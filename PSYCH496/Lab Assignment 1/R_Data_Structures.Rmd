@@ -1,0 +1,169 @@
+---
+title: "Data Structures_in_R"
+output:
+  html_document:
+    df_print: paged
+date: January 31,2020
+---
+
+Let's Create an R object 'five' that holds the value from 1 to 5 
+```{r}
+five <- c(1,2,3,4,5)
+```
+
+To check whether you have created a object let us use the is.vector() command 
+```{r}
+is.vector(five)
+```
+Let's check the length of the vector with the length() command. 
+```{r}
+length(five)
+```
+To check the type of object let's use the typeof() command 
+
+```{r}
+typeof(five)
+```
+Let's create an integer vector. To do this let's type the following and check the type and length of the vector we created.
+```{r}
+int <- c(1L,-1L)
+int
+typeof(int)
+length(int)
+
+```
+Let's create a character vector of friends. To do this type a string of characters surrounded by quotes "". We can also check the type of this vector and length of this character vector.
+```{r}
+friends<-c("Martha","Sam","Charles")
+typeof(friends)
+length(friends)
+```
+Let's work on logical vectors . They store TRUEs and FALSEs. Lets type the following code and see what happens!
+
+```{r}
+5>7
+```
+
+Let's create a vector of logicals and assign it to a R object logical_vector
+
+```{r}
+logical_vector<-c(TRUE,FALSE,TRUE,FALSE)
+typeof(logical_vector)
+```
+To add a names attribute or metadata to an R Object, let's create a vector of characters and attach it to the R object five.You can check the nature of the attributes by the attribute() command.  
+
+```{r}
+names(five) <- c("one","two","three","four","five")
+names(five)
+five
+attributes(five)
+```
+
+The numerical operations on the R object does not affect the attributes of the object. Let's add 3 to the R object five.
+
+```{r}
+five + 3
+```
+
+You can transform an atomic vector into a n dimensional array. Matrices are 2-dimensional arrays. Let's create an atomic vector cotaining 12 values and convert them into arrays here:
+
+
+```{r}
+vector_for_array <- 1:12
+vector_for_array
+```
+
+Let's create a 2 rows and 6 column (2x3) matrix from this vector using the dim() command.
+
+```{r}
+dim(vector_for_array) <-c(2,6)
+vector_for_array
+```
+We can also use the matrix() command to organize an atomic vector into a two dimensional array as follows: 
+
+
+```{r}
+matrix_array <- matrix(vector_for_array,nrow=3)
+matrix_array
+```
+
+You can get the help for the matrix() command by typing ?matrix. Please type it now. You can also force the vectors to rows instead of column by using byrow=TRUE argument to the above command. Let's try in now and see how the matrix looks different!
+
+```{r}
+matrix_array <- matrix(vector_for_array,nrow=3,byrow=TRUE)
+matrix_array
+```
+
+Finally, let's create a cube array with three dimensions with the array() command and the vector of dimensions dim() command as the second argument. 
+
+```{r}
+cube_array <- array(vector_for_array,dim = c(2,2,3))
+cube_array
+```
+
+Let's check the attributes of the matrix_array and cube_array by the attributes() command. 
+
+```{r}
+attributes(matrix_array)
+attributes(cube_array)
+```
+Now let's check out the class of the R object "matrix_array"
+
+```{r}
+class(matrix_array)
+```
+
+You can also check the time and date with the Sys.time() command
+Let's assign the current time to time_now object and check out its class and type!
+
+```{r}
+time_now<-Sys.time()
+time_now
+class(time_now)
+typeof(time_now)
+```
+
+Let's create factors to store categorical information with the factors command. 
+
+```{r}
+gender<-factor(c("male","female"))
+gender
+```
+Let's check the attributes and typeof this factor object gender now,
+
+```{r}
+attributes(gender)
+typeof(gender)
+```
+
+In R you can coerce one atomic vector into another. You can convert a integer/double into a character with as.character() command,an integer into logical with the as.logical() command and a logical vector to a numeric with as.numeric() command. Let's execute all these commands now. 
+
+```{r}
+as.character(1)
+as.logical(1)
+as.numeric(TRUE)
+```
+
+To store more than one type of data into an R object we use the special objects called lists. To create a list of characters, numeric and a logical use the list() command.
+
+
+```{r}
+list_object <- list(1:2,"sam",c(TRUE,FALSE))
+list_object
+```
+
+Finally, we will create a dataframe which is two dimensional version of a list with each column containing a particular type of data. We can do this with the data.frame() command.
+
+```{r}
+dataframe_object<-data.frame(restaurant=c("McDonalds","Dennys","Wendy"),food = c("Fries","Drink","Coffee"), prize=c(2,4,4))
+dataframe_object
+```
+
+You can prevent the strings as being coerced into factors by using the strinsAsFactors=FALSE in the above dataframe command. Let's do this again with the following command. 
+
+
+```{r}
+dataframe_object<-data.frame(restaurant=c("McDonalds","Dennys","Wendy"),food = c("Fries","Drink","Coffee"), prize=c(2,4,4),stringsAsFactors = FALSE)
+dataframe_object
+```
+

@@ -1,0 +1,51 @@
+---
+title: "Data structures Lab Assignment"
+output:
+  html_document:
+    df_print: paged
+date: "January 31,2020"
+---
+
+Assignments:
+
+1. Create a vector of integers, doubles, logicals and characters of your choice.
+2. Create a atomic vector of numeric type and convert this vector into a matrix of your choice. 
+3. Create a list and a data frame of your choice.
+
+#### Assignment 1
+1. Create a vector of integers, doubles, logicals and characters of your choice.
+
+```{r}
+int <- c(1L:5L)
+int
+typeof(int)
+double <- 1:15
+double
+typeof(double)
+logical <- c(T,F,T,F,F,F,T)
+logical
+typeof(logical)
+character
+character <- c("Jonathan","Carlyle","Bonaguro")
+typeof(character)
+```
+
+#### Assignment 2 
+2. Create a atomic vector of numeric type and convert this vector into a matrix of your choice. 
+
+```{r}
+vector_100 <- 1:100
+matrix_100 <- matrix(vector_100, nrow = 10, byrow = T)
+matrix_100
+```
+
+#### Assignment 3 
+3. Create a list and a data frame of your choice.
+
+```{r}
+list <- list(c("Jonathan","Carlyle","Bonaguro"), 1:10, c("Python","Java","C++"))
+list
+dataframe <- data.frame(course_subject=c("PSYC","STAT", "PS", "PS"), instructor=c("Dr. Babu Adhimoolam", "Ha Nyguen", "Alyssa Prorok", "Aleksander Ksiazkiewicz"), course_num=c(496, 385, 396, 328), stringsAsFactors = F)
+dataframe
+```
+

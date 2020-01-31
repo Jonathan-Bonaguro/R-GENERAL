@@ -1,0 +1,332 @@
+---
+title: "STAT385 Notes"
+output: html_notebook
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+die <- c(1:6)
+```
+
+## Fri Jan 24 2020
+
+#### Rolling Dice
+
+Simple function that simulates rolling of two dice and prints the sum of the two dice.
+
+```{r}
+roll <- function(){
+  die <- 1:6
+  dice <- sample(die, size = 2, replace = T)
+  sum(dice)
+}
+roll()
+```
+
+Arguments can change in a function. Say if we want to roll a d20, we can include a function argument. 
+
+```{r}
+roll2 <- function(sides){
+  dice <- sample(x = sides, size = 1)
+  dice
+}
+roll2(1:20)
+```
+
+*The argument sides can be changed to change the number of sides on the die*
+
+#### Now let's roll some *weighted* dice
+
+Look in ?sample to see if you can change the probability of a sample using argument 'prob ='
+
+```{r}
+weighted_roll <- function(){
+  die <- 1:6
+  dice = sample(die, size = 2 , replace = T, prob = c(1/8,1/8,1/8,1/8,1/8,4/8))
+  sum(dice)
+}
+weighted_roll()
+```
+
+The argument 'prob =' allows you to change the probabilities of the die appearing in each roll. In this case, 1:5 have a probability of 1/8, and 6 has a probability of 4/8.
+
+```{r, echo = F}
+rolls <- replicate(n = 10000, expr = roll())
+hist(x = rolls, breaks = c(0:12))
+weighted_rolls <- replicate(n = 10000, expr = weighted_roll())
+hist(x = weighted_rolls, breaks = c(0:12))
+```
+To look at the results, simulate the rolls 10000 times and plot the histogram. Look at how the weighted rolls has shifted the histogram. 
+
+**You don't have to use argument names, but if you do, order doesn't matter**
+*sample(1:6, 2, c(1,1,1,1,2,2))* wont work because the probability vector is in the spot for replace. The argument replace can only take args 'T' and 'F'.
+
+```{r, error = TRUE}
+sample(1:6, 2, c(1,1,1,1,2,2))
+```
+
+## Mon Jan 27 2020
+
+#### Double Vetor
+
+Double means regular number, also called numeric. R will store any number you type in R as double vector of length 1.
+
+```{r}
+4.5
+is.vector(4.5)
+```
+
+Variable `die` is a double vector of length 6.
+
+Integer refers to numbers that can be written withoug a decimal component. By default, R stores any number as double. 
+
+There are many different types of data. Character is denoted by " " or ' '. Complex vectors can store complex numbers by `complex`. 
+
+Raw vectors can store raw bytes of data with `raw`. 
+
+#### Lists
+
+Lists group data into a one-dimensional array. Group R objects such as atomic vecotrs and other lists.
+
+```{r}
+my_vector <- c(1,"one",TRUE)
+my_vector
+
+my_list <- list(1, "one", TRUE)
+my_list
+```
+
+`list()` creates a list the same way as `c()` creates a vector. ELements in a list can have different lenghts, dimensions, or types of objects.
+
+```{r}
+big_list <- list(1:12, "2020", list("january", 2:8))
+big_list
+```
+
+This list features a double vector of length 12, a character vector of length one, and a list with two sub elements, a character vector of length 1 and a numeric vector of length 7.
+
+Many sublists can be created using the `list()` function. This next list features two main elements, with multiple sub elements. 
+
+```{r}
+instructor <- list("Ha", 24)
+students <- list(list("Alex", 20), list("Dave", 21))
+stat385 <- list(instructor, students)
+stat385
+```
+
+##### How do you select elements from a list?
+
+Selecting an element from a vector uses a single bracket. `[]`. For a list, use a double bracket `[[]]`.
+
+```{r}
+big_list[1]
+
+big_list[[1]]
+```
+
+Compare the following code segments:
+
+```{r}
+big_list[[3]]
+
+big_list[[3]][1]
+```
+
+The first line pulls out the entire third element from the list. The following line pulls out only the first element of the sublist, character vector `"january"`.
+
+Using `[[]]` and `[]`, we can access any element in a list. Let's look at Alex's information.
+
+```{r}
+stat385[[2]][[1]]
+
+stat385[[2]][[1]][[1]]
+```
+
+You have to build step by step in order to find what you're looking for. How would we find Ha's age in `stat385`?
+
+```{r}
+stat385[[1]][[2]]
+```
+
+Ha's information is stored in element `[[1]]`. There are two sub-elements, `[[1]][[1]] = "Ha"` and `[[2]][[2]] = 24`.
+
+#### Matrix
+
+Matrix stores values of the same data type in a two dimensional array.
+
+```{r}
+m <- matrix(data = die, nrow = 2)
+m
+```
+
+To create a matrix, supply `matrix()` with an atomic vector to reorganzie and specify number of rows, columns, or rows and columns using `nrow =` and `ncol =`.
+
+By default, `matrix()` will fill the matrix column by column. Fill the matrix row by row with `byrow =T`.
+
+```{r}
+m <- matrix(data = die, nrow = 2, byrow = T)
+m
+```
+
+##### How do we select objects of a matrix?
+
+To select elemnts in a matrix, use `[ , ]`. `[row, column]`. Leave one element blank to extract an entire row or column. 
+
+```{r}
+m 
+
+m[1,2]
+
+m [2, 3]
+
+m[1, ]
+
+m[, 3]
+```
+
+The output is a vector. 
+
+To select a smaller sub matrix, use `[ : , : ]`. 
+
+```{r}
+m[1:2,1:2]
+```
+
+This outputs a matrix. 
+
+#### Array
+
+The `array()` funciton creates an n-dimensional array. 
+
+```{r}
+my_array <- array(data = 1:12, dim = c(2,6))
+my_array
+```
+
+`my_array` is a two-dimensional array, which is a matrix. What about a three-dimensional array?
+
+```{r}
+my_array <- array(data = 1:12, dim = c(2,2,3))
+my_array
+```
+
+##### How do we select dimensions in an array? Similar to matrix, we use `[ , ,]`.
+
+```{r}
+my_array[1,1,1]
+my_array[,,1]
+my_array[,1,1]
+```
+
+#### Summary of data types
+
+1. Elements of an atomic vecotr, matrix, or array have to be of same data type
+2. Elements of a list can be different R objects, 
+3. Atomic Vector and list store data in one-dimensional array.
+4. Matrix stores data in a two-dimensional array. 
+5. Array can store data in an n-dimensional array. 
+
+##### What is the difference between data types and R objects?
+
+1. Data types: basic elements of a programming language
+    1) Think double, integer, character, logical, etc. 
+2. R objects: bigger structures
+    1) Think atomic vector, list, matrix, etc.
+    
+#### Attributes
+
+Attributes tell us information about R objects. 
+
+`name()` allows us to name objects, and `dim()` allows us to set object dimensions. 
+
+## Wed Jan 29 2020
+
+#### Excercise 1
+
+```{r}
+roll_dice <- function(){
+  die <- 1:6
+  dice <- sample(die, size = 6, replace = T)
+  mean(dice)
+}
+roll_dice()
+```
+
+```{r}
+average_dice <- replicate(n = 100000, expr = roll_dice())
+hist(x = average_dice, breaks = seq(from = 0, to = 6, by = 0.5))
+```
+
+#### Excercise 2
+
+```{r}
+roll_two <- function(red, green){
+  if(missing(red)){
+    red = 6
+  }
+  if(missing(green)){
+    green = 6
+  }
+  red_die <- 1:red 
+  green_die <- 1:green
+  red_roll <- sample(red_die, 1)
+  green_roll <- sample(green_die, 1)
+  out <- list(red_roll, green_roll, red_roll >= green_roll)
+  print(out)
+}
+roll_two()
+```
+
+#### Excercise 3
+
+```{r}
+instructor <- list("Ha", 24)
+students <- list(list("Alex", 20), list("Dave", 21))
+stat385 <- list(instructor, students)
+stat385
+```
+
+Alex's age
+```{r}
+stat385[[2]][[1]][[2]]
+```
+
+List of David's name and age
+
+```{r}
+stat385[[2]][[2]]
+```
+
+Ha's Name
+```{r}
+stat385[[1]][[1]]
+```
+
+#### Excercise 4
+
+```{r}
+m <- matrix(data = 1:16, nrow = 4, byrow = TRUE)
+m
+```
+
+Get the element on the 1st row, 3rd column.
+
+Get the element on the 3rd row, 2nd column.
+
+Get all the elements from the 1st row.
+
+Get all the elements from the 3rd column.
+
+Compute the sum of all the elements from the 1st row.
+
+Compute the average of all the elements from the 3rd column.
+
+```{r}
+m[1,3]
+m[3,2]
+m[1, ]
+m[ ,3]
+sum(m[1,])
+mean(m[,3])
+```
+
