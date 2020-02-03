@@ -128,7 +128,7 @@ a == c
 Read in data from csv:
 
 ```{r}
-cards <- read.csv("https://nkha149.github.io/stat385-sp2020/files/data/cards.csv")
+hearts_deck <- read.csv("https://nkha149.github.io/stat385-sp2020/files/data/cards.csv")
 ```
 
 In a new game called **Hearts**, every card has the value `0` except for the suit Hearts and the Queen of spades. Set up the deck in this way:
@@ -137,3 +137,16 @@ In a new game called **Hearts**, every card has the value `0` except for the sui
 * The Queen of Spades has value `13`
 * Save data as Data Frame `hearts_deck`
 
+```{r}
+# Set all values in deck equal to 0
+hearts_deck$value <- 0
+hearts_deck[hearts_deck$suit == "hearts", 3] <- 1
+hearts_deck[hearts_deck$suit == "spades" & hearts_deck$face == "queen", 3] <- 13
+hearts_deck
+```
+
+Ta da!
+
+## Wednesday, Feb. 5, 2020
+
+## Friday, Feb. 7, 2020

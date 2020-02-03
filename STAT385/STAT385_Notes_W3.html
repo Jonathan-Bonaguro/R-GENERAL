@@ -312,14 +312,31 @@ a == b</code></pre>
 <div id="excercise-1" class="section level4">
 <h4>Excercise 1</h4>
 <p>Read in data from csv:</p>
-<pre class="r"><code>cards &lt;- read.csv(&quot;https://nkha149.github.io/stat385-sp2020/files/data/cards.csv&quot;)</code></pre>
+<pre class="r"><code>hearts_deck &lt;- read.csv(&quot;https://nkha149.github.io/stat385-sp2020/files/data/cards.csv&quot;)</code></pre>
 <p>In a new game called <strong>Hearts</strong>, every card has the value <code>0</code> except for the suit Hearts and the Queen of spades. Set up the deck in this way:</p>
 <ul>
 <li>Hearts all have value <code>1</code></li>
 <li>The Queen of Spades has value <code>13</code></li>
 <li>Save data as Data Frame <code>hearts_deck</code></li>
 </ul>
+<pre class="r"><code># Set all values in deck equal to 0
+hearts_deck$value &lt;- 0
+hearts_deck[hearts_deck$suit == &quot;hearts&quot;, 3] &lt;- 1
+hearts_deck[hearts_deck$suit == &quot;spades&quot; &amp; hearts_deck$face == &quot;queen&quot;, 3] &lt;- 13
+hearts_deck</code></pre>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["face"],"name":[1],"type":["fctr"],"align":["left"]},{"label":["suit"],"name":[2],"type":["fctr"],"align":["left"]},{"label":["value"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"king","2":"spades","3":"0"},{"1":"queen","2":"spades","3":"13"},{"1":"jack","2":"spades","3":"0"},{"1":"ten","2":"spades","3":"0"},{"1":"nine","2":"spades","3":"0"},{"1":"eight","2":"spades","3":"0"},{"1":"seven","2":"spades","3":"0"},{"1":"six","2":"spades","3":"0"},{"1":"five","2":"spades","3":"0"},{"1":"four","2":"spades","3":"0"},{"1":"three","2":"spades","3":"0"},{"1":"two","2":"spades","3":"0"},{"1":"ace","2":"spades","3":"0"},{"1":"king","2":"clubs","3":"0"},{"1":"queen","2":"clubs","3":"0"},{"1":"jack","2":"clubs","3":"0"},{"1":"ten","2":"clubs","3":"0"},{"1":"nine","2":"clubs","3":"0"},{"1":"eight","2":"clubs","3":"0"},{"1":"seven","2":"clubs","3":"0"},{"1":"six","2":"clubs","3":"0"},{"1":"five","2":"clubs","3":"0"},{"1":"four","2":"clubs","3":"0"},{"1":"three","2":"clubs","3":"0"},{"1":"two","2":"clubs","3":"0"},{"1":"ace","2":"clubs","3":"0"},{"1":"king","2":"diamonds","3":"0"},{"1":"queen","2":"diamonds","3":"0"},{"1":"jack","2":"diamonds","3":"0"},{"1":"ten","2":"diamonds","3":"0"},{"1":"nine","2":"diamonds","3":"0"},{"1":"eight","2":"diamonds","3":"0"},{"1":"seven","2":"diamonds","3":"0"},{"1":"six","2":"diamonds","3":"0"},{"1":"five","2":"diamonds","3":"0"},{"1":"four","2":"diamonds","3":"0"},{"1":"three","2":"diamonds","3":"0"},{"1":"two","2":"diamonds","3":"0"},{"1":"ace","2":"diamonds","3":"0"},{"1":"king","2":"hearts","3":"1"},{"1":"queen","2":"hearts","3":"1"},{"1":"jack","2":"hearts","3":"1"},{"1":"ten","2":"hearts","3":"1"},{"1":"nine","2":"hearts","3":"1"},{"1":"eight","2":"hearts","3":"1"},{"1":"seven","2":"hearts","3":"1"},{"1":"six","2":"hearts","3":"1"},{"1":"five","2":"hearts","3":"1"},{"1":"four","2":"hearts","3":"1"},{"1":"three","2":"hearts","3":"1"},{"1":"two","2":"hearts","3":"1"},{"1":"ace","2":"hearts","3":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
 </div>
+<p>Ta da!</p>
+</div>
+</div>
+<div id="wednesday-feb.-5-2020" class="section level2">
+<h2>Wednesday, Feb. 5, 2020</h2>
+</div>
+<div id="friday-feb.-7-2020" class="section level2">
+<h2>Friday, Feb. 7, 2020</h2>
 </div>
 
 
