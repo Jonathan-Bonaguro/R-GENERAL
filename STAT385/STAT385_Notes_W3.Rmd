@@ -1,0 +1,139 @@
+---
+title: "STAT385 Notes Week 3"
+author: "Jonathan Bonaguro"
+output:
+  html_document:
+    df_print: paged
+date: "Week 3"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Monday, Feb. 3, 2020
+
+#### Changing values in place
+
+To modify a value within an R object:
+
+* First, describe the value you wish to modify
+* Use the assignment operator `<-` to overwrite those values
+* R will update the selected values **i the original object**
+
+```{r}
+x <- c(0,0,0,0,0)
+x[1] <- 100
+x
+```
+
+To change multiple values at once, make sure the number of **new values** equals the number of **selected values**:
+
+```{r}
+x[c(1,3,5)] <- c(5,5,5)
+x
+x[4:6] <- x[4:6] + 1
+x
+```
+
+Just like populating vectors, R will repeat itself until it can't anymore.
+
+```{r, error=TRUE}
+x[1:2] <- c(2)
+x
+x[1:2] <- c(100,100,100)
+x
+```
+
+#### Looking at Data Frames
+
+Let's add a new column to `deck`:
+
+```{r}
+deck <- read.csv("https://nkha149.github.io/stat385-sp2020/files/data/cards.csv")
+deck$new_column <- 1:52
+deck
+```
+
+Lets change some values:
+
+```{r}
+deck[c(13, 26, 39, 52), 3] <- 14
+deck
+```
+
+#### Logical Operators
+
+```{r}
+1 > 2
+1 > c(0:2)
+c(1,2,3) == c (3,2,1)
+1 %in% c(3:5)
+```
+
+The operators are standard. A different one, `%in%` looks if values are in a group. This operator does not follow element-wise execution. `%in%` independently tests whether each value is somewhere in the vector. 
+
+```{r}
+c(1:4) %in% c(3:5)
+```
+
+**Note:** `=` is an assignment operator like `<-`. Make sure to use `==`.
+
+#### Using Logical Operator for Subsetting
+
+* Let's say in a certain game, aces receive the highest value, say 14.
+* Modify the values in `deck` to follow this rule
+* What are the values of the aces in `deck` right now? 
+
+```{r}
+deck$face
+deck$face == "ace"
+```
+
+Columns that say `TRUE` are aces. Let's subet. 
+
+```{r}
+deck[deck$face == "ace",]
+```
+
+Now, let's update the value for the aces to be 14!
+
+```{r}
+deck[deck$face == "ace", c("value")] <- 14
+deck[deck$face == "ace",]
+```
+
+#### Boolean Operators 
+
+* And `&` 
+* Or `|`
+* Exclusive or `xor`
+* Not `!`
+* Any `any`
+* All `all`  
+
+To use Boolean operator, place it between two *complete* logical tests.  
+
+```{r}
+a <- c(1:3)
+b <- c(1:3)
+c <- c(1,2,4)
+a == b
+c == b
+a == c
+```
+
+#### Excercise 1 
+
+Read in data from csv:
+
+```{r}
+cards <- read.csv("https://nkha149.github.io/stat385-sp2020/files/data/cards.csv")
+```
+
+In a new game called **Hearts**, every card has the value `0` except for the suit Hearts and the Queen of spades. Set up the deck in this way:
+
+* Hearts all have value `1`
+* The Queen of Spades has value `13`
+* Save data as Data Frame `hearts_deck`
+
