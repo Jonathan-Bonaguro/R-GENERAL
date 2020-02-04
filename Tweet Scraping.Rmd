@@ -1,0 +1,13 @@
+---
+title: "Twitter Scraping using twittR"
+output: html_notebook
+---
+
+# Beginning of Twitter Scraping
+
+```{r, echo = FALSE}
+library(tidyverse)
+library(twitteR)
+library(tidytext)
+```
+
