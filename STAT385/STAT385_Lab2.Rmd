@@ -1,0 +1,152 @@
+---
+title: "Lab 2"
+author: "Jonathan Bonaguro"
+output: html_notebook
+date: "February 5, 2020"
+---
+
+## Excercise 1
+
+Load the data:
+
+```{r}
+deck <- read.csv("https://nkha149.github.io/stat385-sp2020/files/data/cards.csv")
+```
+
+#### Modifying the deck
+
+* We will modify the deck for a game called “King of Hearts” where:
+    + All kings get the highest value, 14 in the deck.
+    + All cards in the hearts suit get the value of 10 (except the king of hearts, its value should be 14).
+    
+```{r}
+deck[deck$suit == "hearts", 3] <- 10
+deck[deck$face == "king", 3] <- 14
+```
+
+Use the following code to check your new deck:
+
+```{r}
+deck[deck$suit == "hearts", ]
+deck[deck$face == "king", ]
+```
+
+#### Adding the jackpot column
+
+* Now, create a new column called jackpot in the data frame deck.
+    + Jackpot takes value of TRUE and FALSE.
+    + For the king of hearts, the value of jackpot is TRUE.
+    + For all other rows, the value of jackpot is FALSE.
+    
+```{r}
+deck$jackpot <- FALSE
+deck[deck$face == "king" & deck$suit =='hearts', 4] <- TRUE
+deck
+```
+
+#### Function `draw()`
+
+* Write a function draw() that randomly draws 4 cards from the deck WITHOUT replacement and compute the sum of the 4 cards that were drawn.
+    + Input: no input provided.
+    + Output: a number representing the sum of values of the 4 cards drawn.
+    
+```{r}
+draw <- function(){
+  four <- sample(deck$value, size = 4, replace = FALSE)
+  sum(four)
+}
+set.seed(385)
+draw()
+set.seed(420)
+draw()
+set.seed(400)
+draw()
+set.seed(2020)
+draw()
+```
+
+####Function `win_jackpot()`
+
+* This is a strange game where a person can win a jackpot through 3 possible ways:
+    + Getting a king of hearts in the 4 cards drawn.
+    + OR getting 4 cards from the same suit.
+    + OR getting 4 cards with the same face.
+
+* Write a function `win_jackpot()` that:
+    + Randomly draws 4 cards from the deck WITHOUT replacement
+    + Print out the 4 cards using the print() function
+    + And returns TRUE if the 4 cards drawn satisfying one of the above conditions, FALSE otherwise.
+    
+Hint: You might want to take a look at the unique() function to test the 2nd and 3rd conditions.
+
+```{r}
+win_jackpot <- function(){
+  samp <- deck[sample(nrow(deck), 4), ]
+  print(samp)
+  if (TRUE %in% samp$jackpot){
+    TRUE
+  } else if (length(unique(samp$face)) == 1){
+    TRUE
+  } else if (length(unique(samp$suit)) == 1){
+    TRUE
+  } else {
+    FALSE
+  }
+}
+```
+
+```{r}
+set.seed(35)
+win_jackpot()
+set.seed(174)
+win_jackpot()
+```
+
+#### Running simulation on win_jackpot()
+
+Now, we want to estimate the probability of winning the jackpot in “King of Hearts”. How do we do that? We can do so using simulation studies, that is running the `win_jackpot()` function many many times and record the number of times we win. In this example, the number of simulations is 10000.
+
+**<!!!>BEWARE<!!!>**: You need to change your `win_jackpot()` function before progressing to the next part.
+
+First, write a new function called `win_jackpot2()`:
+Copy the code from your original `win_jackpot()` function.
+Remove the `print()` statement from the code.
+Test your `win_jackpot2()` function:
+
+```{r}
+win_jackpot2 <- function(){
+  samp <- deck[sample(nrow(deck), 4), ]
+  if (TRUE %in% samp$jackpot){
+    TRUE
+  } else if (length(unique(samp$face)) == 1){
+    TRUE
+  } else if (length(unique(samp$suit)) == 1){
+    TRUE
+  } else {
+    FALSE
+  }
+}
+```
+
+* Use the following code to run the simulation studies:
+    + Make sure you copy and paste! If you retype the code, remember win_jackpot2()!!! Missing the 2 will cost     you heavily!
+
+```{r}
+results <- replicate(win_jackpot2(), n = 5000)
+sum(results, na.rm = T) / 5000
+```
+
+## Exercise 2: 2015 Flight Delays and Cancellations Data
+
+Next, we take a quick look at the 2015 Flight Delays and Cancellations Data provided by the U.S. Department of Transportation. This is a huge dataset availalbe on Kaggle. But for us, we will only take a look at flights flying out from O’Hare International Airport (ORD) in January, 2015.
+
+```{r}
+flights <- read.csv("https://nkha149.github.io/stat385-sp2020/files/data/ohare_jan.csv")
+```
+
+```{r}
+nrow(flights[flights$ORIGIN_AIRPORT=="ORD",])
+nrow(flights[flights$ORIGIN_AIRPORT=="ORD" & flights$AIRLINE=="AA",])
+table(flights$AIRLINE)
+```
+
