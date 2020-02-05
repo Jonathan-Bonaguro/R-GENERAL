@@ -1,0 +1,214 @@
+---
+title: "Extracting and modifying values in R Objects"
+output:
+  html_document:
+    df_print: paged
+date: "February 5, 2020"
+---
+You can extract values from R objects using indices of Positive values, Negative values, Blank spaces, Logical values and Names. 
+
+Let's create an R object and assign a vector of numeric values to it.
+
+```{r}
+a <- c(3,5,11,12,15,17)
+```
+
+We can use positive values as indices for extracting values from this object. Let's to do this below.
+
+```{r}
+a[1]
+a[1:2]
+a[c(4,5)]
+```
+
+We also can use negative values as indices for extracting values from R objects. Let's try this method and see what happens. You will see that R omits the corresponding index value with the negative sign and returns the rest of the vector of values associated with that object!
+
+```{r}
+a
+a[-1]
+a[c(-2,-5)]
+```
+
+We can also use logical values to index a R Object. Let's do this now,
+
+```{r}
+
+a[c(TRUE,FALSE,FALSE,FALSE,FALSE,TRUE)]
+
+```
+
+It is important to know that the logical vector should match the length of the R object. If you use logical vectors of unequal length then R will do what is called as "vector recycling", wherein it repeats the logical vector to match the length of the R object. Let's try these two examples now,
+
+```{r}
+a[c(TRUE,FALSE)]
+a[c(TRUE,FALSE,TRUE)]
+```
+
+Let's look at how we can extract values from the dataframe by using these indices. Let's load the mtcars dataframe that comes with R installation, 
+
+```{r}
+mtcars
+```
+
+Let's extract the data values from this dataframe. You can extract the first row and first column of the data frame with the "[1,1]" index, the first row with the "[1,]" index and the first column with the "[,1]" index. Let us do this now,
+
+
+```{r}
+mtcars[1,1]
+mtcars[1,]
+mtcars[,1]
+```
+
+To extract the first three columns of the first row of the data frame mtcars, type the index
+"[1,c(1,2,3)]" in the following command. 
+
+
+```{r}
+mtcars[1,c(1,2,3)]
+```
+
+
+If you want to extract the single column of the data frame with the [1:2,1] index, then this will result in a vector of the first column (without a dataframe structure). To keep the dataframe structure intact use the **drop = FALSE** as an additional argument. 
+
+```{r}
+mtcars[1:2,1]
+mtcars[1:2,1,drop = FALSE]
+```
+
+You can also select the data frames with the logical values. Let's type the following and see what happens,
+
+```{r}
+mtcars[1,c(F,T,F)]
+mtcars[c(F,T,F),1,drop = FALSE]
+```
+
+You can also index using the names of the columns of the data frame and using the "$" sign. Let's try these to get the values of some of the columns in the "mtcars" dataset.
+
+```{r}
+mtcars$mpg
+mtcars[,"mpg"]
+```
+
+To index and extract the value from the list we can use the $ sign and the "[[ ]]" brackets. Let's do this now on the following list,
+
+```{r}
+lst <- list(numbers = c(1, 2), logical = TRUE, strings = c("a", "b", "c"))
+lst
+lst$numbers
+lst$logical
+lst$strings
+lst[[1]]
+lst[[2]]
+lst[[3]]
+```
+
+Remember to carefully use the index in the list. If you use a single bracket notation, this will return another list which is an element of the list and not the sub element. If you run computations on this element instead of sub element it will cause an error. Let's try an example for our understanding, 
+
+```{r,error=TRUE}
+lst[1]
+sum(lst[1])
+```
+
+
+```{r}
+sum(lst[[1]])
+```
+
+
+R provides you with a set of logical operations such as greater than(>), greater than or equal to(>=), less than(<), less than or equal to(<=), equal to(==) and not equal to(!=). You can also check if an element in one vector is also present in another vector with the "%in%" operator. You can refer to the list of logical operators in the following figure. 
+
+![**List of R Logical operators**](/Users/babuadhimoolam/Documents/2020/Jan_2020/Psy_496_Spring_2020/Hands_on_Notebooks/Week_3/Week3_Lab1/R_logical.png)  
+
+Let's execute the logical operations below to understand them,  
+
+```{r}
+1>2
+2>5
+2<=5
+5>=2
+2==2
+2!=3
+2>c(1,2,4,5)
+2!=c(3,4,2,5)
+2%in%c(2,3,4)
+```
+*It's very important not to confuse the = operator which is assignment operator with the == operator which evaluates whether one element equals to another element.*  
+
+Please note that the '%in%' operator works differently than other logical operator, as it does not do the element wise evaluation. It take one element on the left side, and evaluates it with all the elements on the right side. Let's understand this in detail with the following commands.
+
+```{r}
+1 %in% c(3, 4, 5)
+c(1, 2) %in% c(3, 4, 5)
+c(1, 2, 3) %in% c(3, 4, 5)
+c(1, 2, 3, 4) %in% c(3, 4, 5)
+```
+
+Now let us move on to use the logical operators to extract data values from our dataframe. With the help of logical operators, we can extract the cars whose number of cylinders is equal to 4. To do this, let's first use the logical operator to create a vector of logical values and use this as the row index to get the desired result. Execute the following commands below to see this,
+
+```{r}
+mtcars$cyl==4
+mtcars[mtcars$cyl == 4,]
+```
+
+We can use multiple logical operations by combining logical operators with the boolean operators. Here is the list of boolean operators that you can use in R.  
+
+![**List of R Boolean operators**](/Users/babuadhimoolam/Documents/2020/Jan_2020/Psy_496_Spring_2020/Hands_on_Notebooks/Week_3/Week3_Lab1/R_boolean.png)  
+
+Let us now combine two logical operators and a boolean operator to extract a subset of data from the dataframe. For this example, we are going to extract the cars that have 4 cylinders and automatic transmmision. 
+
+```{r}
+mtcars[mtcars$cyl==4 & mtcars$am==0, ]
+```
+
+That's cool as you are now increasing your R powers!! 
+
+
+Always refer to the data set for additional information about the data. You can use the ?mtcars command if you have any questions or doubts about the information pertaining to the data set.
+
+Now that you have learned how to extract the data using logical or boolean operators, we can move on to learn how to modify the values in R objects. Let's create an R object with the vector of zeros and assign a value to the first element.
+
+```{r}
+c<-c(0,0,0,0,0,0)
+c
+c[1]<-10
+c
+```
+
+You can modify multiple values in the R object with the vector of new set of values equal to the size of the original set of values that you intend to modify. Remember, if you assign new set of values unequally then R will use vector recycling to recyle the supplied value to fill in the intended values. Let's try this with the following example. 
+
+```{r}
+c[2:4]<-c(4,5,7)
+c
+c[2:4]<-c(4)
+c
+```
+
+
+You can modify values in the dataframe in a similar way. Let's create a new copy of the mtcars dataframe for this exercise called "mtcars_new". Let's create a new column and assign a new value to this column. Now, "vector recycling" will come to our advantage! As we assign a single value to this column, it will automatically get recycled through the length of the dataframe. You also can delete any column by using the NULL object which denote an empty set. Let's execute the following commands below to understand these concepts, 
+
+```{r}
+mtcars_new<-mtcars
+mtcars_new$new<-32
+mtcars_new
+mtcars_new$new<-NULL
+mtcars_new
+mtcars_new$new<-50
+```
+
+Let's change the value of this "new" column for the first two rows of the data frame. 
+
+```{r}
+mtcars_new[c(1,2),]
+mtcars_new$new[c(1,2)]
+mtcars_new$new[c(1,2)]<-52
+```
+
+You can also combine the logical and boolean operators to change the value of this column. Let's try this with an example, wherein we convert the values in this column only for those cars having 4 cylinders and automatic transmission. 
+
+```{r}
+mtcars_new$new[mtcars_new$cyl==4 & mtcars_new$am==0]
+mtcars_new$new[mtcars_new$cyl==4 & mtcars_new$am==0]<-55
+mtcars_new
+```
+
+

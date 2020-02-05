@@ -1,0 +1,65 @@
+---
+title: "Week 3 Lab Assignment 1"
+output:
+  pdf_document:
+  html_document:
+    df_print: paged
+author: "Jonathan Bonaguro"
+date: "February 5, 2020"
+---
+
+## Assignments
+
+Use the mtcars data set to answer the following questions. (You can use the ?mtcars command to learn about this dataset).
+
+a. Create an R object containing cars with manual transmission.
+b. Create an R object containing cars with weight greater than 1000 lbs.
+c. Create an R object containing cars with automatic transmission and 3 forward gears.
+d. Create an R object containing cars with automatic transmission and miles per gallon(mpg) less than 20.
+e. Let’s assume you are a car manufacturer. After analyzing the data, you want to improve the miles per galon (mpg) of those cars with automatic transmssion and mpg less than 20. Now for these subset of cars, create a new data column with your choice of ideal miles per gallon and assign this value to this column.
+
+#### Assignment A
+
+a. Create an R object containing cars with manual transmission.
+
+```{r}
+manual_trans <- mtcars[mtcars$am == 1,]
+manual_trans
+```
+
+#### Assignment B
+
+b. Create an R object containing cars with weight greater than 1000 lbs.
+
+```{r}
+weight_1000 <- mtcars[mtcars$wt > 1, ]
+weight_1000
+```
+
+#### Assignment C
+
+c. Create an R object containing cars with automatic transmission and 3 forward gears.
+
+```{r}
+automatic_threegears <- mtcars[mtcars$am == 0 & mtcars$gear ==3,]
+automatic_threegears
+```
+
+#### Assignment D
+
+d. Create an R object containing cars with automatic transmission and miles per gallon(mpg) less than 20.
+
+```{r}
+automatic_badmpg <- mtcars[mtcars$am == 0 & mtcars$mpg < 20,]
+automatic_badmpg
+```
+
+#### Assignment E
+
+e. Let’s assume you are a car manufacturer. After analyzing the data, you want to improve the miles per galon (mpg) of those cars with automatic transmssion and mpg less than 20. Now for these subset of cars, create a new data column with your choice of ideal miles per gallon and assign this value to this column.
+
+```{r}
+automatic_badmpg$ideal_mgp <- 55
+automatic_badmpg
+```
+
