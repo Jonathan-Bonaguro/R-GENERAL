@@ -147,6 +147,188 @@ hearts_deck
 
 Ta da!
 
-## Wednesday, Feb. 5, 2020
-
 ## Friday, Feb. 7, 2020
+
+#### `if` Statement
+
+* an `if` statement tells R to do a certain task for a certain case
+* `condition` object should be a logical test
+* if `condition` is `TRUE`
+    + R will run all the code that appears in the `{}` following the `if` statement
+* if `condition` is `FALSE`
+    + R will skip the curly brackets
+
+```{r}
+num <- -2
+
+if (num < 0) {
+  num <- num * -1
+}
+
+num
+```
+
+```{r}
+num <- 4
+
+if (num < 0) {
+  num <- num * -1
+}
+
+num
+```
+
+#### `else` statement
+
+* `else` tells R what to do when the condition is `FALSE`
+
+```{r}
+my_round <- function(a){
+  decimal <- a - trunc(a)
+  if (decimal >= 0.5) {
+    a <- trunc(a) + 1
+  } else {
+    a <- trunc(a)
+  }
+  return(a)
+}
+my_round(3.14)
+```
+
+#### `if else` ladder
+
+```{r}
+who_win <- function(a, b){
+  if (a > b) {
+    print("A wins!")
+  } else if (a <b) {
+    print("B wins!")
+  } else {
+    print("Tie.")
+  }
+}
+who_win(3, 1)
+who_win(5, 10)
+who_win(3, 3)
+```
+
+#### Histograms
+
+* Basic histogram using `hist()`
+    + Change the plot title with `main =`
+    + Change x-axis label with `xlab=`
+
+```{r}
+hist(x = cars$speed, main = "Histogram of Speed", xlab = "Speed (mph)")
+```
+
+* Change histogram from frequency to probability using `probability = TRUE`
+
+```{r}
+hist(x = cars$speed, main = "Histogram of Speed", xlab = "Speed (mph)", probability = TRUE)
+```
+
+* Change the break points in the histogram celss using `breaks = `
+    + Use `seq()` to compute vector of breakpoints
+
+```{r}
+hist(x = cars$speed, main = "Histogram of Speed", xlab = "Speed (mph)", probability = TRUE, breaks = seq(from = 0, to = 32, by = 4))
+```
+
+* Provide `breaks =` a single number to specify breaks
+
+```{r}
+hist(x = cars$speed, main = "Histogram of Speed", xlab = "Speed (mph)", probability = TRUE, breaks = 10)
+```
+
+* Color inside of bins with `col =`
+
+```{r}
+hist(x = cars$speed, main = "Histogram of Speed", xlab = "Speed (mph)", probability = TRUE, breaks = seq(from = 0, to = 32, by = 4), col = "darkorange")
+```
+
+* Color border of histogram using `border =`
+
+```{r}
+hist(x = cars$speed, main = "Histogram of Speed", xlab = "Speed (mph)", probability = TRUE, breaks = seq(from = 0, to = 32, by = 4), border = "dodgerblue")
+```
+
+* Add box and grid using `box()` and `grid`
+
+```{r}
+hist(x = cars$speed, main = "Histogram of Speed", xlab = "Speed (mph)", probability = TRUE, breaks = seq(from = 0, to = 32, by = 4))
+box()
+grid()
+```
+
+#### Boxplot
+
+* Used for exploratory data analysis 
+
+```{r}
+boxplot(x = cars$speed)
+```
+
+* Add title and axis label
+
+```{r}
+boxplot(x = cars$speed, main = "Boxplot of Speed", ylab = "Speed (mph)")
+```
+
+* Rotate plot using `horizontal = TRUE`
+
+```{r}
+boxplot(x = cars$speed, main = "Boxplot of Speed", ylab = "Speed (mph)", horizontal = TRUE)
+```
+
+#### Scatterplot
+
+* Use `plot()` to make a Scatterplot
+
+```{r}
+plot(x = cars$speed, y = cars$dist)
+```
+
+* Add title and labels
+
+```{r}
+plot(x = cars$speed, y = cars$dist, main = "Car Speed vs. Stopping Distance", xlab = "Speed (mph)", ylab = "Stopping Distance (ft)")
+```
+
+* Add color and grid. Change the plotting symbol using `pch =`
+
+```{r}
+plot(x = cars$speed, y = cars$dist, main = "Car Speed vs. Stopping Distance", xlab = "Speed (mph)", ylab = "Stopping Distance (ft)", col = "dodgerblue", pch = 17)
+grid()
+```
+
+* Let's try to change the scale on the axis using `xlim =` and `ylim =`
+
+```{r}
+plot(x = cars$speed, y = cars$dist, main = "Car Speed vs. Stopping Distance", xlab = "Speed (mph)", ylab = "Stopping Distance (ft)", col = "dodgerblue", pch = 19, xlim = c(0, 30), ylim = c(0, 150))
+grid()
+```
+
+#### Play around with plotting
+
+* Plot histogram of `eruptions` in dataset `faithful`
+
+```{r}
+hist(faithful$eruptions, main = "Histogram of Old Faithful Eruption Length (min)", xlab = "Length of Time (min)", breaks = 20, probability = TRUE, border = "dodgerblue")
+```
+
+* Plot a scatterplot between the eruption time and waiting time to the next eruption
+
+```{r}
+plot(x = faithful$eruptions, y = faithful$waiting, main = "Old Faithful Eruption Time vs. Wait Time (min)", xlab = "Eruption Time (min)", ylab = "Waiting Time (min)", col = "dodgerblue", pch = 19)
+grid()
+```
+
+* Another way to plot is with `formula =` and `data =`
+
+```{r}
+plot(formula = waiting ~ eruptions, data = faithful, main = "Old Faithful Eruption Time vs. Wait Time (min)", xlab = "Eruption Time (min)", ylab = "Waiting Time (min)", col = "dodgerblue", pch = 19)
+grid()
+```
+
+* This is a preferred method for plotting, especially when we get to regressions. This specifies that `waiting` is being plotted as a function of `eruption`
