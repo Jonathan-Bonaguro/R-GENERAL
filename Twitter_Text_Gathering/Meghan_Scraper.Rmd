@@ -1,0 +1,74 @@
+---
+title: "Meghan Rest Twitter Scraping"
+output: html_notebook
+---
+
+```{r, echo = FALSE}
+library(tidyverse)
+library(rtweet)
+library(tidytext)
+library(topicmodels)
+library(wordcloud)
+library(RColorBrewer)
+library(tm)
+```
+
+```{r}
+twitter_token <- create_token(
+  app = "UIUCBONSCRAPER",
+  consumer_key = "4aJXOYnN12pbwIlXq7F1SCFKt",
+  consumer_secret = "ZW4jzK6vkrQbdszaQOAdzPq7cT7E82jNR4ycmRMbI1ifh2QYhF",
+  access_token = "1102735221949108226-D4zPvd1T4hYKd5KkbM5k4xZm7R5Vr7",
+  access_secret = "QPA30E2SyNkoYaUTzAyDK0fkf3jROsdVRDBIKNCuOCFmg"
+)
+```
+
+```{r}
+meghan <- get_timeline("meghan_rest", n = 3200, include_rts = FALSE)
+```
+
+```{r}
+meghan_original <- meghan[is.na(meghan$reply_to_screen_name),]
+tweets <- meghan_original$text
+tweets <-  gsub("https\\S*", "", tweets)
+tweets <-  gsub("@\\S*", "", tweets) 
+tweets  <-  gsub("amp", "", tweets) 
+tweets  <-  gsub("[\r\n]", "", tweets)
+tweets  <-  gsub("[[:punct:]]", "", tweets)
+```
+
+```{r}
+corp <- Corpus(VectorSource(tweets))
+```
+
+```{r}
+# Convert the text to lower case
+corp <- tm_map(corp, content_transformer(tolower))
+# Remove numbers
+corp <- tm_map(corp, removeNumbers)
+# Remove english common stopwords
+corp <- tm_map(corp, removeWords, stopwords("english"))
+# Remove your own stop word
+# specify your stopwords as a character vector
+corp <- tm_map(corp, removeWords, c("blabla1", "blabla2")) 
+# Remove punctuations
+corp <- tm_map(corp, removePunctuation)
+# Eliminate extra white spaces
+corp <- tm_map(corp, stripWhitespace)
+```
+
+```{r}
+dtm <- TermDocumentMatrix(corp)
+m <- as.matrix(dtm)
+v <- sort(rowSums(m),decreasing=TRUE)
+d <- data.frame(word = names(v),freq=v)
+head(d, 10)
+```
+
+```{r}
+set.seed(1234)
+cloud <- wordcloud(words = d$word, freq = d$freq, min.freq = 1,
+          max.words=200, random.order=FALSE, rot.per=0.35, 
+          colors=brewer.pal(8, "Dark2"))
+```
+

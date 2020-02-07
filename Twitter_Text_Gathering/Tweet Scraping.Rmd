@@ -10,6 +10,9 @@ library(tidyverse)
 library(rtweet)
 library(tidytext)
 library(topicmodels)
+library(wordcloud)
+library(RColorBrewer)
+library(tm)
 ```
 
 ## Setup Twitter Information
@@ -24,27 +27,51 @@ twitter_token <- create_token(
 )
 ```
 
-```{r}
-sou <- search_tweets(q = "state of the union", n = 18000)
-```
-```{r}
-trump_fav <- get_favorites("realdonaldtrump", n = 3000)
-```
+
+##Jacob Sons Twitter Information
+
+* Read in latest Tweets
+    + `jacob_original` is a subset that is only original tweets
+    + `jacob_original_text` is a subset of only one column, `text`, the original text
 
 ```{r}
-djt <- get_timeline("realDonaldTrump", n = 200)
+jacob <- get_timeline("JustJacobSons", n = 3200, include_rts = FALSE)
+```
+
+```{r}
+jacob_original <- jacob[is.na(jacob$reply_to_screen_name),]
+jacob_original_text <- jacob_original['text']
+```
+
+* Use `gsub()` to remove unwanted characters that may appear in the text
+
+```{r}
+tweets <- jacob_original_text$text
+tweets <-  gsub("https\\S*", "", tweets)
+tweets <-  gsub("@\\S*", "", tweets) 
+tweets  <-  gsub("amp", "", tweets) 
+tweets  <-  gsub("[\r\n]", "", tweets)
+tweets  <-  gsub("[[:punct:]]", "", tweets)
+```
+
+* Make a list of stop words and remove them from the text
+
+```{r}
+jake_stop_words <- c(stopwords("english"), "im", "dont", "just", "like", "its", "the", "get", "when", "and", "but", "its", "i'm")
+tweets <- Corpus(VectorSource(jacob_original_text$text))
+tweets <- tm_map(tweets, removeWords, jake_stop_words)
 ```
 
 
 ```{r}
-sou_text <- LDA(AssociatedPress, k = 2)
+dtm <- TermDocumentMatrix(tweets)
+m <- as.matrix(dtm)
+v <- sort(rowSums(m),decreasing=TRUE)
+d <- data.frame(word = names(v),freq=v)
+head(d, 10)
 ```
-
 
 ```{r}
-topics <- tidy(sou_text, matrix ='beta')
+wordcloud(tweets, min.freq = 5, scale = c(3.5,.5), max.words = 50, random.order = FALSE, rot.per = 0.35,colors=brewer.pal(8, "Dark2"))
 ```
-
-
-
 
