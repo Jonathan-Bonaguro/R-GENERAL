@@ -1,0 +1,180 @@
+---
+title: "Week 3 Lab Assignment 2"
+output: prettydoc::html_pretty
+author: "Jonathan Bonaguro"
+date: "February 7, 2020"
+---
+
+## Assignments
+
+1. Write a function that takes three numbers as input and returns the sum of three numbers. [Please make sure you don’t use the sum() function in the body of the code.]
+
+2. Write a function that will take a number as input and return the square of the number as output.
+
+3. Write a function that will take a number as input and return the cube of the number as output.
+
+4. Write a function that will take two numbers a and b to compute a^2^ + b^2^ - 2ab. Create two versions of this function:
+    a. one with a and b containing predefined default value in the arguments.
+    b. one without any predefinied default values for a and b.
+
+5. Create a function that takes a vector of values as inputs and checks if this vector contains NA or missing values and then return the vector of values (as output) without any missing values.
+
+6. Create a function that takes a vector of values as input and then computes the mean of this value with the mean() function. Your function should return the ouptput rounded to the decimal place of your choice. Make sure this function takes the following two arguments:
+    a. one for input
+    b. one for the number of decimal places to which the answers should be rounded
+
+7. Write a function to retrieve any rows and columns of a data frame. Use the mtcars dataset for evaluating this function.Your function should take these three arguments as inputs:
+    a. one for input data frame,
+    b. one for rows
+    c. one for columns.
+
+8. You have learnt about scoping in R. Use your knowledge of scoping to answer the following questions:
+    a. What will the following function return?
+    b. Can you rewrite the following code such that the output is 3,5?
+    c. If you don’t define x and y within the function what will be the output of the code below?
+
+#### Assignment 1
+
+1. Write a function that takes three numbers as input and returns the sum of three numbers. [Please make sure you don’t use the sum() function in the body of the code.]
+
+```{r}
+sum_of_three <- function(a, b, c){
+  a + b + c
+}
+
+sum_of_three(a = 4, b = 7, c = 9)
+```
+
+#### Assignment 2
+
+2. Write a function that will take a number as input and return the square of the number as output.
+
+```{r}
+square_root <- function(number){
+  number^(0.5)
+}
+
+square_root(number = 9)
+```
+
+#### Assignment 3
+
+3. Write a function that will take a number as input and return the cube of the number as output.
+
+```{r}
+cube_root <- function(number){
+  number^(1/3)
+}
+
+cube_root(number = 64)
+```
+
+#### Assignment 4
+
+4. Write a function that will take two numbers a and b to compute a^2^ + b^2^ - 2ab. Create two versions of this function:
+    a. one with a and b containing predefined default value in the arguments.
+    b. one without any predefinied default values for a and b.
+
+```{r}
+foil_default_arguments <- function(a = 2, b = 4){
+  (a^2)+(b^2)-(2*a*b)
+}
+
+foil_default_arguments()
+
+foil <- function(a, b){
+  (a^2)+(b^2)-(2*a*b)
+}
+
+foil(a = 2, b = 4)
+```
+
+#### Assignment 5
+
+5. Create a function that takes a vector of values as inputs and checks if this vector contains NA or missing values and then return the vector of values (as output) without any missing values.
+
+```{r}
+remove_missing <- function(vector_in){
+  if (TRUE %in% is.na(vector_in)){
+    vector_in[is.na(vector_in)==FALSE]
+  } else {
+    vector_in
+  }
+}
+remove_missing(c(1:10, NA, 11:20))
+```
+
+#### Assignment 6
+
+6. Create a function that takes a vector of values as input and then computes the mean of this value with the `mean()` function. Your function should return the ouptput rounded to the decimal place of your choice. Make sure this function takes the following two arguments:
+    a. one for input
+    b. one for the number of decimal places to which the answers should be rounded
+    
+```{r}
+mean_of_vector <- function(vector, decimals){
+  round(mean(vector, na.rm = TRUE), digits = decimals)
+}
+
+mean_of_vector(vector = c(1:10, NA, 13:20), decimals = 2)
+```
+
+#### Assignment 7
+
+7. Write a function to retrieve any rows and columns of a data frame. Use the mtcars dataset for evaluating this function.Your function should take these three arguments as inputs:
+    a. one for input data frame,
+    b. one for rows
+    c. one for columns.
+    
+```{r}
+retrieve_rows_and_columns <- function(data, rows, columns){
+  data[rows, columns]
+}
+
+retrieve_rows_and_columns(data = mtcars, rows = c(1:7), columns = c(1:5))
+```
+
+#### Assignment 8
+
+8. You have learnt about scoping in R. Use your knowledge of scoping to answer the following questions:
+    a. What will the following function return?
+
+The fuction `scop_1()` will return `[1] 1 2`.
+
+    ```{r, eval = FALSE}  
+      x <- 10
+      y <- 20
+      scop_1 <- function() {
+        x <- 1
+        y <- 2
+        c(x, y)
+      }
+      scop_1()
+    ```
+   
+  b. Can you rewrite the following code such that the output is 3,5?
+
+To rewite `scop_1()` so that it will return `[1] 3 5`, change the definition of `x` and `y` inside the function like so:
+
+    ```{r}
+      scop_1 <- function() {
+        x <- 3
+        y <- 5
+        c(x, y)
+      }
+      scop_1()
+    ```
+    
+  c. If you don’t define x and y within the function what will be the output of the code below?
+
+If you do not define `x` and `y` in the function, the output will be `[1] 10 20` as the global environment has `x` defined as `10` and `y` defined as `20`.
+
+```{r, eval = FALSE}
+x <- 10
+y <- 20
+scop_1 <- function() {
+  c(x, y)
+}
+scop_1()
+```
+
+
