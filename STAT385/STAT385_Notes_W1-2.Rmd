@@ -395,7 +395,7 @@ dim(russ_demo)
 `write.csv()` saves a data frame to a new .csv file to your current working directory, or you can set a path in the file name.
 
 ```{r}
-write.csv(russ_demo, file = "russian_demography_data.csv", row.names = F)
+write.csv(russ_demo, file = "Data/russian_demography_data.csv", row.names = F)
 ```
 
 #### Selecting Values in Data Frame
