@@ -1,0 +1,184 @@
+---
+title: "STAT385 Notes Week 4"
+author: "Jonathan Bonaguro"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Monday, Feb. 10, 2020
+
+#### `for` loops
+
+* A `for` loop repeats a chunk of code many times, **one for each element in a set of input**
+
+```{r, eval=FALSE}
+for (value in that) {
+  this
+}
+```
+
+* The `that` should be a **set of objects ** (often a vector of numbers or character strings)
+    + `1:10`
+    + `1:length(x)`
+    + `1:nrow(x)`
+    + `c("hello", "this", "is", "a", "vector", "of", "strings")`
+* The `value` symbol in a for loop acts like an argument in a function
+
+```{r}
+for (value in c("My", "first", "for", "loop")) {
+  print(value)
+}
+```
+
+##### Example 
+
+* What will the value of `a` be after the loop?
+
+```{r}
+a <- 100
+
+for (a in 1:5) {
+  print(a)
+}
+
+a
+```
+
+#### Excercise 1 
+
+* Write a `for` loop to compute the sum of 5 numbers that are randomly selected from 1 to 100 with replacement
+    + First generate 5 random numbers
+    + Then write the `for` loop
+
+```{r}
+# generate the five random numbers
+set.seed(385)
+nums <- sample(x = 1:100, size = 5, replace = TRUE)
+
+# write the for loop
+sum <- 0
+
+for (i in 1:length(nums)) {
+  sum <- sum + nums[i]
+}
+
+# another way to do it
+sum2 <- 0
+
+for (i in nums) {
+  sum2 <- sum2 + i
+}
+
+sum
+sum2
+
+# check your work
+sum(nums)
+```
+
+#### Working with `for` loop
+
+* To save output from a `for` loop, you must write the loop so that it saves it's own output as it runs
+* What this means:
+    + create an empty `vector` or `list` before you run the loop
+    + include empty `vector` or `list` in the loop
+    + then you will be able to call it outside of the loop
+    
+```{r}
+fruits <- c("apple", "pineapple", "watermelon", "orange", "peach", "plum", "honeydew", "banana", "kiwi", "papaya", "grapes", "strawberry", "blueberry", "blackberry")
+
+fruits_short <- c()
+
+# for loop one
+for (i in fruits) {
+  if (nchar(i) <= 6) {
+    fruits_short <- c(fruits_short, i)
+  }
+}
+
+# for loop two
+fruits_short2 <- c()
+count <- 0
+
+for (i in fruits) {
+  if (nchar(i) <= 6){
+    count <- count + 1
+    fruits_short2[count] <- i
+  }
+}
+
+fruits_short
+fruits_short2
+```
+
+#### `while` loops
+
+* A `while` loop reruns a chunk **while** a certain condition remains `TRUE`
+
+```{r, eval = FALSE}
+while (condition) {
+  code
+}
+```
+
+* Why might `condition` change from `TRUE` to `FALSE`?
+    + The code inside the loop changes the certain values which change the result of the `condition`
+    + If it does not, you can end up with an infinite loop... **avoid this**
+    
+##### Example 
+
+```{r}
+cash <- 20
+n <- 0
+
+while (cash > 0) {
+  cash <- cash - 1
+  n <- n + 1
+}
+
+n
+```
+
+#### Excercise
+
+* Remember the King of Hearts Game from lab 2?
+* It costs $1 to play this game.
+* If you win a jackpot, we gain $10.
+* If you start with $20, how long can you play until you run out of money?
+
+```{r, eval=FALSE}
+deck <- read.csv("https://nkha149.github.io/stat385-sp2020/files/data/cards.csv")
+
+deck$jackpot <- FALSE
+deck[deck$face == "king" & deck$suit =='hearts', 4] <- TRUE
+
+win_jackpot <- function() {
+  samp <- deck[sample(nrow(deck), 4), ]
+  print(samp)
+  any(deck$jackpot) | length(unique(deck$face) == 1) | length(unique(deck$suit) == 1)
+}
+
+set.seed(385)
+cash <- 20
+n <- 0
+
+while (cash > 0) {
+  cash <- cash - 1
+  n <- n + 1
+  if (win_jackpot()) {
+    cash <- cash + 5
+  }
+}
+
+n
+```
+
+#### `repeat` loops
+
+* The `repeat` loops repeat a chunk of code until you tell them to stop (by hittin `esc`) or until they encounter the command `break`, which stops the loop
+
