@@ -1,0 +1,503 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={HW1\_IS457\_33},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{HW1\_IS457\_33}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{}
+    \preauthor{}\postauthor{}
+    \date{}
+    \predate{}\postdate{}
+  
+
+\begin{document}
+\maketitle
+
+\section{Do not remove any of the comments. These are marked
+by}\label{do-not-remove-any-of-the-comments.-these-are-marked-by}
+
+\section{HW 1 - Due Monday Sep 17, 2018 in moodle at 1pmCT and hardcopy
+in
+class.}\label{hw-1---due-monday-sep-17-2018-in-moodle-at-1pmct-and-hardcopy-in-class.}
+
+\section{(1). Please upload R code and report to
+Moodle}\label{please-upload-r-code-and-report-to-moodle}
+
+\section{with filename:
+HW1\_IS457\_YourClassID.}\label{with-filename-hw1_is457_yourclassid.}
+
+\section{(2). Turn in a hard copy of your report in
+class}\label{turn-in-a-hard-copy-of-your-report-in-class}
+
+\section{without your name but only your class
+ID,}\label{without-your-name-but-only-your-class-id}
+
+\section{violators will be subject to a points
+deduction.}\label{violators-will-be-subject-to-a-points-deduction.}
+
+\subsection{Important: Make sure there is no identifying information on
+your printout, including name, username
+etc.}\label{important-make-sure-there-is-no-identifying-information-on-your-printout-including-name-username-etc.}
+
+\subsection{Only include your class ID on
+there.}\label{only-include-your-class-id-on-there.}
+
+\section{Part 1. LifeCycleSavings
+Data}\label{part-1.-lifecyclesavings-data}
+
+\section{In this part, we will work with a built-in dataset --
+LifeCycleSavings.}\label{in-this-part-we-will-work-with-a-built-in-dataset-lifecyclesavings.}
+
+\section{(1) R has a built-in help funtion, write your call to the help
+function below, as well as
+something}\label{r-has-a-built-in-help-funtion-write-your-call-to-the-help-function-below-as-well-as-something}
+
+\section{that you learned about this dataset from the help function. (1
+pt)}\label{that-you-learned-about-this-dataset-from-the-help-function.-1-pt}
+
+\section{Your code/answer here}\label{your-codeanswer-here}
+
+help(``LifeCycleSavings'') \#\# I never knew about the life-cycle
+savings hypothesis, and that it is explained by disposable income and
+\#\# change in disposable income across demographic groups of age 0-15
+and 75+.
+
+\section{(2) Describe this dataset (structure, variables, value types,
+size, etc.) (2
+pts)}\label{describe-this-dataset-structure-variables-value-types-size-etc.-2-pts}
+
+\section{Your code/answer here}\label{your-codeanswer-here-1}
+
+help(``LifeCycleSavings'') \#\# This dataset consists of 5 vectors of
+length 50. These represent the 50 observations of the 5 variables. \#\#
+All variables are of the numeric type.
+
+\section{\texorpdfstring{(3) What is ``aggregate personal savings'' in
+this dataset? Calculate the average
+aggregate}{(3) What is aggregate personal savings in this dataset? Calculate the average aggregate}}\label{what-is-aggregate-personal-savings-in-this-dataset-calculate-the-average-aggregate}
+
+\section{personal savings of these 50 countries. (1
+pt)}\label{personal-savings-of-these-50-countries.-1-pt}
+
+\section{Your code/answer here}\label{your-codeanswer-here-2}
+
+\subsection{\texorpdfstring{Aggregate personal savings are the variable
+``sr'' in this
+dataset.}{Aggregate personal savings are the variable sr in this dataset.}}\label{aggregate-personal-savings-are-the-variable-sr-in-this-dataset.}
+
+mean(LifeCycleSavings\$sr)
+
+\section{\texorpdfstring{(4) What is ``dpi'' in this dataset? Find the
+highest and lowest dpi. (2
+pts)}{(4) What is dpi in this dataset? Find the highest and lowest dpi. (2 pts)}}\label{what-is-dpi-in-this-dataset-find-the-highest-and-lowest-dpi.-2-pts}
+
+\section{Your code/answer here}\label{your-codeanswer-here-3}
+
+\subsection{\texorpdfstring{``dpi'' is the amount of real per-capita
+disposable income averaged over the decade
+1960-1970.}{dpi is the amount of real per-capita disposable income averaged over the decade 1960-1970.}}\label{dpi-is-the-amount-of-real-per-capita-disposable-income-averaged-over-the-decade-1960-1970.}
+
+min(LifeCycleSavings\$dpi)
+
+max(LifeCycleSavings\$dpi)
+
+\section{(5) How many countries have a dpi above median? (2
+pts)}\label{how-many-countries-have-a-dpi-above-median-2-pts}
+
+\section{hint: you might need to find a function to count
+rows.}\label{hint-you-might-need-to-find-a-function-to-count-rows.}
+
+\section{Your code/answer here}\label{your-codeanswer-here-4}
+
+median(LifeCycleSavings\$dpi)
+
+length(which(LifeCycleSavings\$dpi\textgreater{}695.665))
+
+\section{(6) What is the highest aggregate personal savings of the
+countries}\label{what-is-the-highest-aggregate-personal-savings-of-the-countries}
+
+\section{whose pop15s are more than 10 times their pop75s? (2
+pts)}\label{whose-pop15s-are-more-than-10-times-their-pop75s-2-pts}
+
+\section{Your code/answer here}\label{your-codeanswer-here-5}
+
+max(LifeCycleSavings\(sr[LifeCycleSavings\)pop15 \textgreater{}
+10*LifeCycleSavings\$pop75{]})
+
+\section{(7) For the countries with dpi above the 75th percentile, what
+is their average aggregate personal
+savings?}\label{for-the-countries-with-dpi-above-the-75th-percentile-what-is-their-average-aggregate-personal-savings}
+
+\section{For the countries with dpi above the 75th percentale, what is
+their median aggregate personal
+savings?}\label{for-the-countries-with-dpi-above-the-75th-percentale-what-is-their-median-aggregate-personal-savings}
+
+\section{Why are these two statistics
+different?}\label{why-are-these-two-statistics-different}
+
+\section{Your code/answer here}\label{your-codeanswer-here-6}
+
+mean(LifeCycleSavings\(sr[LifeCycleSavings\)dpi \textgreater{}
+quantile(LifeCycleSavings\$dpi, .75){]})
+
+median(LifeCycleSavings\(sr[LifeCycleSavings\)dpi \textgreater{}
+quantile(LifeCycleSavings\$dpi, .75){]})
+
+\section{These statistics are different because the average is
+calculated by taking the sum of the observations
+and}\label{these-statistics-are-different-because-the-average-is-calculated-by-taking-the-sum-of-the-observations-and}
+
+\section{dividing them by the total number of ovservations, and the
+median is the value that lies in the middle
+of}\label{dividing-them-by-the-total-number-of-ovservations-and-the-median-is-the-value-that-lies-in-the-middle-of}
+
+\section{the data set.}\label{the-data-set.}
+
+\section{(8) Let's look at countries with dpi below the 25th percentile.
+What is their average and their
+median}\label{lets-look-at-countries-with-dpi-below-the-25th-percentile.-what-is-their-average-and-their-median}
+
+\section{aggregate personal savings?}\label{aggregate-personal-savings}
+
+\section{Why are these two statistics different? Is the pattern of
+difference different than what you saw
+in}\label{why-are-these-two-statistics-different-is-the-pattern-of-difference-different-than-what-you-saw-in}
+
+\section{Q7? Why or Why not?}\label{q7-why-or-why-not}
+
+\section{Your code/answer here}\label{your-codeanswer-here-7}
+
+mean(LifeCycleSavings\(sr[LifeCycleSavings\)dpi \textless{}
+quantile(LifeCycleSavings\$dpi, .25){]})
+
+median(LifeCycleSavings\(sr[LifeCycleSavings\)dpi \textless{}
+quantile(LifeCycleSavings\$dpi, .25){]})
+
+\section{These statistics are different because the average is
+calculated by taking the sum of the observations
+and}\label{these-statistics-are-different-because-the-average-is-calculated-by-taking-the-sum-of-the-observations-and-1}
+
+\section{dividing them by the total number of ovservations, and the
+median is the value that lies in the middle
+of}\label{dividing-them-by-the-total-number-of-ovservations-and-the-median-is-the-value-that-lies-in-the-middle-of-1}
+
+\section{the data set.}\label{the-data-set.-1}
+
+\section{The pattern of difference is different than Q7 in that the
+median is signficantly lower than the
+average.}\label{the-pattern-of-difference-is-different-than-q7-in-that-the-median-is-signficantly-lower-than-the-average.}
+
+\section{One possible explanation of this is that there are more
+observations of aggregate personal savings
+with}\label{one-possible-explanation-of-this-is-that-there-are-more-observations-of-aggregate-personal-savings-with}
+
+\section{lower values, but the observations with higher values are
+significantly higher
+observations.}\label{lower-values-but-the-observations-with-higher-values-are-significantly-higher-observations.}
+
+\section{(9). (3 pts)}\label{pts}
+
+\section{Try running each expression in
+R.}\label{try-running-each-expression-in-r.}
+
+\section{Record the error message in a
+comment}\label{record-the-error-message-in-a-comment}
+
+\section{Explain what it means.}\label{explain-what-it-means.}
+
+\section{Be sure to directly relate the wording of the error message
+with}\label{be-sure-to-directly-relate-the-wording-of-the-error-message-with}
+
+\section{the problem you find in the
+expression.}\label{the-problem-you-find-in-the-expression.}
+
+\section{LifeCycleSavings{[}LifeCycleSavings\$pop15 \textgreater{}
+10{]}}\label{lifecyclesavingslifecyclesavingspop15-10}
+
+\subsubsection{Error message here}\label{error-message-here}
+
+\section{\texorpdfstring{Error in
+\texttt{{[}.data.frame}(LifeCycleSavings, LifeCycleSavings\$pop15
+\textgreater{} 10)
+:}{Error in {[}.data.frame(LifeCycleSavings, LifeCycleSavings\$pop15 \textgreater{} 10) :}}\label{error-in-.data.framelifecyclesavings-lifecyclesavingspop15-10}
+
+\section{undefined columns selected}\label{undefined-columns-selected}
+
+\subsubsection{Explanation here}\label{explanation-here}
+
+\section{The brackets are trying to subset LifeCycleSavings and then
+looking for the data where it does not
+exist}\label{the-brackets-are-trying-to-subset-lifecyclesavings-and-then-looking-for-the-data-where-it-does-not-exist}
+
+\section{\texorpdfstring{after it was subset. If you remove the
+brackerst and the first ``LifeCycleSavings'', you can find
+out}{after it was subset. If you remove the brackerst and the first LifeCycleSavings, you can find out}}\label{after-it-was-subset.-if-you-remove-the-brackerst-and-the-first-lifecyclesavings-you-can-find-out}
+
+\section{which rows have the variable
+pop15\textgreater{}10.}\label{which-rows-have-the-variable-pop1510.}
+
+\section{mean(pop15,pop75)}\label{meanpop15pop75}
+
+\subsubsection{Error message here}\label{error-message-here-1}
+
+\section{\texorpdfstring{Error in mean(pop15, pop75) : object `pop15'
+not
+found}{Error in mean(pop15, pop75) : object pop15 not found}}\label{error-in-meanpop15-pop75-object-pop15-not-found}
+
+\subsubsection{Explanation here}\label{explanation-here-1}
+
+\section{This error code comes from there being no information on where
+to find the variables. This can be
+included}\label{this-error-code-comes-from-there-being-no-information-on-where-to-find-the-variables.-this-can-be-included}
+
+\section{\texorpdfstring{by either using \$ before each variable or
+including `data
+='.}{by either using \$ before each variable or including data =.}}\label{by-either-using-before-each-variable-or-including-data-.}
+
+\section{\texorpdfstring{mean(LifeCycleSavings\(pop15, LifeCycleSavings\)pop75)}{mean(LifeCycleSavingspop15, LifeCycleSavingspop75)}}\label{meanlifecyclesavingspop15-lifecyclesavingspop75}
+
+\subsubsection{Error message here}\label{error-message-here-2}
+
+\section{\texorpdfstring{Error in
+mean.default(LifeCycleSavings\(pop15, LifeCycleSavings\)pop75)
+:}{Error in mean.default(LifeCycleSavingspop15, LifeCycleSavingspop75) :}}\label{error-in-mean.defaultlifecyclesavingspop15-lifecyclesavingspop75}
+
+\section{\texorpdfstring{`trim' must be numeric of length
+one}{trim must be numeric of length one}}\label{trim-must-be-numeric-of-length-one}
+
+\subsubsection{Explanation here}\label{explanation-here-2}
+
+\section{\texorpdfstring{This error comes from trying to run two
+experessions in a function that can only return a ``numeric of \#length
+one'' or one response. You can either find the mean of pop15 or pop75,
+but not both at
+once.}{This error comes from trying to run two experessions in a function that can only return a numeric of \#length one or one response. You can either find the mean of pop15 or pop75, but not both at once.}}\label{this-error-comes-from-trying-to-run-two-experessions-in-a-function-that-can-only-return-a-numeric-of-length-one-or-one-response.-you-can-either-find-the-mean-of-pop15-or-pop75-but-not-both-at-once.}
+
+\section{Part 2. Plot analysis}\label{part-2.-plot-analysis}
+
+\section{Run the following code to make a
+plot.}\label{run-the-following-code-to-make-a-plot.}
+
+\section{(don't worry right now about what this code is
+doing)}\label{dont-worry-right-now-about-what-this-code-is-doing}
+
+plot(LifeCycleSavings\(pop15, LifeCycleSavings\)pop75, xlab = `pop15',
+ylab = `pop75', main = `pop15 vs pop75')
+
+\section{(1) Use the Zoom button in the Plots window to enlarge the
+plot.}\label{use-the-zoom-button-in-the-plots-window-to-enlarge-the-plot.}
+
+\section{Resize the plot so that it is long and short, making it easier
+to
+read.}\label{resize-the-plot-so-that-it-is-long-and-short-making-it-easier-to-read.}
+
+\section{Include an image of this plot in the homework you turn in. (1
+pt)}\label{include-an-image-of-this-plot-in-the-homework-you-turn-in.-1-pt}
+
+\section{Your answer here}\label{your-answer-here}
+
+\section{(2) Make an interesting observation about the relationship
+between}\label{make-an-interesting-observation-about-the-relationship-between}
+
+\section{pop15 and pop75 based on your
+plot.}\label{pop15-and-pop75-based-on-your-plot.}
+
+\section{(something that you couldn't see with the calculations so far.)
+(1
+pt)}\label{something-that-you-couldnt-see-with-the-calculations-so-far.-1-pt}
+
+\section{Your answer here}\label{your-answer-here-1}
+
+\section{There seems to be a relationship between the percentage of the
+Population under the age of 15 and the
+amount}\label{there-seems-to-be-a-relationship-between-the-percentage-of-the-population-under-the-age-of-15-and-the-amount}
+
+\section{of the population over the age of 75. The higher the percentage
+of people under the age of 15, the
+lower}\label{of-the-population-over-the-age-of-75.-the-higher-the-percentage-of-people-under-the-age-of-15-the-lower}
+
+\section{percentage of people over
+75.}\label{percentage-of-people-over-75.}
+
+\section{(3) Based on our analysis so far, what interesting question
+about the LifeCycleSavings
+data}\label{based-on-our-analysis-so-far-what-interesting-question-about-the-lifecyclesavings-data}
+
+\section{would you like to answer, but don't yet know how to do it? (1
+pt)}\label{would-you-like-to-answer-but-dont-yet-know-how-to-do-it-1-pt}
+
+\section{Your answer here}\label{your-answer-here-2}
+
+\section{I would like to see if there is a relationship between the
+amount of population over the age of
+75}\label{i-would-like-to-see-if-there-is-a-relationship-between-the-amount-of-population-over-the-age-of-75}
+
+\section{and the amount of personal savings. Does more people over the
+age of 75 mean there are higher
+amounts}\label{and-the-amount-of-personal-savings.-does-more-people-over-the-age-of-75-mean-there-are-higher-amounts}
+
+\section{of personal savings?}\label{of-personal-savings}
+
+\section{Part 3. Random number
+generators}\label{part-3.-random-number-generators}
+
+\section{For the remainder of this assignment we will work
+with}\label{for-the-remainder-of-this-assignment-we-will-work-with}
+
+\section{one of the random number generators in
+R.}\label{one-of-the-random-number-generators-in-r.}
+
+\section{(1) Use you UIN number to set the seed in the set.seed()
+function. (1
+pt)}\label{use-you-uin-number-to-set-the-seed-in-the-set.seed-function.-1-pt}
+
+\section{Your code here}\label{your-code-here}
+
+set.seed(660694484)
+
+\section{\texorpdfstring{(2) Generate a vector called ``normsample''
+containing 1000 random samples from
+a}{(2) Generate a vector called normsample containing 1000 random samples from a}}\label{generate-a-vector-called-normsample-containing-1000-random-samples-from-a}
+
+\section{normal distribution with mean 2 and standard deviation 1. (1
+pt)}\label{normal-distribution-with-mean-2-and-standard-deviation-1.-1-pt}
+
+\section{Your code here}\label{your-code-here-1}
+
+normsample \textless{}- rnorm(1000, mean=2, sd=1)
+
+\section{(3) Calculate the mean and standard deviation of the
+normsample. (2
+pts)}\label{calculate-the-mean-and-standard-deviation-of-the-normsample.-2-pts}
+
+\section{Your code here}\label{your-code-here-2}
+
+mean(normsample) \#2.016063 sd(normsample) \#1.002991
+
+\section{(4) Use logical operations
+(\textgreater{},\textless{},==,\ldots{}.) to
+calculate}\label{use-logical-operations-.-to-calculate}
+
+\section{\texorpdfstring{the fraction of the values in ``normsample''
+that are more than 3. (1
+pt)}{the fraction of the values in normsample that are more than 3. (1 pt)}}\label{the-fraction-of-the-values-in-normsample-that-are-more-than-3.-1-pt}
+
+\section{Your code here}\label{your-code-here-3}
+
+length(which(normsample\textgreater{}3)) 168/1000
+
+\section{(8). Find the area under the normal(2, 1) curve to the right of
+3.}\label{find-the-area-under-the-normal2-1-curve-to-the-right-of-3.}
+
+\section{This should be the probability of getting a random value more
+than
+3.}\label{this-should-be-the-probability-of-getting-a-random-value-more-than-3.}
+
+\section{(Hint: Look up the help for rnorm. You will see a few other
+functions
+listed.}\label{hint-look-up-the-help-for-rnorm.-you-will-see-a-few-other-functions-listed.}
+
+\section{Use one of them to figure out about what answer you should
+expect.)}\label{use-one-of-them-to-figure-out-about-what-answer-you-should-expect.}
+
+\section{What value do you expect?}\label{what-value-do-you-expect}
+
+\section{I would expect about 16.8\%.}\label{i-would-expect-about-16.8.}
+
+\section{What value did you get?}\label{what-value-did-you-get}
+
+\section{R returned the value 15.9\%}\label{r-returned-the-value-15.9}
+
+\section{Why might they be different? (3
+pts)}\label{why-might-they-be-different-3-pts}
+
+\section{The values may be different based on a few things. They may be
+that the random values will differ
+based}\label{the-values-may-be-different-based-on-a-few-things.-they-may-be-that-the-random-values-will-differ-based}
+
+\section{on a vector of different lengths. In this case, this results in
+a lower probability of giving a
+value}\label{on-a-vector-of-different-lengths.-in-this-case-this-results-in-a-lower-probability-of-giving-a-value}
+
+\section{more than three. Probabiliy does not neccesarily predict
+observed
+results.}\label{more-than-three.-probabiliy-does-not-neccesarily-predict-observed-results.}
+
+\section{Your code here}\label{your-code-here-4}
+
+help(rnorm) pnorm(3, mean=2, sd=1, lower.tail = FALSE)
+
+
+\end{document}
