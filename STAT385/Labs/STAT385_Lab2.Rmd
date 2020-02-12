@@ -149,4 +149,3 @@ nrow(flights[flights$ORIGIN_AIRPORT=="ORD",])
 nrow(flights[flights$ORIGIN_AIRPORT=="ORD" & flights$AIRLINE=="AA",])
 table(flights$AIRLINE)
 ```
-

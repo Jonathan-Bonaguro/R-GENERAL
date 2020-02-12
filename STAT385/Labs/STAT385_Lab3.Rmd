@@ -1,0 +1,123 @@
+---
+title: "Lab 3"
+author: "Jonathan Bonaguro"
+output: 
+  html_document: prettydoc::html_pretty
+date: "February 12, 2020"
+---
+
+## `Plantgrowth`
+
+For this exercise, we will use practice plotting different types of graphs on multiple built-in datasets in R.
+
+* Take a look at the `PlantGrowth` dataset by typing it in the console.
+* Use the `table()` function to get counts on the number of plants in each treatment groups.
+
+```{r}
+PlantGrowth
+table(PlantGrowth$group)
+```
+
+#### Histogram
+
+* Plot one histogram of dried weigth (`weight`) of plants from all 3 treatment groups.
+
+```{r}
+hist(PlantGrowth$weight, main = "Histogram of the Plants' Dried Weight", xlab = "Dried Weight (lbs.)", ylab = "Density", probability = TRUE, border = "dodgerblue", breaks = 10)
+```
+
+####Boxplot
+
+* To compare the treatments, we want to have a plot that can compare the dried weight of plants from each treatment group.
+* Plot a boxplot of `Weight` vs. `Group`.
+
+```{r}
+boxplot(weight ~ group, data = PlantGrowth, main = "Boxplot of Plants' Dried Weight by Treatment", xlab = "Treatment Group", ylab = "Dried Weight (lbs.)", col = c("orange", "dodgerblue", "gray"))
+```
+
+## `trees`
+
+* Next, we’re taking a look at the `trees` dataset.
+
+#### Scatterplot
+
+* Plot a scatterplot of `Height` vs. `Girth` (tree diameter).
+
+```{r}
+plot(Height ~ Girth, data = trees, main = "Black Cherry Trees Girth vs. Height", xlab = "Girth (in.)", ylab = "Height (ft.)", col = "dodgerblue", pch = 19)
+grid()
+```
+
+#### Boxplot
+
+* To get summary statistics from a vector (or a column of a data frame, which is a vector), we can use `fivenum()`.
+* For example, the five main summary statistics of Black Cherry Trees’ Girth are
+
+```{r}
+fivenum(trees$Girth)
+```
+
+* That means: min = `8.3`, q1 = `11.05`, median = `12.9`, q3 = `15.25`, max = `20.6`.
+
+* We will use these numbers to divide the dataset into 5 groups based on their Girth measurement. Create a new column Group in trees that contain the following value:
+    + `group1`: if the girth is in [8.3, 11.05)
+    + `group2`: [11.05, 12.90)
+    + `group3`: [12.90, 15.25)
+    + `group4`: [15.25, 20.60)
+    
+* So how do we do that in R?
+
+* We can use a function called `cut()`. Google this function or look at the documentation by typing `?cut` in the RStudio console.
+
+```{r}
+trees$Group <- cut(trees$Girth, breaks = c(8.3, 11.05, 12.90, 15.25, 20.60), labels = c("group1", "group2", "group3", "group4"), right = FALSE, include.lowest = TRUE)
+table(trees$Group)
+```
+
+* Now, plot a boxplot of `Height` vs. `Group`.
+
+```{r}
+boxplot(Height ~ Group, data = trees, main = "Boxplot of Girth Group vs. Height", xlab = "Girth Group", ylab = "Height (ft.)", col = c("purple", "pink", "magenta", "gray"))
+```
+
+## `warpbreaks`
+
+* Use `str()` to take a quick look at the `warpbreaks` dataset.
+* Use `table()` to count how many experiments were done for each combination of `wool` and `tension`.
+
+```{r}
+str(warpbreaks)
+table(warpbreaks$wool, warpbreaks$tension)
+```
+
+#### Histogram
+
+* Plot a histogram of the number of breaks breaks for all combination of `wool` and `tension`.
+
+```{r}
+hist(warpbreaks$breaks, main = "Histogram of Number of Breaks", xlab = "Number of Breaks", ylab = "Density", probability = TRUE, border = "orange", breaks = 20)
+```
+
+####Boxplot
+
+* Plot a boxplot of `breaks` vs. `tension`.
+
+```{r}
+boxplot(breaks ~ tension, data = warpbreaks, main = "Boxplot of Number of Breaks vs. Tension Level", xlab = "Tension Level", ylab = "Number of Breaks", col = c("darkred", "red", "orange"))
+```
+
+#### Another Boxplot
+
+* Plot a boxplot of `breaks` vs. `wool`.
+
+```{r}
+boxplot(breaks ~ wool, data = warpbreaks, main = "Boxplot of Number of Breaks vs. Wool Type", xlab = "Wool Type", ylab = "Number of Breaks", col = c("darkgreen", "limegreen"))
+```
+
+#### Another Boxplot (Again!)
+
+* Now, plot a boxplot of `breaks` vs. combination of `wool` and `tension` (hint: `wool*tension`).
+
+```{r}
+boxplot(breaks ~ wool*tension, data = warpbreaks, main = "Boxplot of Number of Breaks vs. Wool and Tension", xlab = "Wool Type and Tension Level", ylab = "Number of Breaks", col = c("darkgreen", "limegreen"))
+```
