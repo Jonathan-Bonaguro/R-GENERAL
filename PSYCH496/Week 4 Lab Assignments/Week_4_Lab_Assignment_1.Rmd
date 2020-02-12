@@ -1,0 +1,107 @@
+---
+title: "Week 4 Lab Assignment 1"
+output: prettydoc::html_pretty
+author: "Jonathan Bonaguro"
+date: "February 12, 2020"
+---
+
+## Assignments 
+
+1. Write an if-else statement that will take a numeric value and evaluate it (if it is less than, greater than, equal to zero) and print this information into the console.
+
+2. Write an if-else statement to check if a number is an odd number or even number and print the information to the console. [Hint: use the modulus operator in R for this assignment].
+
+3. Write a for loop that takes any R object containing vector of numeric values and returns it with every element of the values multipled by 2.
+
+4. Write a for loop that takes the mtcars dataframe and prints the type of vector values contained in each column.
+
+5. Create a matrix containing numeric values in 10 rows and 10 columns. Now write a for loop that will return the sum for each of the columns in this matrix.
+
+6. Combine the if-else statement and for loop for this exercise . You can use the mtcars dataset for this assignment. Across the columns of this dataset check if they have a missing value and print “found missing values” if any of the columns have missing value. If no missing values are found print “no missing values”.
+
+#### Assignment 1
+
+1. Write an if-else statement that will take a numeric value and evaluate it (if it is less than, greater than, equal to zero) and print this information into the console.
+
+```{r}
+x <- 3
+if(x > 5) {
+  print("x is greater than 5")
+} else if (x < 5) {
+  print ("x is less than 5")
+} else {
+  print ("x is equal to 5")
+}
+```
+
+#### Assignment 2
+
+2. Write an if-else statement to check if a number is an odd number or even number and print the information to the console. [Hint: use the modulus operator in R for this assignment].
+
+```{r}
+x <- 5203
+if((x %% 2) == 0) {
+  print("x is an even number")
+} else {
+  print("x is an odd number")
+}
+```
+
+#### Assignment 3
+
+3. Write a for loop that takes any R object containing vector of numeric values and returns it with every element of the values multipled by 2.
+
+```{r}
+vector <- seq(from = 2, to = 10, by = 2)
+output <- NA
+for (i in 1:length(vector)) {
+  output[i] <- (vector[i] *2)
+}
+output
+```
+
+#### Assignment 4
+
+4. Write a for loop that takes the mtcars dataframe and prints the type of vector values contained in each column.
+
+```{r}
+output <- NA
+for (i in 1:ncol(mtcars)) {
+  output[i] <- class(mtcars[ , i])
+}
+output
+```
+
+#### Assignment 5
+
+5. Create a matrix containing numeric values in 10 rows and 10 columns. Now write a for loop that will return the sum for each of the columns in this matrix.
+
+```{r}
+matrix <- matrix(1:100, nrow = 10, byrow = T)
+output <- NA
+for (i in 1:ncol(matrix)) {
+  output[i] <- sum(matrix[ , i])
+}
+output
+```
+
+#### Assignment 6
+
+6. Combine the if-else statement and for loop for this exercise . You can use the mtcars dataset for this assignment. Across the columns of this dataset check if they have a missing value and print “found missing values” if any of the columns have missing value. If no missing values are found print “no missing values”.
+
+```{r}
+mtcars[4, 5] <- NA
+output <- matrix(NA, nrow = nrow(mtcars), ncol = ncol(mtcars), byrow = FALSE)
+columns_missing_data <- NA
+for (i in 1:ncol(mtcars)) {
+  output[ , i] <- is.na(mtcars[ , i])
+  for (j in 1:ncol(mtcars)){
+    if (TRUE %in% output[ , j]) {
+      columns_missing_data[j] <- "found missing values"
+    } else {
+       columns_missing_data[j] <- "found no missing values"
+    }
+  }
+}
+columns_missing_data
+```
