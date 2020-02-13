@@ -47,6 +47,21 @@ roulette <- function(bet, amount = 1){
   cat(out)
 }
 
+set.seed(385)
+roulette(bet = "red", amount = 10)
+
+set.seed(385)
+roulette(bet = "first", amount = 15)
+
+set.seed(385)
+roulette(bet = "odd", amount = 20)
+
+set.seed(385)
+roulette(bet = 9, amount = 10)
+
+set.seed(385)
+roulette(bet = 5)
+
 ###
 
 ## Exercise 2
@@ -81,6 +96,21 @@ roulette2 <- function(bet, amount = 1){
   print(win)
 }
 
+set.seed(385)
+roulette2(bet = "red", amount = 10)
+
+set.seed(385)
+roulette2(bet = "first", amount = 15)
+
+set.seed(385)
+roulette2(bet = "odd", amount = 20)
+
+set.seed(385)
+roulette2(bet = 9, amount = 10)
+
+set.seed(385)
+roulette2(bet = 5)
+
 # Probability of winning with bet `red`
 set.seed(385)
 games_red <- replicate(roulette2(bet = "red", amount = 1), n = 5000)
@@ -108,12 +138,20 @@ money_odd
 ## Exercise 3
 
 # Histogram of `Sepal.Length` for all three types of the Iris flowers
-hist(iris$Sepal.Length, main = "Histogram of Sepal Length for all species of Iris Flowers (cm)", 
+hist(iris$Sepal.Length, main = "Histogram of Sepal Length for all Iris Flowers", 
      xlab = "Sepal Length (cm)", ylab = "Probability", probability = TRUE, 
-     breaks = seq (from = 4, to = 8, by = 0.25))
+     breaks = seq (from = 4, to = 8, by = 0.25), border = "dodgerblue")
+grid()
+box()
 
-plot(formula = Sepal.Width ~ Sepal.Length, data = iris, main = "Iris Flowers Sepal Length vs. Sepal Width (cm)",
+plot(formula = Sepal.Width ~ Sepal.Length, data = iris, main = "Scatterplot of Sepal Length vs. Sepal Width for all Iris Flowers",
+     xlab = "Sepal Length (cm)", ylab = "Sepal Width (cm)", xlim = c(4, 8), ylim = c(2, 4.5), pch = 19,
+     col = "orchid2")
+grid()
+
+plot(formula = Sepal.Width ~ Sepal.Length, data = iris, main = "Iris Flowers Sepal Length vs. Sepal Width by Species",
      xlab = "Sepal Length (cm)", ylab = "Sepal Width (cm)", xlim = c(4, 8), ylim = c(2, 4.5),
      col = c("green", "red", "blue")[as.numeric(iris$Species)], pch = 19)
 legend('topright', legend = levels(iris$Species), col = c("green", "red", "blue"), pch = 19)
 grid()
+
