@@ -1,0 +1,73 @@
+---
+title: "Week 4 Lab Assignment 2"
+output: prettydoc::html_pretty
+author: "Jonathan Bonaguro"
+date: "February 14, 2020"
+---
+
+## Assignments
+
+1. Write your own function that uses an explicit return() statement in the body of the code.
+2. Write a function that uses stopifnot() in the body of code. Use the arguments in such a way that this function should return a error message if the specific conditions are not met within the arguments or body of the code.
+3. Use the dot-dot-dot(…) argument in a function to return the output as list whenever you input a vector of numeric type.
+4. Using the generic print() function, create your own custom S3 method that takes a R object of your choice and prints the output as per your choice.
+
+#### Assignment 1
+
+1. Write your own function that uses an explicit return() statement in the body of the code.
+
+```{r}
+sd_of_vector <- function(vect) {
+  s <- sd(vect, na.rm = TRUE)
+  return(s)
+  print(paste("The standard deviation of the vector is", s))
+}
+
+sd_of_vector(c(1, 3, 5, NA, 12, 4))
+```
+
+#### Assignment 2
+
+2. Write a function that uses stopifnot() in the body of code. Use the arguments in such a way that this function should return a error message if the specific conditions are not met within the arguments or body of the code.
+
+```{r, error = TRUE}
+sd_of_vector <- function(vect) {
+  stopifnot(is.numeric(vect), all(is.na(vect) == FALSE))
+  s <- sd(vect)
+  return(s)
+}
+
+sd_of_vector(c(1, 3, 5, NA, 12, 4))
+```
+
+#### Assignment 3
+
+3. Use the dot-dot-dot(…) argument in a function to return the output as list whenever you input a vector of numeric type.
+
+
+```{r}
+return_list <- function(...) {
+  list(...)
+}
+
+return_list(c(1, 3, 5, NA, 12, 4), 1:10, 1:2)
+```
+
+#### Assignment 4
+
+4. Using the generic print() function, create your own custom S3 method that takes a R object of your choice and prints the output as per your choice.
+
+```{r}
+a <- as.list(c(1, 3, 5, NA, 12, 4))
+class(a) <- c("custom_print")
+
+print.custom_print<-function(x){
+  print(paste("Your list contains",x))
+}
+
+print(a)
+b <- list(1, 10)
+class(b) <- c("custom_print")
+b
+```
+
