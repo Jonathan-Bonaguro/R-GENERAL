@@ -375,6 +375,249 @@ n</code></pre>
 </div>
 <div id="friday-feb.-14-2020" class="section level2">
 <h2>Friday, Feb. 14, 2020</h2>
+<div id="vectorized-code" class="section level3">
+<h3>Vectorized Code</h3>
+<ul>
+<li>The fastest R code will usually take advantage of three things:
+<ul>
+<li>logical tests</li>
+<li>subsetting</li>
+<li>element-wise execution</li>
+</ul></li>
+<li>cod that uses these things usually has a certain quality: it is <strong>vectorized</strong></li>
+<li>That means the code can take a <strong>vector of values</strong> as input and manipulate <strong>each value</strong> in the vector at the <strong>same time</strong> (parallel computing)</li>
+</ul>
+<div id="example-2" class="section level4">
+<h4>Example</h4>
+<ul>
+<li>Write an absolute value function in R that takes
+<ul>
+<li>Input: <strong>vec</strong> a vector of numbers</li>
+<li>Ouput: a vector with all non-negative numbers</li>
+</ul></li>
+</ul>
+<div id="first-method-for-loop" class="section level5">
+<h5>First method: <code>for</code> loop</h5>
+<pre class="r"><code>abs_loop &lt;- function(vec){
+  for (i in 1:length(vec)) {
+    if (vec[i] &lt; 0) {
+      vec[i] &lt;- -vec[i]
+    }
+  }
+  vec
+}</code></pre>
+</div>
+<div id="second-method-vectorized-code" class="section level5">
+<h5>Second method: vectorized code</h5>
+<pre class="r"><code>abs_vectorized &lt;- function(vec) {
+  negs &lt;- vec &lt; 0
+  vec[negs] &lt;- vec[negs] * -1
+  vec
+}</code></pre>
+</div>
+<div id="claim-abs_vectorized-is-much-faster-than-abs_loop" class="section level5">
+<h5>Claim: <code>abs_vectorized()</code> is much faster than <code>abs_loop()</code></h5>
+<ul>
+<li>Lets test this claim!</li>
+</ul>
+<pre class="r"><code>long &lt;- rep(c(-1,1), 5000000)
+
+system.time(abs_loop(long))</code></pre>
+<pre><code>##    user  system elapsed 
+##   0.624   0.026   0.690</code></pre>
+<pre class="r"><code>system.time(abs_vectorized(long))</code></pre>
+<pre><code>##    user  system elapsed 
+##   0.183   0.043   0.243</code></pre>
+<ul>
+<li><code>abs_vectorized()</code> is faster!</li>
+<li>How does <code>abs_vectorized()</code> compare to the built in <code>abs()</code> function in R?</li>
+</ul>
+<pre class="r"><code>system.time(abs(long))</code></pre>
+<pre><code>##    user  system elapsed 
+##   0.015   0.000   0.015</code></pre>
+</div>
+</div>
+</div>
+<div id="how-to-write-vectorized-code" class="section level3">
+<h3>How to Write Vectorized Code</h3>
+<ul>
+<li>To create vectorized code:
+<ul>
+<li>Use <strong>vectorized funtions</strong> (R built in functions) to complete the sequential steps in your program.</li>
+<li>Use <strong>logical subsetting</strong> to handle parallel cases. Try to manipulate every element in a case at once!</li>
+</ul></li>
+</ul>
+<pre class="r"><code>vec &lt;- c(1, -2, 3, -4, 5, -6, 7, -8, 9, -10)
+vec &lt; 0</code></pre>
+<pre><code>##  [1] FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE</code></pre>
+<pre class="r"><code>vec[vec &lt; 0]</code></pre>
+<pre><code>## [1]  -2  -4  -6  -8 -10</code></pre>
+<pre class="r"><code>vec[vec &lt; 0] * -1</code></pre>
+<pre><code>## [1]  2  4  6  8 10</code></pre>
+<div id="exercise-1" class="section level4">
+<h4>Exercise 1</h4>
+<ul>
+<li>The following function converts a vector of slot symbols to a vector of new slot symbols. Can you vectorize it?</li>
+</ul>
+<pre class="r"><code>change_symbols &lt;- function(vec){
+  for (i in 1:length(vec)){
+    if (vec[i] == &quot;DD&quot;) {
+      vec[i] &lt;- &quot;joker&quot;
+    } else if (vec[i] == &quot;C&quot;) {
+      vec[i] &lt;- &quot;ace&quot;
+    } else if (vec[i] == &quot;7&quot;) {
+      vec[i] &lt;- &quot;king&quot;
+    }else if (vec[i] == &quot;B&quot;) {
+      vec[i] &lt;- &quot;queen&quot;
+    } else if (vec[i] == &quot;BB&quot;) {
+      vec[i] &lt;- &quot;jack&quot;
+    } else if (vec[i] == &quot;BBB&quot;) {
+      vec[i] &lt;- &quot;ten&quot;
+    } else {
+      vec[i] &lt;- &quot;nine&quot;
+    } 
+  }
+  vec
+}
+
+vec &lt;- c(&quot;DD&quot;, &quot;C&quot;, &quot;7&quot;, &quot;B&quot;, &quot;BB&quot;, &quot;BBB&quot;, &quot;0&quot;)
+
+change_symbols(vec)</code></pre>
+<pre><code>## [1] &quot;joker&quot; &quot;ace&quot;   &quot;king&quot;  &quot;queen&quot; &quot;jack&quot;  &quot;ten&quot;   &quot;nine&quot;</code></pre>
+<pre class="r"><code>vec &lt;- c(&quot;DD&quot;, &quot;C&quot;, &quot;7&quot;, &quot;B&quot;, &quot;BB&quot;, &quot;BBB&quot;, &quot;0&quot;)
+
+change_vec &lt;- function (vec) {
+  vec[vec == &quot;DD&quot;] &lt;- &quot;joker&quot;
+  vec[vec == &quot;C&quot;] &lt;- &quot;ace&quot;
+  vec[vec == &quot;7&quot;] &lt;- &quot;king&quot;
+  vec[vec == &quot;B&quot;] &lt;- &quot;queen&quot;
+  vec[vec == &quot;BB&quot;] &lt;- &quot;jack&quot;
+  vec[vec == &quot;BBB&quot;] &lt;- &quot;ten&quot;
+  vec[!vec %in% c(&quot;joker&quot;, &quot;ace&quot;, &quot;king&quot;, &quot;queen&quot;, &quot;jack&quot;, &quot;ten&quot;)] &lt;- &quot;nine&quot;
+  vec
+}
+change_vec(vec)</code></pre>
+<pre><code>## [1] &quot;joker&quot; &quot;ace&quot;   &quot;king&quot;  &quot;queen&quot; &quot;jack&quot;  &quot;ten&quot;   &quot;nine&quot;</code></pre>
+<div id="how-fast-is-it" class="section level5">
+<h5>How fast is it?</h5>
+<pre class="r"><code>many &lt;- rep(vec, 1000000)
+system.time(change_symbols(many))</code></pre>
+<pre><code>##    user  system elapsed 
+##   7.675   0.064   7.921</code></pre>
+<pre class="r"><code>system.time(change_vec(many))</code></pre>
+<pre><code>##    user  system elapsed 
+##   0.546   0.070   0.641</code></pre>
+<ul>
+<li>The non-vectorized code took almost <strong>way longer</strong> than the vectorized code did!</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="lookup-tables" class="section level3">
+<h3>Lookup Tables</h3>
+<ul>
+<li>Another way to vectorize code is to use lookup table. Think of lookup tables as a dictionary</li>
+</ul>
+<pre class="r"><code>tb &lt;- c(&quot;DD&quot; = &quot;joker&quot;, &quot;C&quot; = &quot;ace&quot;, &quot;7&quot; = &quot;king&quot;, &quot;B&quot; = &quot;queen&quot;, 
+    &quot;BB&quot; = &quot;jack&quot;, &quot;BBB&quot; = &quot;ten&quot;, &quot;0&quot; = &quot;nine&quot;)
+
+tb[vec]</code></pre>
+<pre><code>##      DD       C       7       B      BB     BBB       0 
+## &quot;joker&quot;   &quot;ace&quot;  &quot;king&quot; &quot;queen&quot;  &quot;jack&quot;   &quot;ten&quot;  &quot;nine&quot;</code></pre>
+<ul>
+<li><code>tb</code> is a lookup table sort of like a Python Dictionary. It uses a key to return the value</li>
+<li><code>unname()</code> removes the key from the lookup table to return values</li>
+</ul>
+<pre class="r"><code>change_vec2 &lt;- function(vec){
+  tb &lt;- c(&quot;DD&quot; = &quot;joker&quot;, &quot;C&quot; = &quot;ace&quot;, &quot;7&quot; = &quot;king&quot;, &quot;B&quot; = &quot;queen&quot;, 
+    &quot;BB&quot; = &quot;jack&quot;, &quot;BBB&quot; = &quot;ten&quot;, &quot;0&quot; = &quot;nine&quot;)
+  unname(tb[vec])
+}
+
+vec &lt;- c(&quot;DD&quot;, &quot;C&quot;, &quot;7&quot;, &quot;B&quot;, &quot;BB&quot;, &quot;BBB&quot;, &quot;0&quot;)
+
+change_vec2(vec)</code></pre>
+<pre><code>## [1] &quot;joker&quot; &quot;ace&quot;   &quot;king&quot;  &quot;queen&quot; &quot;jack&quot;  &quot;ten&quot;   &quot;nine&quot;</code></pre>
+<pre class="r"><code>system.time(change_vec2(many))</code></pre>
+<pre><code>##    user  system elapsed 
+##   0.158   0.044   0.206</code></pre>
+</div>
+<div id="how-to-write-fast-for-loops-in-r" class="section level3">
+<h3>How to Write Fast <code>for</code> Loops in R</h3>
+<ul>
+<li>Here’s a bad <code>for</code> loop… you are allocating more memory because it is creating more space to store information in a new vector.
+<ul>
+<li>As you add a value in, vector needs to be made bigger every time in the loop</li>
+</ul></li>
+</ul>
+<pre class="r"><code>system.time({
+  output &lt;- c()
+  
+  for (i in 1:1000000) {
+      output[i] &lt;- i + 1
+  }
+})</code></pre>
+<pre><code>##    user  system elapsed 
+##   0.231   0.065   0.299</code></pre>
+<ul>
+<li>If you know exactly how long the output is going to be, create an empty vector with the same length.
+<ul>
+<li>Define how much space you need before the <code>for</code> loop</li>
+<li><strong>Not as fast as vectorized code</strong>: But still fast</li>
+</ul></li>
+</ul>
+<pre class="r"><code>system.time({
+  output &lt;- rep(NA, 1000000) 
+  
+  for (i in 1:1000000) {
+    output[i] &lt;- i + 1
+  }
+})</code></pre>
+<pre><code>##    user  system elapsed 
+##   0.048   0.002   0.050</code></pre>
+</div>
+<div id="vectorized-code-in-practice" class="section level3">
+<h3>Vectorized Code in Practice</h3>
+<ul>
+<li>Remember Excercise 2 from Monday’s lecture?</li>
+<li>From a given list of fruits, select only the ones that have 6 or fewer letters</li>
+</ul>
+<pre class="r"><code>fruits &lt;- c(&quot;apple&quot;, &quot;pineapple&quot;, &quot;watermelon&quot;, &quot;orange&quot;, &quot;peach&quot;, &quot;plum&quot;,
+            &quot;honeydew&quot;, &quot;banana&quot;, &quot;kiwi&quot;, &quot;papaya&quot;, &quot;grapes&quot;, &quot;strawberry&quot;, 
+            &quot;blueberry&quot;, &quot;blackberry&quot;)
+
+fruits_short &lt;- c()
+
+for (i in 1:length(fruits)) {
+  fruit &lt;- fruits[i]
+  if (nchar(fruit) &lt;= 6) {
+    fruits_short &lt;- c(fruits_short, fruit)
+  }
+}
+
+fruits_short</code></pre>
+<pre><code>## [1] &quot;apple&quot;  &quot;orange&quot; &quot;peach&quot;  &quot;plum&quot;   &quot;banana&quot; &quot;kiwi&quot;   &quot;papaya&quot; &quot;grapes&quot;</code></pre>
+<div id="how-do-we-vectorize-the-above-code" class="section level5">
+<h5>How do we vectorize the above code?</h5>
+<ul>
+<li>Is <code>nchar()</code> following element wise execution?</li>
+</ul>
+<pre class="r"><code>fruits &lt;- c(&quot;apple&quot;, &quot;pineapple&quot;, &quot;watermelon&quot;, &quot;orange&quot;, &quot;peach&quot;, &quot;plum&quot;,
+            &quot;honeydew&quot;, &quot;banana&quot;, &quot;kiwi&quot;, &quot;papaya&quot;, &quot;grapes&quot;, &quot;strawberry&quot;, 
+            &quot;blueberry&quot;, &quot;blackberry&quot;)
+
+nchar(fruits)</code></pre>
+<pre><code>##  [1]  5  9 10  6  5  4  8  6  4  6  6 10  9 10</code></pre>
+<pre class="r"><code>nchar(fruits) &lt;= 6</code></pre>
+<pre><code>##  [1]  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE FALSE
+## [13] FALSE FALSE</code></pre>
+<pre class="r"><code>fruits[nchar(fruits) &lt;= 6]</code></pre>
+<pre><code>## [1] &quot;apple&quot;  &quot;orange&quot; &quot;peach&quot;  &quot;plum&quot;   &quot;banana&quot; &quot;kiwi&quot;   &quot;papaya&quot; &quot;grapes&quot;</code></pre>
+</div>
+<div id="we-went-from-a-long-slow-loop-to-only-one-line-of-code" class="section level4">
+<h4>We went from a long slow loop to only <strong>one line</strong> of code!</h4>
+</div>
+</div>
 </div>
 
 

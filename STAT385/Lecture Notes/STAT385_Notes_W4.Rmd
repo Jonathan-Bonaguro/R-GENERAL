@@ -183,3 +183,229 @@ n
 * The `repeat` loops repeat a chunk of code until you tell them to stop (by hittin `esc`) or until they encounter the command `break`, which stops the loop
 
 ## Friday, Feb. 14, 2020
+
+### Vectorized Code
+
+* The fastest R code will usually take advantage of three things:
+    + logical tests
+    + subsetting
+    + element-wise execution
+* cod that uses these things usually has a certain quality: it is **vectorized**
+* That means the code can take a **vector of values** as input and manipulate **each value** in the vector at the **same time** (parallel computing)
+
+#### Example 
+
+* Write an absolute value function in R that takes
+    + Input: **vec** a vector of numbers
+    + Ouput: a vector with all non-negative numbers
+
+##### First method: `for` loop
+
+```{r}
+abs_loop <- function(vec){
+  for (i in 1:length(vec)) {
+    if (vec[i] < 0) {
+      vec[i] <- -vec[i]
+    }
+  }
+  vec
+}
+```
+
+##### Second method: vectorized code
+
+```{r}
+abs_vectorized <- function(vec) {
+  negs <- vec < 0
+  vec[negs] <- vec[negs] * -1
+  vec
+}
+```
+
+##### Claim: `abs_vectorized()` is much faster than `abs_loop()`
+
+* Lets test this claim!
+
+```{r}
+long <- rep(c(-1,1), 5000000)
+
+system.time(abs_loop(long))
+```
+
+```{r}
+system.time(abs_vectorized(long))
+```
+
+* `abs_vectorized()` is faster!
+* How does `abs_vectorized()` compare to the built in `abs()` function in R?
+
+```{r}
+system.time(abs(long))
+```
+
+### How to Write Vectorized Code
+
+* To create vectorized code:
+    + Use **vectorized funtions** (R built in functions) to complete the sequential steps in your program.
+    + Use **logical subsetting** to handle parallel cases. Try to manipulate every element in a case at         once!
+
+```{r}
+vec <- c(1, -2, 3, -4, 5, -6, 7, -8, 9, -10)
+vec < 0
+vec[vec < 0]
+vec[vec < 0] * -1
+```
+
+#### Exercise 1
+
+* The following function converts a vector of slot symbols to a vector of new slot symbols. Can you         vectorize it?
+
+```{r}
+change_symbols <- function(vec){
+  for (i in 1:length(vec)){
+    if (vec[i] == "DD") {
+      vec[i] <- "joker"
+    } else if (vec[i] == "C") {
+      vec[i] <- "ace"
+    } else if (vec[i] == "7") {
+      vec[i] <- "king"
+    }else if (vec[i] == "B") {
+      vec[i] <- "queen"
+    } else if (vec[i] == "BB") {
+      vec[i] <- "jack"
+    } else if (vec[i] == "BBB") {
+      vec[i] <- "ten"
+    } else {
+      vec[i] <- "nine"
+    } 
+  }
+  vec
+}
+
+vec <- c("DD", "C", "7", "B", "BB", "BBB", "0")
+
+change_symbols(vec)
+```
+
+```{r}
+vec <- c("DD", "C", "7", "B", "BB", "BBB", "0")
+
+change_vec <- function (vec) {
+  vec[vec == "DD"] <- "joker"
+  vec[vec == "C"] <- "ace"
+  vec[vec == "7"] <- "king"
+  vec[vec == "B"] <- "queen"
+  vec[vec == "BB"] <- "jack"
+  vec[vec == "BBB"] <- "ten"
+  vec[!vec %in% c("joker", "ace", "king", "queen", "jack", "ten")] <- "nine"
+  vec
+}
+change_vec(vec)
+```
+
+##### How fast is it? 
+
+```{r}
+many <- rep(vec, 1000000)
+system.time(change_symbols(many))
+system.time(change_vec(many))
+```
+
+* The non-vectorized code took almost **way longer** than the vectorized code did!
+
+### Lookup Tables
+
+* Another way to vectorize code is to use lookup table. Think of lookup tables as a dictionary
+
+```{r}
+tb <- c("DD" = "joker", "C" = "ace", "7" = "king", "B" = "queen", 
+    "BB" = "jack", "BBB" = "ten", "0" = "nine")
+
+tb[vec]
+```
+
+* `tb` is a lookup table sort of like a Python Dictionary. It uses a key to return the value
+* `unname()` removes the key from the lookup table to return values
+
+```{r}
+change_vec2 <- function(vec){
+  tb <- c("DD" = "joker", "C" = "ace", "7" = "king", "B" = "queen", 
+    "BB" = "jack", "BBB" = "ten", "0" = "nine")
+  unname(tb[vec])
+}
+
+vec <- c("DD", "C", "7", "B", "BB", "BBB", "0")
+
+change_vec2(vec)
+
+system.time(change_vec2(many))
+```
+
+### How to Write Fast `for` Loops in R
+
+* Here's a bad `for` loop... you are allocating more memory because it is creating more space to store information in a new vector. 
+    + As you add a value in, vector needs to be made bigger every time in the loop
+
+```{r}
+system.time({
+  output <- c()
+  
+  for (i in 1:1000000) {
+      output[i] <- i + 1
+  }
+})
+```
+
+* If you know exactly how long the output is going to be, create an empty vector with the same length. 
+    + Define how much space you need before the `for` loop
+    + **Not as fast as vectorized code**: But still fast
+
+```{r}
+system.time({
+  output <- rep(NA, 1000000) 
+  
+  for (i in 1:1000000) {
+    output[i] <- i + 1
+  }
+})
+```
+
+### Vectorized Code in Practice
+
+* Remember Excercise 2 from Monday's lecture?
+* From a given list of fruits, select only the ones that have 6 or fewer letters
+
+```{r}
+fruits <- c("apple", "pineapple", "watermelon", "orange", "peach", "plum",
+            "honeydew", "banana", "kiwi", "papaya", "grapes", "strawberry", 
+            "blueberry", "blackberry")
+
+fruits_short <- c()
+
+for (i in 1:length(fruits)) {
+  fruit <- fruits[i]
+  if (nchar(fruit) <= 6) {
+    fruits_short <- c(fruits_short, fruit)
+  }
+}
+
+fruits_short
+```
+
+##### How do we vectorize the above code?
+
+* Is `nchar()` following element wise execution?
+
+```{r}
+fruits <- c("apple", "pineapple", "watermelon", "orange", "peach", "plum",
+            "honeydew", "banana", "kiwi", "papaya", "grapes", "strawberry", 
+            "blueberry", "blackberry")
+
+nchar(fruits)
+
+nchar(fruits) <= 6
+
+fruits[nchar(fruits) <= 6]
+```
+
+#### We went from a long slow loop to only **one line** of code!
