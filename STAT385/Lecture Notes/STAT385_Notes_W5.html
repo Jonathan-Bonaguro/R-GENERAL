@@ -187,6 +187,10 @@ summary {
 
 <div id="monday-feb.-17-2020" class="section level2">
 <h2>Monday, Feb. 17, 2020</h2>
+<div id="note" class="section level3">
+<h3>Note</h3>
+<p><em>I already have and use Git and GitHub frequently. Typing down notes for fun and to keep myself focused in class.</em></p>
+</div>
 <div id="what-is-git" class="section level3">
 <h3>What is Git?</h3>
 <ul>
@@ -200,10 +204,74 @@ summary {
 <ul>
 <li>There’s a lot of different ways to use Git:
 <ul>
-<li>The Shell/Terminal</li>
-<li></li>
-<li></li>
+<li>The command line terminal</li>
+<li>Through a client, like RStudio</li>
+<li>GitHub Desktop</li>
 </ul></li>
+<li>Introduce yourself to Git</li>
+</ul>
+<pre class="r"><code>git config --global user.name 'Jane-Doe'
+git config --global user.email 'janedoe@illinois.edu'
+git config --global -list</code></pre>
+</div>
+<div id="connect-to-github" class="section level3">
+<h3>Connect to Github</h3>
+<ul>
+<li>Create a repository on GitHub</li>
+<li>Clone the repository to your computer</li>
+<li>Make a local change, commit, and push</li>
+<li>Confirm the change on GitHub remote repository!</li>
+</ul>
+</div>
+<div id="how-does-this-work" class="section level3">
+<h3>How does this work?</h3>
+<ul>
+<li>Pull down the repository</li>
+<li>Make changes in the working directory</li>
+<li>Stage fixes, and commit to the working directory!</li>
+</ul>
+<div id="the-three-states-of-git" class="section level4">
+<h4>The Three States of Git</h4>
+<ul>
+<li><strong>Modified</strong>
+<ul>
+<li>You have changed the file but have not committed it to your database yet.</li>
+</ul></li>
+<li><strong>Staged</strong>
+<ul>
+<li>You have marked a modified file in its current version to go into your next commit snapshot.</li>
+</ul></li>
+<li><strong>Committed</strong>
+<ul>
+<li>the data is safely stored in your <strong>local</strong> database.</li>
+</ul></li>
+</ul>
+</div>
+<div id="three-sections-of-a-git-project" class="section level4">
+<h4>Three Sections of a Git Project</h4>
+<ul>
+<li><strong>Working Directory</strong>
+<ul>
+<li>These files are pulled out of the compressed database in the Git directory and placed on disk for you to use or modify.</li>
+</ul></li>
+<li><strong>Staging Area</strong>
+<ul>
+<li>A file, generally contained in your Git directory, that stores information about what will go into your next commit.</li>
+</ul></li>
+<li><strong>Git Directory</strong>
+<ul>
+<li>Where Git stores the metadata and object database for your project. This is the most important part of Git.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="basic-git-workflow" class="section level3">
+<h3>Basic Git Workflow</h3>
+<ul>
+<li>Modify files in your working tree</li>
+<li>Selectively stage just those changes you want to be part of your next commit, which only add those files to the commit</li>
+<li>You do a <code>commit</code>, which takes the files as they are in the staging area and stores that snapshot permanently to your Git directory.</li>
+<li>When you’re ready to update the remote repo, <code>push</code> the commit(s).</li>
 </ul>
 </div>
 </div>

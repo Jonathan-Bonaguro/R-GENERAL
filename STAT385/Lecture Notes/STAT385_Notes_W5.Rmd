@@ -12,6 +12,10 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Monday, Feb. 17, 2020
 
+### Note
+
+*I already have and use Git and GitHub frequently. Typing down notes for fun and to keep myself focused in class.*
+
 ### What is Git?
 
 * A version control system.
@@ -21,9 +25,55 @@ knitr::opts_chunk$set(echo = TRUE)
 ### Using Git
 
 * There's a lot of different ways to use Git:
-    + The Shell/Terminal
-    + 
-    + 
+    + The command line terminal
+    + Through a client, like RStudio
+    + GitHub Desktop
+    
+* Introduce yourself to Git
+
+```{r, eval=FALSE}
+git config --global user.name 'Jane-Doe'
+git config --global user.email 'janedoe@illinois.edu'
+git config --global -list
+```
+
+### Connect to Github
+
+* Create a repository on GitHub
+* Clone the repository to your computer
+* Make a local change, commit, and push
+* Confirm the change on GitHub remote repository!
+
+### How does this work?
+
+* Pull down the repository
+* Make changes in the working directory
+* Stage fixes, and commit to the working directory!
+
+#### The Three States of Git
+
+* **Modified**
+    + You have changed the file but have not committed it to your database yet.
+* **Staged**
+    + You have marked a modified file in its current version to go into your next commit snapshot.
+* **Committed**
+    + the data is safely stored in your **local** database.
+
+#### Three Sections of a Git Project
+
+* **Working Directory**
+    + These files are pulled out of the compressed database in the Git directory and placed on disk for you     to use or modify.
+* **Staging Area**
+    + A file, generally contained in your Git directory, that stores information about what will go into       your next commit.
+* **Git Directory**
+    + Where Git stores the metadata and object database for your project. This is the most important part      of Git.
+
+### Basic Git Workflow
+
+* Modify files in your working tree
+* Selectively stage just those changes you want to be part of your next commit, which only add those files to the commit
+* You do a `commit`, which takes the files as they are in the staging area and stores that snapshot permanently to your Git directory.
+* When you’re ready to update the remote repo, `push` the commit(s).
 
 
 
