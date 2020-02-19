@@ -1,0 +1,82 @@
+---
+title: "Week 5 Lab Assignment 1"
+output: 
+  html_document:
+    df_print: paged
+author: "Jonathan Bonaguro"
+date: "February 19, 2020"
+---
+
+```{r, echo = FALSE, include = FALSE}
+library("magrittr")
+library("purrr")
+```
+
+## Assignments
+
+1. Using the appropriate map() family of functions write the code to compute the following:
+    a. mean of every column of the mtcars dataframe.
+    b. check if each column is a character vector.
+    c. check if each column is a logical vector.
+2. Using the appropriate map() family of functions check the type of each column in the flights dataframe. You can install the package “nycflights13” and then run the library() command with the “flights” dataset in this package.
+3. Using the appropriate map() family of functions check the number of unique values in every column of the mtcars dataframe.
+4. Using the appropriate map() family of functions check if there are any missing values found in each of the columns of the flights dataset.
+5. Using the appropriate map() family of functions add any two columns of the mtcars dataframe to return an output.
+
+#### Assignment 1
+
+1. Using the appropriate map() family of functions write the code to compute the following:
+    a. mean of every column of the mtcars dataframe.
+    b. check if each column is a character vector.
+    c. check if each column is a logical vector.
+    
+```{r}
+mtcars %>% 
+  map_dbl(mean)
+
+mtcars %>% 
+  map_lgl(is.character)
+
+mtcars %>% 
+  map_lgl(is.logical)
+```
+
+#### Assignment 2
+
+2. Using the appropriate map() family of functions check the type of each column in the flights dataframe. You can install the package “nycflights13” and then run the library() command with the “flights” dataset in this package.
+
+```{r}
+library(nycflights13)
+
+flights %>% 
+  map(typeof)
+```
+
+#### Assignment 3 
+
+3. Using the appropriate map() family of functions check the number of unique values in every column of the mtcars dataframe.
+
+```{r}
+mtcars %>% 
+  map(unique) %>% 
+  map_int(length)
+```
+
+#### Assignment 4
+
+4. Using the appropriate map() family of functions check if there are any missing values found in each of the columns of the flights dataset.
+
+```{r}
+flights %>% 
+  map_lgl(anyNA)
+```
+
+#### Assignment 5
+
+5. Using the appropriate map() family of functions add any two columns of the mtcars dataframe to return an output.
+
+```{r}
+mtcars %$%
+  map2_dbl(mpg, wt, ~.x + .y)
+```
+

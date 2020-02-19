@@ -1,0 +1,30 @@
+---
+title: "Homework Assignment One"
+author: "Jonathan Bonaguro"
+date: "February 23, 2020"
+output: 
+  html_notebook:
+    df_print: paged
+---
+
+For the following homework, you can use the lecture slides, hands-on-notebooks, reference books, google search, and `?` in R console as resources for help.
+
+#### Problem 1
+
+1. (1 Point) What type of vector values are stored in object `a`. `a <- c("1","2","3")`. Go ahead and convert them to `numeric` type.
+
+```{r}
+a <- c("1","2","3")
+typeof(a)
+
+as.numeric(a)
+```
+
+#### Problem 2
+
+2. (1 Point) In R, the following arthimetic operation `b*2` on the object `b::b<-c(4,5,5,7)` will result in the following solution `(8,10,10,14)`. Which of the following accurately descibes how R handled this operation: 
+    + **R Vectorized this operation, and applied the function `*2` to each item in `b`**
+    
+
+
+
