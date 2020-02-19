@@ -7,9 +7,9 @@ output:
     df_print: paged
 ---
 
-For the following homework, you can use the lecture slides, hands-on-notebooks, reference books, google search, and `?` in R console as resources for help.
+## For the following homework, you can use the lecture slides, hands-on-notebooks, reference books, google search, and `?` in R console as resources for help.
 
-#### Problem 1
+### Problem 1
 
 1. (1 Point) What type of vector values are stored in object `a`. `a <- c("1","2","3")`. Go ahead and convert them to `numeric` type.
 
@@ -20,11 +20,77 @@ typeof(a)
 as.numeric(a)
 ```
 
-#### Problem 2
+### Problem 2
 
 2. (1 Point) In R, the following arthimetic operation `b*2` on the object `b::b<-c(4,5,5,7)` will result in the following solution `(8,10,10,14)`. Which of the following accurately descibes how R handled this operation: 
-    + **R Vectorized this operation, and applied the function `*2` to each item in `b`**
+    a) Arithmetic recyling
+    b) **Vector recyling**
+    c) Complex substituion
+    d) Vector coercion
     
+### Problem 3
 
+3.  (2 Points) Let’s say you want to store multiple vector types in a R object `c`. What is wrong with the following code: `c <- c("Good Morning",1,TRUE)`. Can you rewrite this code appropriately?
 
+**`c` automatically concatenates a vector, and vectors have to be data of the same type. The following code records the data as a type `list`**
+
+```{r}
+c <- c(list("Good Morning", 1, TRUE))
+c
+```
+
+### Problem 4
+
+4. (1 Point) Which of the following describes accurately about `class` of a R object?
+    a) type
+    b) dimension
+    c) **Attribute**
+    d) None of the above
+    
+### Problem 5
+
+5. (1 Point) Which among the following operation will return the entire `mtcars` dataframe (including all rows and colums):
+    a) **`mtcars[TRUE,]`**
+    b) `mtcars[TRUE,c(FALSE)]`
+    c) `mtcars[TRUE,FALSE]`
+    d) `mtcars[FALSE,TRUE]`
+
+```{r}
+mtcars[TRUE, ]
+```
+
+### Problem 6
+
+6. In the following list `list_a`, which of the following operation will return the value 3?
+    a) `sum(list_a[[1]])`
+    b) `sum(list_a[[3]])`
+    c) `sum(list_a[1])`
+    d) **both a and b are true**
+
+### Problem 7
+
+7. (5 points) What will the following combinations of logical and boolean operations return?
+    a. `(2<1) & (3<4) & (5<6)` == `FALSE`
+    b. `(2<1) | (3<4) | (5<6)` == `TRUE`
+    c. `(FALSE<TRUE) & (TRUE>FALSE) & (FALSE!=TRUE)` == `TRUE`
+    d. `any(c(2<1 & 3<4 & 5<6),(2<1 | 3<4 | 5<6),(FALSE<TRUE & TRUE>FALSE & FALSE!=TRUE))` == `TRUE`
+    e. `all(1%in%c(2,3,4),0%in%c(FALSE,TRUE),1%in%100==100)` == `FALSE`
+
+### Problem 8
+
+8. (2 Points) What is the use of `ifelse()` function? Execute the `ifelse()` function with an example of your choice.
+
+**`ifelse()` exectues a logical test and returns the value of argument `yes=` if `test` returns `TRUE` and returns the value of argument `no=` if `test` returns `FALSE`.**
+
+```{r}
+x <- 1:10
+sum(ifelse(x>=0, yes = x, NA))
+
+x <- -2:10
+sum(ifelse(x>=0, yes = x, NA))
+```
+
+### Problem 9
+
+9. (1 Point) What is the use of `switch()` function?
 

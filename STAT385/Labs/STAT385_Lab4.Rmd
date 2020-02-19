@@ -1,0 +1,102 @@
+---
+title: "STAT385 Lab 4"
+author: "Jonathan Bonaguro"
+date: "2/19/2020"
+output: html_document
+---
+
+# R Markdown Lab
+
+Source: David Dalpiaz’s STAT 3202-Sp19 at Ohio State
+
+# Class Schedule
+
+1. Add a header to your document titled “Class Schedule”
+2. Add a bulleted list in that section that lists your Spring 2020 schedule.
+
+* **PS328** - Introduction to Biology and Politics
+* **PS396** - International Conflict
+* **PS496** - Senior Thesis
+* **PSYCH496** - Advanced Topics in Psychology
+* **STAT385** - Statistical Programming Methods
+
+# Using R
+
+In this section, add three R “chunks.” Do the following in those chunks:
+
+* **Chunk 1:** Create a vector called x that stores the integers from `1` to `10`. Calculate the standard deviation of this vector.
+    + *Hint:* Use the `:` operator.
+
+```{r}
+x <- 1:10
+sd(x)
+```
+
+* **Chunk 2:** Calculate the probability that a Poisson random variable with a mean of `5` takes the value `3`.
+    + *Hint:* Use the `dpois()` function.
+
+```{r}
+dpois(5, 3)
+```
+
+* **Chunk 3:** Generate a sample of size `100` from a standard normal distribution and store it in a vector named `std_norm`. Calculate the mean of this vector. (Fingers crossed that it is close to zero!)
+    + *Hint:* Use the `rnorm()` function.
+    + *Note:* For an added bonus (worth no points), set a seed first so that every time you knit this document the “random” result will be the same.
+    
+```{r}
+set.seed(385)
+std_norm <- rnorm(100, mean = 0, sd = 1)
+mean(std_norm)
+```
+
+# Simulation Study
+
+In this section, add the following R code in a chunk.
+
+```{r}
+# function that simulates sample means and variance from a poisson distribution
+# for various sample sizes and true lambdas
+sim_mean_var = function(sample_size = 50, true_lambda = 2) {
+  sim_sample = rpois(n = sample_size, lambda = true_lambda)
+  c(mean(sim_sample), var(sim_sample))
+}
+
+# generate sample means and variances
+set.seed(42)
+results = replicate(10000, sim_mean_var())
+sample_means = results[1, ]
+sample_variances = results[2, ]
+```
+
+This is code we saw in class for obtaining the empirical distribution of X¯ and S2 when attempting to estimating λ=2 using a sample of size 50 from a Poisson distribution.
+
+In the “Simulation Study” section, add another chunk with the following code which will produce a plot. When using R Markdown, it is a good idea to use different chunks for plots. Also, one plot per chunk!
+
+```{r, echo = FALSE}
+# plot results of simulation study
+plot(density(sample_means), xlim = range(sample_variances), lwd = 3,
+     main =  "Sampling Distributions of Sample Mean and Variance: Poisson ", 
+     xlab = " ", col = "dodgerblue")
+lines(density(sample_variances), lwd = 3, lty = 2, col = "darkorange")
+legend("topright", c("mean", "variance"), lty = c(1, 2), lwd = 3,
+       col = c("dodgerblue", "darkorange"))
+abline(v = 2, col = "darkgrey", lty = 3)
+```
+
+# Objects and Functions
+
+Create another header titled “Objects and Functions.” In that section, recreate the following blockquote:
+
+> “To understand computations in R, two slogans are helpful:
+> 
+> * Everything that exists is an object.
+> * Everything that happens is a function call."  
+> — John Chambers
+
+
+
+
+    
+    
+    
+
