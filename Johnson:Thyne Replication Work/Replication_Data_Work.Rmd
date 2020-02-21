@@ -1,0 +1,215 @@
+---
+title: "Johnson and Thyne Replication Data Cleaning"
+author: "Jonathan Bonaguro"
+date: "Cline Center for Advanced Social Research"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r}
+library(haven)
+library(doBy)
+library(tidyverse)
+```
+
+## Produce Replication Data for Johnson and Thyne Article
+
+#### Read in Johnson and Thyne's Replication Data as `johnson_thyne`
+
+```{r}
+johnson_thyne <- read_dta("Johnson_Thyne Rep Data/johnson_thyne_JCR_2018_base.dta")
+head(johnson_thyne)
+```
+
+#### Modify `johnson_thyne`
+
+* Add month index to merge with CDP Data later on
+* Add dummy variables for `protests_near`, `protests_far`, `protests_violent`, and `protests_peaceful`
+
+```{r}
+johnson_thyne <- as.data.frame(johnson_thyne)
+
+johnson_thyne <-johnson_thyne %>%
+   group_by(ccode, group = cumsum(year != lag(year, default = first(year)))) %>%
+   mutate(month = row_number()) %>%
+   ungroup() %>%
+   select(-group)
+
+# reorder data so it's easier to read
+
+johnson_thyne <- johnson_thyne[ , c(1, 2, 21, 3:20)]
+
+# add dummy varaibles for protest events
+johnson_thyne <- johnson_thyne %>%
+  mutate(protests_near_dummy = as.numeric(protests_near >= 1)) %>% 
+  mutate(protests_far_dummy = as.numeric(protests_far >= 1))
+
+johnson_thyne <- johnson_thyne %>%
+  mutate(protests_peaceful_dummy = as.numeric(protests_peaceful >= 1)) %>% 
+  mutate(protests_violent_dummy = as.numeric(protests_violent >= 1))
+```
+
+## Adding in CDP 2.0 Data
+
+#### Read in Cline Center data as `cdp2`
+
+```{r}
+cdp2 <- read.csv("External Data Sources/Coup Data v2.0.0.csv")
+# Delete extra column 'X' that was imported 
+cdp2 <- cdp2[ , -1]
+```
+
+#### Collapse `cdp2` data into country month format
+
+* Make `cdp2` type `dataframe`
+* Collapse coup variable on `cowcode`, `year`, and `month`
+* Rename column `cowcode` to `ccode`
+* Create index `new_columns` of new columns to add to dataset
+* Add `new_columns` to dataset, default value 0
+* Populate new columns as dichotomous variables based on values of count variables
+
+```{r}
+cdp2 <- as.data.frame(cdp2)
+
+cdp2_country_month <- summaryBy(realized + unrealized + military_coup + rebel_coup + palace_coup + popular_revolt + dissident_action + foreign_coup + i_m_trans + forced_resign + counter_coup + auto_coup + attempted + conspiracy ~ cowcode + year + month, data = cdp2, FUN = c(sum)) 
+
+colnames(cdp2_country_month)[1] <- "ccode"
+
+new_columns <- c('realized', 'unrealized', 'military_coup', 'rebel_coup', 'palace_coup', 'popular_revolt', 'dissident_action', 'foreign_coup', 'i_m_trans', 'forced_resign', 'counter_coup', 'auto_coup', 'attempted', 'conspiracy')
+
+cdp2_country_month[new_columns] <- 0
+
+cdp2_country_month$realized[cdp2_country_month$realized.sum > 0] <- 1
+cdp2_country_month$unrealized[cdp2_country_month$unrealized.sum > 0] <- 1 
+cdp2_country_month$military_coup[cdp2_country_month$military_coup.sum > 0] <- 1 
+cdp2_country_month$rebel_coup[cdp2_country_month$rebel_coup.sum > 0] <- 1 
+cdp2_country_month$palace_coup[cdp2_country_month$palace_coup.sum > 0] <- 1 
+cdp2_country_month$popular_revolt[cdp2_country_month$popular_revolt.sum > 0] <- 1 
+cdp2_country_month$dissident_action[cdp2_country_month$dissident_action.sum > 0] <- 1 
+cdp2_country_month$foreign_coup[cdp2_country_month$foreign_coup.sum > 0] <- 1 
+cdp2_country_month$i_m_trans[cdp2_country_month$i_m_trans.sum > 0] <- 1 
+cdp2_country_month$forced_resign[cdp2_country_month$forced_resign.sum > 0] <- 1 
+cdp2_country_month$counter_coup[cdp2_country_month$counter_coup.sum > 0] <- 1 
+cdp2_country_month$auto_coup[cdp2_country_month$auto_coup.sum > 0] <- 1 
+cdp2_country_month$attempted[cdp2_country_month$attempted.sum > 0] <- 1 
+cdp2_country_month$conspiracy[cdp2_country_month$conspiracy.sum > 0] <- 1 
+```
+
+## Merge `cdp2_country_month` into `johnson_thyne`
+
+```{r}
+merged_data <- merge(johnson_thyne, cdp2_country_month, all.x = TRUE)
+```
+
+* Create variable `cc_coup` indicating that there was any coup activity in a month according to CCASR
+* `replication_data` will serve as data for models
+
+```{r}
+merged_data$cc_coup <- merged_data$realized + merged_data$unrealized
+merged_data$cc_coup[merged_data$cc_coup > 0] <- 1
+merged_data$cc_coup[is.na(merged_data$cc_coup)] <- 0
+
+replication_data <- merged_data[merged_data$year >= 1950 & merged_data$year <= 2005, ]
+```
+
+#### Create Month Since Coup Event Variables for CDP Coup Data
+
+```{r, include=FALSE}
+replication_data <- replication_data %>%
+  group_by(ccode, group = cumsum(cc_coup = lag(cc_coup, default = first(cc_coup)))) %>%
+  mutate(coupmonth_cdp = row_number()-1) %>%
+  ungroup() %>%
+  select(-group) %>% 
+  mutate(coupmonth_cdp2 = coupmonth_cdp^2) %>% 
+  mutate(coupmonth_cdp3 = coupmonth_cdp^3)
+
+replication_data <- replication_data %>%
+  mutate(military_coup = coalesce(military_coup, 0)) %>% 
+  group_by(ccode, group = cumsum(military_coup = lag(military_coup, default = first(military_coup)))) %>%
+  mutate(mil_coupmonth = row_number()-1) %>%
+  ungroup() %>%
+  select(-group) %>% 
+  mutate(mil_coupmonth2 = mil_coupmonth^2) %>% 
+  mutate(mil_coupmonth3 = mil_coupmonth^3)
+
+replication_data <- replication_data %>%
+  mutate(palace_coup = coalesce(palace_coup, 0)) %>% 
+  group_by(ccode, group = cumsum(palace_coup = lag(palace_coup, default = first(palace_coup)))) %>%
+  mutate(palace_coupmonth = row_number()-1) %>%
+  ungroup() %>%
+  select(-group) %>% 
+  mutate(palace_coupmonth2 = palace_coupmonth^2) %>% 
+  mutate(palace_coupmonth3 = palace_coupmonth^3)
+
+replication_data <- replication_data %>%
+  mutate(dissident_action = coalesce(dissident_action, 0)) %>% 
+  group_by(ccode, group = cumsum(dissident_action = lag(dissident_action, default = first(dissident_action)))) %>%
+  mutate(dissident_actionmonth = row_number()-1) %>%
+  ungroup() %>%
+  select(-group) %>% 
+  mutate(dissident_actionmonth2 = dissident_actionmonth^2) %>% 
+  mutate(dissident_actionmonth3 = dissident_actionmonth^3)
+
+replication_data <- replication_data %>%
+  mutate(realized = coalesce(realized, 0)) %>% 
+  group_by(ccode, group = cumsum(realized = lag(realized, default = first(realized)))) %>%
+  mutate(realized_month = row_number()-1) %>%
+  ungroup() %>%
+  select(-group) %>% 
+  mutate(realized_month2 = realized_month^2) %>% 
+  mutate(realized_month3 = realized_month^3)
+
+replication_data <- replication_data %>%
+  mutate(rebel_coup = coalesce(rebel_coup, 0)) %>% 
+  group_by(ccode, group = cumsum(rebel_coup = lag(rebel_coup, default = first(rebel_coup)))) %>%
+  mutate(rebel_coup_month = row_number()-1) %>%
+  ungroup() %>%
+  select(-group) %>% 
+  mutate(rebel_coup_month2 = rebel_coup_month^2) %>% 
+  mutate(rebel_coup_month3 = rebel_coup_month^3)
+
+replication_data <- replication_data %>%
+  mutate(popular_revolt = coalesce(popular_revolt, 0)) %>% 
+  group_by(ccode, group = cumsum(popular_revolt = lag(popular_revolt, default = first(popular_revolt)))) %>%
+  mutate(popular_revolt_month = row_number()-1) %>%
+  ungroup() %>%
+  select(-group) %>% 
+  mutate(popular_revolt_month2 = popular_revolt_month^2) %>% 
+  mutate(popular_revolt_month3 = popular_revolt_month^3)
+
+replication_data <- replication_data %>%
+  mutate(foreign_coup = coalesce(foreign_coup, 0)) %>% 
+  group_by(ccode, group = cumsum(foreign_coup = lag(foreign_coup, default = first(foreign_coup)))) %>%
+  mutate(foreign_coup_month = row_number()-1) %>%
+  ungroup() %>%
+  select(-group) %>% 
+  mutate(foreign_coup_month2 = foreign_coup_month^2) %>% 
+  mutate(foreign_coup_month3 = foreign_coup_month^3)
+
+replication_data <- replication_data %>%
+  mutate(forced_resign = coalesce(forced_resign, 0)) %>% 
+  group_by(ccode, group = cumsum(forced_resign = lag(forced_resign, default = first(forced_resign)))) %>%
+  mutate(forced_resign_month = row_number()-1) %>%
+  ungroup() %>%
+  select(-group) %>% 
+  mutate(forced_resign_month2 = forced_resign_month^2) %>% 
+  mutate(forced_resign_month3 = forced_resign_month^3)
+
+
+replication_data <- replication_data %>% 
+  mutate(unrealized = coalesce(unrealized, 0)) %>% 
+  mutate(i_m_trans = coalesce(i_m_trans, 0)) %>%
+  mutate(counter_coup = coalesce(counter_coup, 0)) %>%
+  mutate(auto_coup = coalesce(auto_coup, 0)) %>%
+  mutate(attempted = coalesce(attempted, 0)) %>%
+  mutate(conspiracy = coalesce(conspiracy, 0))
+```
+
+## Write `replication_data` to csv for use in models
+
+```{r}
+write.csv(replication_data, "CCAS_Johnson_Thyne_Replication/replication_data.csv")
+```
+
+

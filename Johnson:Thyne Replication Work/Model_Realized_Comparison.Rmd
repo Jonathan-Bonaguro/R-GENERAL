@@ -1,0 +1,88 @@
+---
+title: "Johnson and Thyne Realized Replication Models"
+author: "Jonathan Bonaguro/Cline Center for Advanced Social Reserach"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r, echo=FALSE, message=FALSE}
+library(jtools)
+library(huxtable)
+library(knitr)
+```
+
+## Read in Data for Replication
+
+```{r}
+replication_data <- read.csv("CCAS_Johnson_Thyne_Replication/replication_data.csv")
+```
+
+## Realized Models with Count Protest Variables
+
+#### Realized Model 1
+
+```{r}
+formula1_realized <- as.formula(realized ~ protests + military_coup + palace_coup + dissident_action + rebel_coup + popular_revolt + foreign_coup + forced_resign + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + coupmonth_cdp + coupmonth_cdp2 + coupmonth_cdp3)
+
+model1_realized <- glm(data = replication_data, formula = formula1_realized, family =  binomial())
+model1_realized_se <- summ(model1_realized, robust = "HC1", cluster = "ccode", digits = 3)
+```
+
+#### Realized Model 2
+
+```{r}
+formula2_realized <- as.formula(realized ~ protests_near + protests_far + military_coup + palace_coup + dissident_action + rebel_coup + popular_revolt + foreign_coup + forced_resign + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + coupmonth_cdp + coupmonth_cdp2 + coupmonth_cdp3)
+
+model2_realized <- glm(data = replication_data, formula = formula2_realized, family =  binomial())
+model2_realized_se <- summ(model2_realized, robust = "HC1", cluster = "ccode", digits = 3)
+```
+
+#### Realized Model 3
+
+```{r}
+formula3_realized <- as.formula(realized ~ protests_violent + protests_peaceful + military_coup + palace_coup + dissident_action + rebel_coup + popular_revolt + foreign_coup + forced_resign + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + coupmonth_cdp + coupmonth_cdp2 + coupmonth_cdp3)
+
+model3_realized <- glm(data = replication_data, formula = formula3_realized, family =  binomial())
+model3_realized_se <- summ(model3_realized, robust = "HC1", cluster = "ccode", digits = 3)
+```
+
+## Realized Models with Dummy Protest Variables
+
+#### Realized Model 2 Dummy
+
+```{r}
+formula2_realized_dummy <- as.formula(realized ~ protests_near_dummy + protests_far_dummy + military_coup + palace_coup + dissident_action + rebel_coup + popular_revolt + foreign_coup + forced_resign + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + coupmonth_cdp + coupmonth_cdp2 + coupmonth_cdp3)
+
+model2_realized_dummy <- glm(data = replication_data, formula = formula2_realized_dummy, family =  binomial())
+model2_realized_se_dummy <- summ(model2_realized_dummy, robust = "HC1", cluster = "ccode", digits = 3)
+model2_realized_se_or <- summ(model2_realized_dummy, robust = "HC1", cluster = "ccode", digits = 3, exp = TRUE)
+```
+
+#### Realized Model 3 Dummy
+
+```{r}
+formula3_realized_dummy <- as.formula(realized ~ protests_violent_dummy + protests_peaceful_dummy + military_coup + palace_coup + dissident_action + rebel_coup + popular_revolt + foreign_coup + forced_resign + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + coupmonth_cdp + coupmonth_cdp2 + coupmonth_cdp3)
+
+model3_realized_dummy <- glm(data = replication_data, formula = formula3_realized_dummy, family =  binomial())
+model3_realized_se_dummy <- summ(model3_realized_dummy, robust = "HC1", cluster = "ccode", digits = 3)
+model3_realized_se_or <- summ(model3_realized_dummy, robust = "HC1", cluster = "ccode", digits = 3, exp = TRUE)
+```
+
+## Realized Count Variable Model Regression Table
+
+```{r, cache=TRUE, message=FALSE}
+export_summs(model1_realized_se, model2_realized_se, model3_realized_se, digits = 3,coefs = c("protests", "protests_near", "protests_far", "protests_violent", "protests_peaceful", "military_coup", "palace_coup", "dissident_action", "rebel_coup", "popular_revolt", "foreign_coup", "forced_resign", "gdppc", "dem", "auth", "milreg", "cwongoing", "mideast", "africa", "asia", "americas", "(Intercept)"))
+```
+
+## Realized Dummy Variable Model Regression Table
+
+```{r, cache=TRUE, message=FALSE}
+export_summs(model2_realized_se_dummy, model3_realized_se_dummy, digits = 3,coefs = c("protests_near_dummy", "protests_far_dummy", "protests_violent_dummy", "protests_peaceful_dummy", "military_coup", "palace_coup", "dissident_action", "rebel_coup", "popular_revolt", "foreign_coup", "forced_resign", "gdppc", "dem", "auth", "milreg", "cwongoing", "mideast", "africa", "asia", "americas", "(Intercept)"))
+```
+
+## Realized Dummy Variable Model Odds Ratio Table
+
+```{r, cache=TRUE, message=FALSE}
+export_summs(model2_realized_se_or, model3_realized_se_or, digits = 3,coefs = c("protests_near_dummy", "protests_far_dummy", "protests_violent_dummy", "protests_peaceful_dummy", "military_coup", "palace_coup", "dissident_action", "rebel_coup", "popular_revolt", "foreign_coup", "forced_resign", "gdppc", "dem", "auth", "milreg", "cwongoing", "mideast", "africa", "asia", "americas", "(Intercept)"))
+```

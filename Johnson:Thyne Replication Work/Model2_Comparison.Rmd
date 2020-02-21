@@ -1,0 +1,221 @@
+---
+title: "Johnson and Thyne Replication Model 2"
+author: "Jonathan Bonaguro/Cline Center for Advanced Social Reserach"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r, echo=FALSE, message=FALSE}
+library(tidyverse)
+library(knitr)
+library(jtools)
+library(huxtable)
+```
+
+## Read in Data for Replication
+
+```{r}
+replication_data <- read.csv("CCAS_Johnson_Thyne_Replication/replication_data.csv")
+```
+
+## Count Variable Model 2
+
+### Johnson and Thyne Replication Model 2
+
+* Create models using `glm`, fit robust clustered standard errors using `jtools::summ` 
+
+```{r}
+formula2 <- as.formula(coup ~ protests_near + protests_far + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + coupmonths + coupmonths2 + coupmonths3)
+
+model2 <- glm(data = replication_data, formula = formula2, family =  binomial())
+model2_se <- summ(model2, robust = "HC1", cluster = "ccode", digits = 3)
+```
+
+### Cline Center Coup Data Model 2 Variants
+
+#### Coup Activity (Attempted, Successful, Conspiracy) Model 2
+
+```{r}
+formula2_cdp <- as.formula(cc_coup ~ protests_near + protests_far + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + coupmonth_cdp + coupmonth_cdp2 + coupmonth_cdp3)
+
+model2_cdp <- glm(data = replication_data, formula = formula2_cdp, family =  binomial())
+model2_cdp_se <- summ(model2_cdp, robust = "HC1", cluster = "ccode", digits = 3)
+```
+
+#### Military Coup Model 2
+
+```{r}
+formula2_mil <- as.formula(military_coup ~ protests_near + protests_far + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + mil_coupmonth + mil_coupmonth2 + mil_coupmonth3)
+
+model2_mil <- glm(data = replication_data, formula = formula2_mil, family =  binomial())
+model2_mil_se <- summ(model2_mil, robust = "HC1", cluster = "ccode", digits = 3)
+```
+
+#### Palace Coup Model 2
+
+```{r}
+formula2_palace <- as.formula(palace_coup ~ protests_near + protests_far + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + palace_coupmonth + palace_coupmonth2 + palace_coupmonth3)
+
+model2_palace <- glm(data = replication_data, formula = formula2_palace, family =  binomial())
+model2_palace_se <- summ(model2_palace, robust = "HC1", cluster = "ccode", digits = 3)
+```
+
+#### Dissident Action Model 2
+
+```{r}
+formula2_dissident <- as.formula(dissident_action ~ protests_near + protests_far + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + dissident_actionmonth + dissident_actionmonth2 + dissident_actionmonth3)
+
+model2_dissident <- glm(data = replication_data, formula = formula2_dissident, family =  binomial())
+model2_dissident_se <- summ(model2_dissident, robust = "HC1", cluster = "ccode", digits = 3)
+```
+
+#### Rebel Coup Model 2
+
+```{r}
+formula2_rebel_coup <- as.formula(rebel_coup ~ protests_near + protests_far + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + rebel_coup_month + rebel_coup_month2 + rebel_coup_month3)
+
+model2_rebel_coup <- glm(data = replication_data, formula = formula2_rebel_coup, family =  binomial())
+model2_rebel_coup_se <- summ(model2_rebel_coup, robust = "HC1", cluster = "ccode", digits = 3)
+```
+
+#### Popular Revolt Model 2
+
+```{r}
+formula2_popular_revolt <- as.formula(popular_revolt ~ protests_near + protests_far + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + popular_revolt_month + popular_revolt_month2 + popular_revolt_month3)
+
+model2_popular_revolt <- glm(data = replication_data, formula = formula2_popular_revolt, family =  binomial())
+model2_popular_revolt_se <- summ(model2_popular_revolt, robust = "HC1", cluster = "ccode", digits = 3)
+```
+
+#### Foreign Coup Model 2
+
+```{r}
+formula2_foreign_coup <- as.formula(foreign_coup ~ protests_near + protests_far + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + foreign_coup_month + foreign_coup_month2 + foreign_coup_month3)
+
+model2_foreign_coup <- glm(data = replication_data, formula = formula2_foreign_coup, family =  binomial())
+model2_foreign_coup_se <- summ(model2_foreign_coup, robust = "HC1", cluster = "ccode", digits = 3)
+```
+
+#### Forced Resign Model 2
+
+```{r}
+formula2_forced_resign <- as.formula(forced_resign ~ protests_near + protests_far + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + forced_resign_month + forced_resign_month2 + forced_resign_month3)
+
+model2_forced_resign <- glm(data = replication_data, formula = formula2_forced_resign, family =  binomial())
+model2_forced_resign_se <- summ(model2_forced_resign, robust = "HC1", cluster = "ccode", digits = 3)
+```
+
+## Dummy Variable Model 2
+
+### Johnson and Thyne Replication Dummy Model 2
+
+* Create models using `glm`, fit robust clustered standard errors using `jtools::summ` 
+
+```{r}
+formula2_dummy <- as.formula(coup ~ protests_near_dummy + protests_far_dummy + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + coupmonths + coupmonths2 + coupmonths3)
+
+model2_dummy <- glm(data = replication_data, formula = formula2_dummy, family =  binomial())
+model2_se_dummy <- summ(model2_dummy, robust = "HC1", cluster = "ccode", digits = 3)
+model2_se_or <- summ(model2_dummy, robust = "HC1", cluster = "ccode", digits = 3, exp = TRUE)
+```
+
+### Cline Center Coup Data Model 2 Variants
+
+#### Coup Activity (Attempted, Successful, Conspiracy) Dummy Model 2
+
+```{r}
+formula2_cdp_dummy <- as.formula(cc_coup ~ protests_near_dummy + protests_far_dummy + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + coupmonth_cdp + coupmonth_cdp2 + coupmonth_cdp3)
+
+model2_cdp_dummy <- glm(data = replication_data, formula = formula2_cdp_dummy, family =  binomial())
+model2_cdp_se_dummy <- summ(model2_cdp_dummy, robust = "HC1", cluster = "ccode", digits = 3)
+model2_cdp_se_or <- summ(model2_cdp_dummy, robust = "HC1", cluster = "ccode", digits = 3, exp = TRUE)
+```
+
+#### Military Coup Dummy Model 2
+
+```{r}
+formula2_mil_dummy <- as.formula(military_coup ~ protests_near_dummy + protests_far_dummy + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + mil_coupmonth + mil_coupmonth2 + mil_coupmonth3)
+
+model2_mil_dummy <- glm(data = replication_data, formula = formula2_mil_dummy, family =  binomial())
+model2_mil_se_dummy <- summ(model2_mil_dummy, robust = "HC1", cluster = "ccode", digits = 3)
+model2_mil_se_or <- summ(model2_mil_dummy, robust = "HC1", cluster = "ccode", digits = 3, exp = TRUE)
+```
+
+#### Palace Coup Dummy Model 2
+
+```{r}
+formula2_palace_dummy <- as.formula(palace_coup ~ protests_near_dummy + protests_far_dummy + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + palace_coupmonth + palace_coupmonth2 + palace_coupmonth3)
+
+model2_palace_dummy <- glm(data = replication_data, formula = formula2_palace_dummy, family =  binomial())
+model2_palace_se_dummy <- summ(model2_palace_dummy, robust = "HC1", cluster = "ccode", digits = 3)
+model2_palace_se_or <- summ(model2_palace_dummy, robust = "HC1", cluster = "ccode", digits = 3, exp = TRUE)
+```
+
+#### Dissident Action Dummy Model 2
+
+```{r}
+formula2_dissident_dummy <- as.formula(dissident_action ~ protests_near_dummy + protests_far_dummy + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + dissident_actionmonth + dissident_actionmonth2 + dissident_actionmonth3)
+
+model2_dissident_dummy <- glm(data = replication_data, formula = formula2_dissident_dummy, family =  binomial())
+model2_dissident_se_dummy <- summ(model2_dissident_dummy, robust = "HC1", cluster = "ccode", digits = 3)
+model2_dissident_se_or <- summ(model2_dissident_dummy, robust = "HC1", cluster = "ccode", digits = 3, exp = TRUE)
+```
+
+#### Rebel Coup Dummy Model 2
+
+```{r}
+formula2_rebel_coup_dummy <- as.formula(rebel_coup ~ protests_near_dummy + protests_far_dummy + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + rebel_coup_month + rebel_coup_month2 + rebel_coup_month3)
+
+model2_rebel_coup_dummy <- glm(data = replication_data, formula = formula2_rebel_coup_dummy, family =  binomial())
+model2_rebel_coup_se_dummy <- summ(model2_rebel_coup_dummy, robust = "HC1", cluster = "ccode", digits = 3)
+model2_rebel_coup_se_or <- summ(model2_rebel_coup_dummy, robust = "HC1", cluster = "ccode", digits = 3, exp = TRUE)
+```
+
+#### Popular Revolt Dummy Model 2
+
+```{r}
+formula2_popular_revolt_dummy <- as.formula(popular_revolt ~ protests_near_dummy + protests_far_dummy + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + popular_revolt_month + popular_revolt_month2 + popular_revolt_month3)
+
+model2_popular_revolt_dummy <- glm(data = replication_data, formula = formula2_popular_revolt_dummy, family =  binomial())
+model2_popular_revolt_se_dummy <- summ(model2_popular_revolt_dummy, robust = "HC1", cluster = "ccode", digits = 3)
+model2_popular_revolt_se_or <- summ(model2_popular_revolt_dummy, robust = "HC1", cluster = "ccode", digits = 3, exp = TRUE)
+```
+
+#### Foreign Coup Dummy Model 2
+
+```{r}
+formula2_foreign_coup_dummy <- as.formula(foreign_coup ~ protests_near_dummy + protests_far_dummy + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + foreign_coup_month + foreign_coup_month2 + foreign_coup_month3)
+
+model2_foreign_coup_dummy <- glm(data = replication_data, formula = formula2_foreign_coup_dummy, family =  binomial())
+model2_foreign_coup_se_dummy <- summ(model2_foreign_coup_dummy, robust = "HC1", cluster = "ccode", digits = 3)
+model2_foreign_coup_se_or <- summ(model2_foreign_coup_dummy, robust = "HC1", cluster = "ccode", digits = 3, exp = TRUE)
+```
+
+#### Forced Resign Dummy Model 2
+
+```{r}
+formula2_forced_resign_dummy <- as.formula(forced_resign ~ protests_near_dummy + protests_far_dummy + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + forced_resign_month + forced_resign_month2 + forced_resign_month3)
+
+model2_forced_resign_dummy <- glm(data = replication_data, formula = formula2_forced_resign_dummy, family =  binomial())
+model2_forced_resign_se_dummy <- summ(model2_forced_resign_dummy, robust = "HC1", cluster = "ccode", digits = 3)
+model2_forced_resign_se_or <- summ(model2_forced_resign_dummy, robust = "HC1", cluster = "ccode", digits = 3, exp = TRUE)
+```
+
+## Regression Table
+
+```{r, cache=TRUE, message=FALSE}
+export_summs(model2_se, model2_cdp_se, model2_mil_se, model2_palace_se, model2_dissident_se, model2_rebel_coup_se, model2_popular_revolt_se, model2_foreign_coup_se, model2_forced_resign_se, digits = 3, model.names = c("Johnson/Thyne", "CDP Events", "Mil Coups", "Palace Coup", "Dissident Action", "Rebel Coup", "Pop Revolt", "Foreign Coup", "Forced Resign"), coefs = c("protests_near", "protests_far", "gdppc", "dem", "auth", "milreg", "cwongoing", "mideast", "africa", "asia", "americas", "(Intercept)"))
+```
+
+## Regression Table Dummy Models
+
+```{r, cache=TRUE, message=FALSE}
+export_summs(model2_se_dummy, model2_cdp_se_dummy, model2_mil_se_dummy, model2_palace_se_dummy, model2_dissident_se_dummy, model2_rebel_coup_se_dummy, model2_popular_revolt_se_dummy, model2_foreign_coup_se_dummy, model2_forced_resign_se_dummy, digits = 3, model.names = c("Johnson/Thyne", "CDP Events", "Mil Coups", "Palace Coup", "Dissident Action", "Rebel Coup", "Pop Revolt", "Foreign Coup", "Forced Resign"), coefs = c("protests_near_dummy", "protests_far_dummy", "gdppc", "dem", "auth", "milreg", "cwongoing", "mideast", "africa", "asia", "americas", "(Intercept)"))
+```
+
+## Odds Ratio Table Dummy Models
+
+```{r, cache=TRUE, message=FALSE}
+export_summs(model2_se_or, model2_cdp_se_or, model2_mil_se_or, model2_palace_se_or, model2_dissident_se_or, model2_rebel_coup_se_or, model2_popular_revolt_se_or, model2_foreign_coup_se_or, model2_forced_resign_se_or, digits = 3, model.names = c("Johnson/Thyne", "CDP Events", "Mil Coups", "Palace Coup", "Dissident Action", "Rebel Coup", "Pop Revolt", "Foreign Coup", "Forced Resign"), coefs = c("protests_near_dummy", "protests_far_dummy", "gdppc", "dem", "auth", "milreg", "cwongoing", "mideast", "africa", "asia", "americas", "(Intercept)"))
+```

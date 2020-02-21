@@ -1,0 +1,124 @@
+---
+title: "Johnson and Thyne Replication Model 1"
+author: "Jonathan Bonaguro/Cline Center for Advanced Social Reserach"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r, echo=FALSE}
+library(jtools)
+library(huxtable)
+```
+
+## Read in Data for Replication
+
+```{r}
+replication_data <- read.csv("CCAS_Johnson_Thyne_Replication/replication_data.csv")
+```
+
+### Johnson and Thyne Replication Model 1
+
+* Create models using `glm`, fit robust clustered standard errors using `jtools::summ` 
+
+```{r}
+formula1 <- as.formula(coup ~ protests + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + coupmonths + coupmonths2 + coupmonths3)
+
+model1 <- glm(data = replication_data, formula = formula1, family =  binomial())
+model1_se <- summ(model1, robust = "HC1", cluster = "ccode", digits = 3)
+model1_or <- summ(model1, robust = "HC1", cluster = "ccode", digits = 3, exp = TRUE)
+```
+
+### Cline Center Coup Data Model 1 Variants
+
+#### Coup Activity (Attempted, Successful, Conspiracy) Model 1
+
+```{r}
+formula1_cdp <- as.formula(cc_coup ~ protests + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + coupmonth_cdp + coupmonth_cdp2 + coupmonth_cdp3)
+
+model1_cdp <- glm(data = replication_data, formula = formula1_cdp, family =  binomial())
+model1_cdp_se <- summ(model1_cdp, robust = "HC1", cluster = "ccode", digits = 3)
+model1_cdp_or <- summ(model1_cdp, robust = "HC1", cluster = "ccode", digits = 3, exp = TRUE)
+```
+
+#### Military Coup Model 1
+
+```{r}
+formula1_mil <- as.formula(military_coup ~ protests + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + mil_coupmonth + mil_coupmonth2 + mil_coupmonth3)
+
+model1_mil <- glm(data = replication_data, formula = formula1_mil, family =  binomial())
+model1_mil_se <- summ(model1_mil, robust = "HC1", cluster = "ccode", digits = 3)
+model1_mil_or <- summ(model1_mil, robust = "HC1", cluster = "ccode", digits = 3, exp = TRUE)
+```
+
+#### Palace Coup Model 1
+
+```{r}
+formula1_palace <- as.formula(palace_coup ~ protests + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + palace_coupmonth + palace_coupmonth2 + palace_coupmonth3)
+
+model1_palace <- glm(data = replication_data, formula = formula1_palace, family =  binomial())
+model1_palace_se <- summ(model1_palace, robust = "HC1", cluster = "ccode", digits = 3)
+model1_palace_or <- summ(model1_palace, robust = "HC1", cluster = "ccode", digits = 3, exp = TRUE)
+```
+
+#### Dissident Action Model 1
+
+```{r}
+formula1_dissident <- as.formula(dissident_action ~ protests + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + dissident_actionmonth + dissident_actionmonth2 + dissident_actionmonth3)
+
+model1_dissident <- glm(data = replication_data, formula = formula1_dissident, family =  binomial())
+model1_dissident_se <- summ(model1_dissident, robust = "HC1", cluster = "ccode", digits = 3)
+model1_dissident_or <- summ(model1_dissident, robust = "HC1", cluster = "ccode", digits = 3, exp = TRUE)
+```
+
+#### Rebel Coup Model 1
+
+```{r}
+formula1_rebel_coup <- as.formula(rebel_coup ~ protests + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + rebel_coup_month + rebel_coup_month2 + rebel_coup_month3)
+
+model1_rebel_coup <- glm(data = replication_data, formula = formula1_rebel_coup, family =  binomial())
+model1_rebel_coup_se <- summ(model1_rebel_coup, robust = "HC1", cluster = "ccode", digits = 3)
+model1_rebel_coup_or <- summ(model1_rebel_coup, robust = "HC1", cluster = "ccode", digits = 3, exp = TRUE)
+```
+
+#### Popular Revolt Model 1
+
+```{r}
+formula1_popular_revolt <- as.formula(popular_revolt ~ protests + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + popular_revolt_month + popular_revolt_month2 + popular_revolt_month3)
+
+model1_popular_revolt <- glm(data = replication_data, formula = formula1_popular_revolt, family =  binomial())
+model1_popular_revolt_se <- summ(model1_popular_revolt, robust = "HC1", cluster = "ccode", digits = 3)
+model1_popular_revolt_or <- summ(model1_popular_revolt, robust = "HC1", cluster = "ccode", digits = 3, exp = TRUE)
+```
+
+#### Foreign Coup Model 1
+
+```{r}
+formula1_foreign_coup <- as.formula(foreign_coup ~ protests + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + foreign_coup_month + foreign_coup_month2 + foreign_coup_month3)
+
+model1_foreign_coup <- glm(data = replication_data, formula = formula1_foreign_coup, family =  binomial())
+model1_foreign_coup_se <- summ(model1_foreign_coup, robust = "HC1", cluster = "ccode", digits = 3)
+model1_foreign_coup_or <- summ(model1_foreign_coup, robust = "HC1", cluster = "ccode", digits = 3, exp = TRUE)
+```
+
+#### Forced Resign Model 1
+
+```{r}
+formula1_forced_resign <- as.formula(forced_resign ~ protests + gdppc + dem + auth + milreg + cwongoing + mideast + africa + asia + americas + forced_resign_month + forced_resign_month2 + forced_resign_month3)
+
+model1_forced_resign <- glm(data = replication_data, formula = formula1_forced_resign, family =  binomial())
+model1_forced_resign_se <- summ(model1_forced_resign, robust = "HC1", cluster = "ccode", digits = 3)
+model1_forced_resign_or <- summ(model1_forced_resign, robust = "HC1", cluster = "ccode", digits = 3, exp = TRUE)
+```
+
+## Regression Table
+
+```{r, cache=TRUE, message=FALSE}
+export_summs(model1_se, model1_cdp_se, model1_mil_se, model1_palace_se, model1_dissident_se, model1_rebel_coup_se, model1_popular_revolt_se, model1_foreign_coup_se, model1_forced_resign_se, digits = 3, model.names = c("Johnson/Thyne", "CDP Events", "Mil Coups", "Palace Coup", "Dissident Action", "Rebel Coup", "Pop Revolt", "Foreign Coup", "Forced Resign"), coefs = c("protests", "gdppc", "dem", "auth", "milreg", "cwongoing", "mideast", "africa", "asia", "americas", "(Intercept)"))
+```
+
+## Odds Ratio Regression Table
+
+```{r, cache=TRUE, message=FALSE}
+export_summs(model1_or, model1_cdp_or, model1_mil_or, model1_palace_or, model1_dissident_or, model1_rebel_coup_or, model1_popular_revolt_or, model1_foreign_coup_or, model1_forced_resign_or, digits = 3, model.names = c("Johnson/Thyne", "CDP Events", "Mil Coups", "Palace Coup", "Dissident Action", "Rebel Coup", "Pop Revolt", "Foreign Coup", "Forced Resign"), coefs = c("protests", "gdppc", "dem", "auth", "milreg", "cwongoing", "mideast", "africa", "asia", "americas", "(Intercept)"))
+```
