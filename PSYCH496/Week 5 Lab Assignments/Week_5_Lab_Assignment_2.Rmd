@@ -1,0 +1,74 @@
+---
+title: "Week 5 Lab Assignment 2"
+output: 
+  html_document:
+    df_print: paged
+author: "Jonathan Bonaguro"
+date: "February 21, 2020"
+---
+
+## Assignment 
+
+Create a function with traditional if else/for loop of your choice. You can then proceed to vectorize this code and rewrite this function in a vectorized manner. Use the `system.time()` function on both these functions to demonstrate that your code performs faster with the vectorization method.
+
+### For Loop 
+
+* Defined a `for` loop to print a vector of card colors based on a vector of card suits
+
+```{r}
+change_symbols <- function(vec){
+  for (i in 1:length(vec)){
+    if (vec[i] %in% c("hearts", "diamonds")) {
+      vec[i] <- "red"
+    } else if (vec[i] %in% c("spades", "clubs")) {
+      vec[i] <- "black"
+    } else {
+      vec[i] <- NA
+    } 
+  }
+  vec
+}
+
+draw <- c("hearts", "spades", "diamonds", "clubs", "joker")
+
+many <- rep(draw, 1000000)
+
+change_symbols(draw)
+
+system.time(change_symbols(many))
+
+
+```
+
+### Vectorized Function
+
+* Vectorized function to print a vector of card colors based on their suits
+
+```{r}
+change_vec <- function (vec) {
+  vec[vec %in% c("hearts", "diamonds")] <- "red"
+  vec[vec %in% c("spades", "clubs")] <- "black"
+  vec[!vec %in% c("red", "black")] <- NA
+  vec
+}
+
+change_vec(draw)
+
+system.time(change_vec(many))
+```
+
+### Vectorized Function with Lookup Table
+
+* Vectorized function using a lookup table to print a vector of card colors based on their suits
+
+```{r}
+change_vec2 <- function(vec){
+  tb <- c("hearts" = "red", "diamonds" = "red", "spades" = "black", "clubs" = "black")
+  unname(tb[vec])
+}
+
+change_vec2(draw)
+
+system.time(change_vec2(many))
+```
+

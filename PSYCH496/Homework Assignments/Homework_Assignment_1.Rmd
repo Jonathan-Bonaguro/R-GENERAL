@@ -61,7 +61,14 @@ mtcars[TRUE, ]
 
 ### Problem 6
 
-6. In the following list `list_a`, which of the following operation will return the value 3?
+```{r}
+list_a <- list(1:2, "Harry Potter", c(TRUE, TRUE, TRUE))
+
+list_a
+```
+
+
+6. In `list_a`, which of the following operation will return the value 3?
     a) `sum(list_a[[1]])`
     b) `sum(list_a[[3]])`
     c) `sum(list_a[1])`
@@ -70,11 +77,11 @@ mtcars[TRUE, ]
 ### Problem 7
 
 7. (5 points) What will the following combinations of logical and boolean operations return?
-    a. `(2<1) & (3<4) & (5<6)` == `FALSE`
-    b. `(2<1) | (3<4) | (5<6)` == `TRUE`
-    c. `(FALSE<TRUE) & (TRUE>FALSE) & (FALSE!=TRUE)` == `TRUE`
-    d. `any(c(2<1 & 3<4 & 5<6),(2<1 | 3<4 | 5<6),(FALSE<TRUE & TRUE>FALSE & FALSE!=TRUE))` == `TRUE`
-    e. `all(1%in%c(2,3,4),0%in%c(FALSE,TRUE),1%in%100==100)` == `FALSE`
+    a. `(2<1) & (3<4) & (5<6)` will return `FALSE`
+    b. `(2<1) | (3<4) | (5<6)` will return `TRUE`
+    c. `(FALSE<TRUE) & (TRUE>FALSE) & (FALSE!=TRUE)` will return `TRUE`
+    d. `any(c(2<1 & 3<4 & 5<6),(2<1 | 3<4 | 5<6),(FALSE<TRUE & TRUE>FALSE & FALSE!=TRUE))` will return `TRUE`
+    e. `all(1%in%c(2,3,4),0%in%c(FALSE,TRUE),1%in%100==100)` will return `FALSE`
 
 ### Problem 8
 
