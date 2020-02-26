@@ -1,0 +1,148 @@
+---
+title: "Week 6 Lab Assignment 1"
+output: 
+  html_document:
+    df_print: paged
+author: "Jonathan Bonaguro"
+date: "February 26, 2020"
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(tidyverse)
+```
+
+## Assignments
+
+1. Using appropriate base R’s read family of functions read a dataset (from either a .txt or .csv file of your choice) and store it in a dataframe. Attach the txt or CSV file during your submission.
+2. Now using the appropriate base R’s write family of functions write a dataframe object to a CSV file of your choice. Attach the CSV file you created for submission.
+
+**Use the tibble reference page (https://tibble.tidyverse.org/reference/index.html) for help for the following questions:**
+
+3. Create a tibble of your choice.
+    a. Now add a row of new data to this tibble.
+    b. Now add a column of new data to this tibble.
+4. Create a tribble of your choice.
+5. Create a R object with vectors of single type of your choice.
+    a. Now, convert this R object to a tibble.
+    b. Convert the tibble back to the original vector type.
+6. Create a list object and convert it to a tibble.
+7. Convert the mtcars dataframe to a tibble.
+8. Using the pipe operator transform the mtcars to a tibble and check
+    a. whether the mtcars tibble has rownames?
+    b. whether the mtcars tibble has colnames?
+9. Convert the rownames of the mtcars to a separate column so it can be retained within the tibble format and store this new object as a tibble
+
+### Assignment 1 
+
+1. Using appropriate base R’s read family of functions read a dataset (from either a .txt or .csv file of your choice) and store it in a dataframe. Attach the txt or CSV file during your submission.
+
+```{r}
+deck <- read.csv("deck.csv", header = TRUE)
+deck
+```
+
+### Assignment 2
+
+2. Now using the appropriate base R’s write family of functions write a dataframe object to a CSV file of your choice. Attach the CSV file you created for submission.
+
+```{r}
+spades <- deck[deck$suit == "spades",]
+write.csv(spades, file = "spades.csv", row.names = FALSE)
+```
+
+### Assignment 3
+
+3. Create a tibble of your choice.
+    a. Now add a row of new data to this tibble.
+    b. Now add a column of new data to this tibble.
+
+```{r}
+my_courses <- tibble(subject = c("PS", "PS", "STAT", "PSYCH"), number = c(328, 396, 385, 496))
+
+my_courses <- my_courses %>% 
+  add_row(subject = "PS", number = 496)
+
+my_courses <- my_courses %>% 
+  add_column(instructor = c("Ksiazkiewicz", "Prorok", "Ngyuen", "Adhimoolam", "Althuas"))
+
+my_courses
+```
+
+### Assignment 4
+
+4. Create a tribble of your choice.
+
+```{r}
+last_semester_courses <- tribble(
+  ~subject, ~number, ~instructor,
+  "STAT", 400, "Chatterjee",
+  "STAT", 107, "Fagen-Ulmschneider",
+  "SOC", 280, "Akresh",
+  "PS", 495, "Winters"
+)
+
+last_semester_courses
+```
+
+### Assignment 5
+
+5. Create a R object with vectors of single type of your choice.
+    a. Now, convert this R object to a tibble.
+    b. Convert the tibble back to the original vector type.
+
+```{r}
+random_vector <- c(a = 1, b = 2, c = 3)
+
+random_vector <- enframe(random_vector)
+
+random_vector <- deframe(random_vector)
+
+random_vector
+```
+
+### Assignment 6
+
+6. Create a list object and convert it to a tibble.
+
+```{r}
+my_list <- list(first = c("Jonathan", "Kae"), middle = c("Carlyle", "Nicole"), last = "Bonaguro")
+my_list
+as_tibble(my_list, .name_repair = "minimal")
+```
+
+### Assignment 7
+
+7. Convert the mtcars dataframe to a tibble.
+
+```{r}
+as_tibble(mtcars)
+```
+
+### Assignment 8
+
+8. Using the pipe operator transform the mtcars to a tibble and check
+    a. whether the mtcars tibble has rownames?
+    b. whether the mtcars tibble has colnames?
+
+```{r}
+mtcars %>% 
+  as_tibble() %>% 
+  has_rownames()
+
+mtcars %>% 
+  as_tibble() %>% 
+  colnames()
+```
+
+### Assignment 9
+
+9. Convert the rownames of the mtcars to a separate column so it can be retained within the tibble format and store this new object as a tibble
+
+```{r}
+mtcars_tibble <- mtcars %>% 
+  as_tibble() %>% 
+  rownames_to_column(var = "rownames")
+
+mtcars_tibble
+```
+
