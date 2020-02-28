@@ -1,0 +1,132 @@
+---
+title: "Week 6 Lab Assignment 2"
+output: 
+  html_document:
+    df_print: paged
+author: "Jonathan Bonaguro"
+date: "February 28, 2020"
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(tidyverse)
+```
+
+## Assignments
+
+You can refer to the following refernce page for answering these questions. <https://readr.tidyverse.org/reference/index.html>
+
+1. Using appropriate readr family of function read a dataset(from either a .txt or .csv file of your choice) and store it in a tibble. Attach the .txt or CSV file during your submission.
+2. Now using the appropriate readr family of function write a tibble object of your choice to a CSV file. Attach the CSV file you created for submission.
+3. Create an appropriate vector and use the following functions to successfully parse that vector.
+    a. parse_logical
+    b. parse_integer
+    c. parse_double
+    d. parse_vector
+4. Create a vector of
+    a. numeric and
+    b. logical type
+    c. and use the guess_parser() function to return output.
+5. Create a vector of
+    a. numeric and
+    b. logical type
+    c. and use the parse_guess() function to return the output.
+
+You can refer to the following reference page for answering these questions. <https://tidyr.tidyverse.org/reference/pivot_wider.html>
+
+6. Load the relign_income dataset. The pivot_longer() function is an updated version of gather() function you got used to in the hands-on Lab. Use the pivot_longer function to tidy this dataset.
+7. Use the appropriate tidyr function to organize the untidy language_diversity data (attached csv file) into a tidy version.
+
+#### Assignment 1
+
+1. Using appropriate readr family of function read a dataset(from either a .txt or .csv file of your choice) and store it in a tibble. Attach the .txt or CSV file during your submission.
+
+```{r}
+russ_demo <- read_csv("Data/russian_demography_data.csv", col_types = cols(region = col_character()))
+russ_demo
+```
+
+#### Assignment 2
+
+2. Now using the appropriate readr family of function write a tibble object of your choice to a CSV file. Attach the CSV file you created for submission.
+
+```{r}
+# create dataset of demography data for Nizhny Novgorod Oblast
+nizhny_novgorod_data <- russ_demo %>% 
+  filter(region == "Nizhny Novgorod Oblast")
+
+write_csv(nizhny_novgorod_data, "Data/nizhny_novgorod_demo_data.csv")
+```
+
+#### Assignment 3
+
+3. Create an appropriate vector and use the following functions to successfully parse that vector.
+    a. parse_logical
+    b. parse_integer
+    c. parse_double
+    d. parse_vector
+
+```{r}
+vec <- rep(as.character(c(1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0)), times = 10)
+
+parse_logical(vec)
+parse_integer(vec)
+parse_double(vec)
+parse_vector(vec, collector = col_logical())
+```
+
+#### Assignment 4
+
+4. Create a vector of
+    a. numeric and
+    b. logical type
+    c. and use the guess_parser() function to return output.
+
+```{r}
+num_vector <- c(1:5, 7:20, 8:1)
+logical_vector <- c(TRUE, FALSE, TRUE, TRUE, FALSE, FALSE, TRUE, FALSE)
+
+guess_parser(num_vector)
+guess_parser(logical_vector)
+```
+
+#### Assignment 5
+
+5. Create a vector of
+    a. numeric and
+    b. logical type
+    c. and use the parse_guess() function to return the output.
+
+```{r, error=TRUE}
+num_vector <- as.character(c(1:5, 7:20, 8:1))
+logical_vector <- as.character(c(TRUE, FALSE, TRUE, TRUE, FALSE, FALSE, TRUE, FALSE))
+
+parse_guess(num_vector)
+parse_guess(logical_vector)
+```
+
+#### Assignment 6
+
+6. Load the relign_income dataset. The pivot_longer() function is an updated version of gather() function you got used to in the hands-on Lab. Use the pivot_longer function to tidy this dataset.
+
+```{r}
+relig_income
+
+relig_income %>% 
+  pivot_longer(-religion, names_to = "income", values_to = "count")
+```
+
+#### Assignment 7
+
+7. Use the appropriate tidyr function to organize the untidy language_diversity data (attached csv file) into a tidy version.
+
+```{r, message = FALSE}
+language_diversity <- read_csv("Data/language_diversity.csv")
+
+language_diversity
+
+language_diversity %>% 
+  pivot_wider(names_from = Measurement, values_from = Value) %>% 
+  arrange(Continent)
+
+```
+
