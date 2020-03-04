@@ -1,0 +1,188 @@
+---
+title: "STAT385 Notes Week 7"
+author: "Jonathan Bonaguro"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+## Wednesday, Mar. 4, 2020
+
+### Note
+
+**I love the `tidyverse`. It's literally my favorite.**
+
+### `tidyverse`
+
+* The `tidyverse` contains multiple packages, such as `tidyr`, `tibble`, `dplyr`, `ggplot2`, etc...
+
+### Tibbles
+
+* Tibbles **are** data frames, but they tweak some old behavoirs to make life easier
+* It’s difficult to change base R without breaking existing code, so most innovation occurs in packages.
+    + `tidyverse` is a “mega” package (including many smaller packages).
+
+```{r}
+tibble(
+  x = 1:5,
+  y = 6:10
+)
+
+data.frame(
+  x = 1:5,
+  y = 6:10
+)
+```
+
+### Prerequisites
+
+* Install `tidyverse`
+    + You only need to do this **once**.
+    
+```{r, eval=FALSE}
+install.packages('tidyverse')
+```
+
+* "Call" the package before using it's functions
+    + Need to do this everytime you open a new R session or "quit" RStudio and open it again
+    
+```{r, eval=FALSE}
+library(tidyvers)
+```
+
+### Creating tibbles
+
+* To create a tibble, use `tibble()`
+    + Similar to `data.frame()`
+    + Uses vector recycling for vectors of length 1
+    
+```{r}
+mytb <- tibble(
+  x = 1:5,
+  y = 1,
+  z = x ^ 2 + y
+)
+
+mytb
+```
+
+* If you try to do this using `data.frame()`, it won't work. 
+    + You would need to create `x` and `y` first, then you can add `z`. It won't remember as it goes. 
+    
+```{r, error=TRUE}
+data.frame(
+  x = 1:5,
+  y = 1,
+  z = x ^ 2 + y
+)
+```
+
+* Almost all functions in the `tidyverse` and many new R packages produce tibbles. 
+* Most other (old) R packages use regular data frames.
+    + to coerce a dataframe to a tibble, use `as_tibble()`
+    
+```{r}
+mydf <- data.frame(
+  x = 1:5,
+  y = 1
+)
+
+as_tibble(mydf)
+```
+
+* **Note:** functions in `tidyverse` use `_` to seperate words instead of `.`
+    + `read_csv()` instead of `read.csv()`
+* If you're already familiar with `data.frame()`, note that `tibble()` does much less
+    + It never changes the type of input
+    + It never changes the names of the variables
+    + It never creates row names
+    
+### Tibbes vs. data frames
+
+There are two main differences in the usage of a tibble vs. a classic `data.frame`: **printing** and **subsetting**.
+
+#### Printing
+
+* Tibbles have a refined print method that shows:
+    + only the first 10 rows,
+    + all the columns that fit on screen,
+    + and each column reports its type.
+    
+```{r}
+tibble(
+  a = lubridate::now() + runif(1e3) * 86400,
+  b = lubridate::today() + runif(1e3) * 30,
+  c = 1:1e3,
+  d = runif(1e3),
+  e = sample(letters, 1e3, replace = TRUE)
+)
+```
+
+* But sometimes you need more output than the default display.
+    + You can explicitly `print()` the data frame and control the number of rows `n` and the `width` of the display.
+    + `width = Inf` will display all columns:
+
+```{r}
+nycflights13::flights
+
+nycflights13::flights %>% 
+  print(n = 10, width = Inf)
+```
+
+* **Note:** For the above code to work, you first have to install the `nycflights13` package (which includes the `flights` dataset).
+* **Another note:** from now on, when I use data frame and tibble as equivalence. I will say *base R data frame* if I specifically talk about classic data frame (not tibble).    
+    
+#### Subsetting
+
+* Quick review: what does `iris[,1]` return?
+    + Returns the first column of `iris` as a **vector**
+    
+```{r}
+iris[,1]
+```
+
+* What about these?
+    + `iris$Sepal.Length`
+    + `iris[c("Sepal.Length", "Sepal.Width")]`
+
+```{r}
+iris$Sepal.Length
+iris[c("Sepal.Length", "Sepal.Width")]
+```
+
+* It returns a **vector** and a **data frame**
+
+##### Now change `iris` to a tibble
+
+```{r}
+iris_tibble <- as_tibble(iris)
+```
+
+* Now what do these return?
+
+```{r}
+iris_tibble[,1]
+iris_tibble$Sepal.Length
+iris_tibble[c("Sepal.Length", "Sepal.Width")]
+```
+
+* They all return **tibbles**.
+
+##### Summary
+
+* `$` always returns a vector.
+* With base R data frames, `[ ]` sometimes returns a data frame, and sometimes returns a vector.
+* With tibbles, `[ ]` always returns another tibble.
+* An even easier way to choose specific columns
+    + We will learn more on Friday
+
+```{r}
+iris_tibble %>% 
+  select(Sepal.Length, Sepal.Width)
+```
+
