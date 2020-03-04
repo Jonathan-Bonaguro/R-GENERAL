@@ -1,0 +1,182 @@
+---
+title: "Week 6 Lab Assignment 2"
+output: 
+  html_document:
+    df_print: paged
+author: "Jonathan Bonaguro"
+date: "February 28, 2020"
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(tidyverse)
+library(nycflights13)
+iris <- as_tibble(iris)
+mtcars <- as_tibble(mtcars)
+```
+
+## Assignments
+
+You can refer to the “Basic single-table verbs” section of the reference [dplyr page](https://dplyr.tidyverse.org/reference/index.html) for the following exercises.
+
+**Using the flights dataset answer the following questions:**
+
+1. Find all the flights that departed New york city in the month of January.
+
+2. Find all the flights that departed Newyork city on January, 28th after 6 pm.
+
+3. Find all the flights that travelled distances of greater than 3000 miles with the departure delay less than an hour.
+
+4. Find all the flights with an arrival delay of less than an hour, but with departure delay of more than an hour.
+
+**Using the iris dataset answer the following questions:**
+
+5. Select the columns that starts with the characters “se”.
+
+6. Select the columns that ends with the characters “th”.
+
+7. Rename the species column to a column name of your choice.
+
+**Using the mtcars dataset answer the following question.**
+
+8. Rearrange the mtcars dataframe with values of milles per galon(mpg) in ascending order and descending order.
+
+9. a.Group the mtcars dataset according to the mode of transmission and calculate the mean miles per gallon for each group.
+
+9. b.Now repeat the above assignment with the pipe operator.
+
+10. a.Group the mtcars dataset according to the number of cylinders and select the cars that have miles per galon greater than the mean mpg for each group.
+
+10. b.Now repeat the above assignment with the pipe operator.
+
+**Use the flights dataset for the following questions:**
+
+11. Count the number of flights by destination.
+
+12. Calculate the speed of the flights (speed = distance/airtime) and calculate the mean speed across different airlines.
+
+#### Assignment 1
+
+1. Find all the flights that departed New york city in the month of January.
+
+```{r}
+flights %>% 
+  filter(month == 1)
+```
+
+#### Assignment 2
+
+2. Find all the flights that departed Newyork city on January, 28th after 6 pm.
+
+```{r}
+flights %>% 
+  filter(month == 1, day == 28, dep_time > 1800)
+```
+
+#### Assignment 3
+
+3. Find all the flights that travelled distances of greater than 3000 miles with the departure delay less than an hour.
+
+```{r}
+flights %>% 
+  filter(distance > 3000, dep_delay < 60)
+```
+
+#### Assignment 4
+
+4. Find all the flights with an arrival delay of less than an hour, but with departure delay of more than an hour.
+
+```{r}
+flights %>% 
+  filter(arr_delay < 60, dep_delay > 60)
+```
+
+#### Assignment 5
+
+5. Select the columns that starts with the characters “se”.
+
+```{r}
+iris %>% 
+  select(starts_with("se"))
+```
+
+#### Assignment 6
+
+6. Select the columns that ends with the characters “th”.
+
+```{r}
+iris %>% 
+  select(ends_with("th"))
+```
+
+#### Assignment 7
+
+7. Rename the species column to a column name of your choice.
+
+```{r}
+iris %>% 
+  rename(Breed = Species)
+```
+
+#### Assignment 8
+
+8. Rearrange the mtcars dataframe with values of miles per gallon (mpg) in ascending order and descending order.
+
+```{r}
+mtcars %>% 
+  arrange(mpg)
+
+mtcars %>% 
+  arrange(desc(mpg))
+```
+
+#### Assignment 9
+
+9. Group the mtcars dataset according to the mode of transmission and calculate the mean miles per gallon for each group.
+    b. Now repeat the above assignment with the pipe operator.
+
+```{r}
+mtcars_transmission_group <- group_by(mtcars, am)
+summarize(mtcars_transmission_group, mean_mpg = mean(mpg,na.rm=TRUE))
+
+mtcars %>%
+  group_by(am) %>% 
+  summarize(mean_mpg = mean(mpg, na.rm = TRUE))
+```
+
+#### Assignment 10
+
+10. Group the mtcars dataset according to the number of cylinders and select the cars that have miles per galon greater than the mean mpg for each group.
+    b. Now repeat the above assignment with the pipe operator.
+
+```{r}
+mtcars_cylinder_group <- group_by(mtcars, cyl)
+filter(mtcars_cylinder_group, mpg > mean(mpg, na.rm = TRUE))
+
+mtcars %>%
+  group_by(cyl) %>% 
+  filter(mpg > mean(mpg, na.rm = TRUE))
+```
+
+#### Assignment 11
+
+11. Count the number of flights by destination.
+
+```{r}
+flights %>% 
+  group_by(dest) %>% 
+  summarize(number_of_flights = n())
+```
+
+#### Assignment 12
+
+12. Calculate the speed of the flights (speed = distance/airtime) and calculate the mean speed across different airlines.
+
+```{r}
+# since air_time is in minutes, I decided to divide it by 60 to report speed in mph
+
+flights %>% 
+  mutate(speed = distance / (air_time / 60)) %>% 
+  group_by(carrier) %>% 
+  summarize(mean_speed = mean(speed, na.rm = TRUE))
+```
+
