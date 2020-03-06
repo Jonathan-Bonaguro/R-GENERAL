@@ -1,0 +1,203 @@
+---
+title: "STAT385 Lab 4"
+author: "Jonathan Bonaguro"
+date: "2/19/2020"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(cache = TRUE, autodep = TRUE)
+```
+
+***
+
+```{r, message = FALSE, warning = FALSE}
+library("tidyverse")
+```
+
+***
+
+## `dplyr` Information
+
+## Overview
+
+dplyr is a grammar of data manipulation, providing a consistent set of verbs that help you solve the most common data manipulation challenges:
+
+* `mutate()` adds new variables that are functions of existing variables.
+* `select()` picks variables based on their names.
+* `filter()` picks cases based on their values.
+* `summarise()` reduces multiple values down to a single summary.
+* `arrange()` changes the ordering of the rows.
+
+These all combine naturally with `group_by()` which allows you to perform any operation "by group". You can learn more about them in `vignette("dplyr")`. 
+
+## Additional Resources
+
+- [The `tidyverse` Website](https://www.tidyverse.org/packages/)
+- [`dplyr` Website](https://dplyr.tidyverse.org/)
+- [`dplyr` Cheat Sheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf)
+- [R4DS: Data Transformation](https://r4ds.had.co.nz/transform.html)
+- [R4DS: Pipes](https://r4ds.had.co.nz/pipes.html)
+
+***
+
+# Open Powerlifting Data
+
+- Source: [`www.openpowerlifting.org`](https://www.openpowerlifting.org/)
+- [Wikipedia: Powerlifting](https://en.wikipedia.org/wiki/Powerlifting)
+
+```{r, message = FALSE, warning = FALSE}
+powerlifting = read_csv("http://daviddalpiaz.com/files/data/openpowerlifting-2019-12-04.csv.gz")
+```
+
+<center>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/AIJKGSXdl9g" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/p3vR-OFazyU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/GAad3dG0Eoo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/wBUSXBhabrU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</center>
+
+***
+
+```{r}
+skimr::skim(powerlifting)
+```
+
+***
+
+# Manipulating Rows with `filter()`
+
+- How can we find results from IPF meets that use only "raw" equipment?
+
+```{r, eval = FALSE}
+powerlifting %>% 
+  filter(Federation == "IPF") %>% 
+  filter(Equipment == "Raw")
+```
+
+
+```{r}
+filter(filter(filter(filter(powerlifting, Federation == "IPF"), Equipment == "Raw"), AgeClass == "24-34"), Sex == "M")
+```
+
+
+***
+
+# Manipulating Columns with `select()`
+
+- How can we remove information about 4th attempts? (For raw lifters in the IPF.)
+
+```{r, eval = FALSE}
+powerlifting %>% 
+  filter(Federation == "IPF", Equipment == "Raw") %>% 
+  select(-Squat4Kg, -Bench4Kg, -Deadlift4Kg)
+```
+
+```{r, eval = FALSE}
+powerlifting %>%
+  filter(Federation == "IPF", Equipment == "Raw") %>% 
+  select(Name, Sex, Age, BodyweightKg, contains("Best"))
+```
+
+***
+
+# Creating Columns with `mutate()`
+
+- How can add a variable about a lifter's total to bodyweight ratio? (For raw lifters in the IPF.)
+
+```{r, eval = FALSE}
+powerlifting %>%
+  filter(Federation == "IPF", Equipment == "Raw") %>% 
+  mutate(total_bw_ratio = TotalKg / BodyweightKg) %>% 
+  View()
+```
+
+***
+
+# Summarizing Data with `summarise()`
+
+- How can we find the average best squat, best bench, and best deadlift by age class? (For male raw lifters in the IPF open division.)
+
+```{r, eval = FALSE}
+powerlifting %>%
+  filter(Federation == "IPF", Equipment == "Raw", 
+         Division == "Open", Sex == "M") %>%
+  # group_by(AgeClass) %>%
+  summarise(ave_squat = mean(Best3SquatKg, na.rm = TRUE),
+            ave_bench = mean(Best3BenchKg, na.rm = TRUE),
+            ave_dead  = mean(Best3DeadliftKg, na.rm = TRUE),
+            n = n())
+```
+
+```{r}
+powerlifting %>%
+  filter(Federation == "IPF", Equipment == "Raw", 
+         Division == "Open", Sex == "M") %>%
+  filter(AgeClass == "55-59")
+```
+
+
+***
+
+# Reordering Data with `arrange()`
+
+- How can we find the best raw lifter in the database? (Who has the highest Wilks?)
+
+```{r, eval = FALSE}
+powerlifting %>% 
+  filter(Equipment == "Raw") %>% 
+  arrange(desc(Wilks))
+```
+
+***
+
+# Tasks
+
+- How much does single-ply equipment effect deadlift results?
+  - Find all results from IPF competitions with squat, bench, and deadlift contested.
+  - Group by `Sex` and `Equipment`
+  - Calculate mean and standard deviation of `Best3DeadliftKg` within these groups.
+  
+```{r}
+powerlifting %>% 
+  filter(Federation == "IPF", Event == "SBD") %>% 
+  group_by(Sex, Equipment, WeightClassKg) %>% 
+  summarise(avg_deadlift = mean(Best3DeadliftKg, na.rm = TRUE),
+            sd_deadlift = sd(Best3DeadliftKg, na.rm = TRUE)) %>% 
+  arrange(WeightClassKg)
+```
+
+  
+- Convert the entire dataset from kilograms to pounds. (Or just the raw IPF data so you can work with a smaller dataset.)
+
+```{r}
+kg_to_pounds = function(x) {
+  2.2 * x
+}
+```
+
+```{r}
+str_kg_to_lb = function(x) { 
+  n_letters = nchar(x)
+  substr(x, n_letters - 1, n_letters) = "lb"
+  
+  return(x)
+}
+```
+
+```{r}
+str_kg_to_lb("Hello World")
+```
+
+
+```{r}
+powerlifting %>% 
+  mutate(WeightClassKg = as.numeric(WeightClassKg)) %>% 
+  mutate_at(vars(contains("Kg")), kg_to_pounds) %>% 
+  rename_at(vars(contains("Kg")), str_kg_to_lb)
+```
+
+
+
+
+

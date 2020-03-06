@@ -13,9 +13,7 @@ library(tidyverse)
 
 ## Wednesday, Mar. 4, 2020
 
-### Note
-
-**I love the `tidyverse`. It's literally my favorite.**
+**Note: I love the `tidyverse`. It's literally my favorite.**
 
 ### `tidyverse`
 
@@ -185,4 +183,5 @@ iris_tibble[c("Sepal.Length", "Sepal.Width")]
 iris_tibble %>% 
   select(Sepal.Length, Sepal.Width)
 ```
+
 

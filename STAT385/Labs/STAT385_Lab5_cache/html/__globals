@@ -1,0 +1,16 @@
+unnamed-chunk-1	library
+unnamed-chunk-2	read_csv
+unnamed-chunk-3	::	powerlifting
+unnamed-chunk-4	%>%	==	Equipment	Federation	filter	powerlifting
+unnamed-chunk-5	==	AgeClass	Equipment	Federation	filter	powerlifting	Sex
+unnamed-chunk-6	%>%	==	Bench4Kg	Deadlift4Kg	Equipment	Federation	filter	powerlifting	select	Squat4Kg
+unnamed-chunk-7	%>%	==	Age	BodyweightKg	contains	Equipment	Federation	filter	Name	powerlifting	select	Sex
+unnamed-chunk-8	%>%	==	BodyweightKg	Equipment	Federation	filter	mutate	powerlifting	TotalKg	View
+unnamed-chunk-9	%>%	==	Best3BenchKg	Best3DeadliftKg	Best3SquatKg	Division	Equipment	Federation	filter	mean	n	powerlifting	Sex	summarise
+unnamed-chunk-10	%>%	==	AgeClass	Division	Equipment	Federation	filter	powerlifting	Sex
+unnamed-chunk-11	%>%	==	arrange	desc	Equipment	filter	powerlifting	Wilks
+unnamed-chunk-12	%>%	==	arrange	Best3DeadliftKg	Equipment	Event	Federation	filter	group_by	mean	powerlifting	sd	Sex	summarise	WeightClassKg
+unnamed-chunk-13	
+unnamed-chunk-14	nchar	return	substr<-
+unnamed-chunk-15	str_kg_to_lb
+unnamed-chunk-16	%>%	as.numeric	contains	kg_to_pounds	mutate	mutate_at	powerlifting	rename_at	str_kg_to_lb	vars	WeightClassKg

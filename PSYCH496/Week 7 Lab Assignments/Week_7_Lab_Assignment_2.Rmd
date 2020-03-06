@@ -1,0 +1,183 @@
+---
+title: "Week 7 Lab Assignment 2"
+output: 
+  html_document:
+    df_print: paged
+author: "Jonathan Bonaguro"
+date: "March 6, 2020"
+---
+
+```{r environment setup, echo = FALSE, message = FALSE}
+library(tidyverse)
+library(nycflights13)
+mtcars <- as_tibble(mtcars)
+band_members <- as_tibble(band_members)
+band_instruments <- as_tibble(band_instruments)
+```
+
+## Assignments
+
+1. Load the `band_members` and `band_instruments` dataset. Consider x as band_members and y as band_instruments and perform the following operations on these datasets (Make sure you use a specific key for joining the two datasets).
+    a. inner_join
+    b. left_join
+    c. right_join
+    d. full_join
+    e. semi_join
+    d. anti_join
+
+2. Let `x` be `mtcars[1:18, ]` and `y` be `mtcars[12:32, ]` evaluate the following:
+    a. `intersect(x,y)`
+    b. `union(x,y)`
+    c. `setdiff(x,y)`  
+
+3. Join the weather and flights data sets to answer the following questions:
+    a. What is the highest windspeed in the airports with maximum departure delays?
+    b. What is the maximum visibiity in the airports with maximum arrival delays?
+
+4. Join the airports and the flights datasets to answer the following questions:
+    a. Can you add the location information of the airports(lat,lon,alt) to the flights dataset?
+    b. What is the altitude of top 15 destinations in the year 2013?
+
+5. Join the planes and flights dataset to answer the following questions:
+    a. What is the maximum departure delay of flights manufactured before 1990?
+    b. What is the maximum number of destinations travelled by planes manufactured after 2010?
+    c. What is the minimum number of seats in planes travelling to top 10 destinations?
+
+6. Using the flights dataset, find all the flights that travelled to top 3 destinations.
+
+#### Assignment 1
+
+1. Load the `band_members` and `band_instruments` dataset. Consider x as band_members and y as band_instruments and perform the following operations on these datasets (Make sure you use a specific key for joining the two datasets).
+    a. inner_join
+    b. left_join
+    c. right_join
+    d. full_join
+    e. semi_join
+    d. anti_join
+
+```{r Assignment 1}
+band_members %>% 
+  inner_join(band_instruments, by = "name")
+
+band_members %>% 
+  left_join(band_instruments, by = "name")
+
+band_members %>% 
+  right_join(band_instruments, by = "name")
+
+band_members %>% 
+  full_join(band_instruments, by = "name")
+
+band_members %>% 
+  semi_join(band_instruments, by = "name")
+
+band_members %>% 
+  anti_join(band_instruments, by = "name")
+```
+
+#### Assignment 2
+
+2. Let `x` be `mtcars[1:18, ]` and `y` be `mtcars[12:32, ]` evaluate the following:
+    a. `intersect(x,y)`
+    b. `union(x,y)`
+    c. `setdiff(x,y)`  
+    
+```{r Assignment 2}
+intersect(mtcars[1:18, ], mtcars[12:32, ])
+
+union(mtcars[1:18, ], mtcars[12:32, ])
+
+setdiff(mtcars[1:18, ], mtcars[12:32, ])
+```
+
+#### Assignment 3
+
+3. Join the weather and flights data sets to answer the following questions:
+    a. What is the highest windspeed in the airports with maximum departure delays?
+    b. What is the maximum visibiity in the airports with maximum arrival delays?
+    
+```{r Assignment 3}
+flights_weather <- flights %>%
+  left_join(weather, by = c("year", "month", "day", "origin", "hour"))
+
+flights_weather %>%
+  group_by(dest) %>%
+  summarize(max_dep_delay = max(dep_delay, na.rm=TRUE),
+            wind_speed = max(wind_speed, na.rm = TRUE)) %>% 
+  top_n(5, max_dep_delay) %>% 
+  arrange(desc(max_dep_delay))
+
+flights_weather %>%
+  group_by(dest) %>%
+  summarize(max_arr_delay = max(arr_delay, na.rm=TRUE),
+            visib = max(visib, na.rm = TRUE)) %>% 
+  top_n(5, max_arr_delay) %>% 
+  arrange(desc(max_arr_delay))
+  
+```
+
+
+
+#### Assignment 4
+
+4. Join the airports and the flights datasets to answer the following questions:
+    a. Can you add the location information of the airports(lat,lon,alt) to the flights dataset?
+    b. What is the altitude of top 15 destinations in the year 2013?
+    
+```{r Assignment 4}
+airport_flights <- left_join(flights, airports, by = c("dest" = "faa"))
+
+airport_flights %>%
+  group_by(dest) %>% 
+  mutate(top_dest = n()) %>% 
+  summarize(altitutde = max(alt, na.rm = TRUE),
+            trips_to = max(top_dest)) %>% 
+  top_n(15, trips_to) %>% 
+  arrange(desc(trips_to))
+```
+
+#### Assignment 5
+
+5. Join the planes and flights dataset to answer the following questions:
+    a. What is the maximum departure delay of flights manufactured before 1990?
+    b. What is the maximum number of destinations travelled by planes manufactured after 2010?
+    c. What is the minimum number of seats in planes travelling to top 10 destinations?
+    
+```{r Assignment 5, message=FALSE}
+planes_flights <- left_join(flights, planes, by = "tailnum")
+
+planes_flights %>% 
+  group_by(tailnum) %>% 
+  filter(year.y < 1990) %>% 
+  summarize(max_dep_delay = max(dep_delay, na.rm = TRUE)) %>% 
+  top_n(1, max_dep_delay)
+
+planes_flights %>% 
+  group_by(tailnum) %>%
+  filter(year.y > 2010) %>% 
+  summarise(Unique_Dest = n_distinct(dest)) %>% 
+  top_n(1, Unique_Dest)
+
+top_dest <- flights %>%
+  count(dest, sort = TRUE) %>%
+  head(10)
+
+planes_flights %>%
+  semi_join(top_dest) %>% 
+  filter(seats == min(seats, na.rm = TRUE)) %>% 
+  summarise(seats = min(seats, na.rm = TRUE))
+```
+
+#### Assignment 6
+
+6. Using the flights dataset, find all the flights that travelled to top 3 destinations.
+
+```{r Assignment 6, message=FALSE}
+top_dest <- flights %>%
+  count(dest, sort = TRUE) %>%
+  head(3)
+
+planes_flights %>%
+  semi_join(top_dest)
+```
+

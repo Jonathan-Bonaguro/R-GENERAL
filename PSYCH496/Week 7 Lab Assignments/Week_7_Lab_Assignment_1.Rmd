@@ -1,10 +1,10 @@
 ---
-title: "Week 6 Lab Assignment 2"
+title: "Week 7 Lab Assignment 1"
 output: 
   html_document:
     df_print: paged
 author: "Jonathan Bonaguro"
-date: "February 28, 2020"
+date: "March 4, 2020"
 ---
 
 ```{r, echo = FALSE, message = FALSE}
