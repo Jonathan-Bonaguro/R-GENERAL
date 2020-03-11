@@ -1,0 +1,36 @@
+---
+title: "Leeds 2003 Replication and Expansion"
+author: "Jonathan Bonaguro"
+output: html_notebook
+---
+
+```{r setup, include=FALSE, message=FALSE}
+library(tidyverse)
+library(haven)
+library(gee)
+```
+
+# Repication and Hopeful Expansion of Leeds 2003 Paper: "Do Alliances Deter Aggression? The Influence of Military Alliances on the Initiation of Militarized Interstate Disputes"
+
+DOI: [10.2307/3186107](10.2307/3186107)
+
+> Scholars have long debated the effects of military alliances on the likelihood of war, and no clear support has emerged for the argument that alliances improve the prospects for peace through effective deterrence nor that they kindle the flames of war. In this study, I argue that alliance commitments affect the probability that a potential challenger will initiate a militarized interstate dispute because alliances provide information about the likelihood that others will intervene in a potential conflict. Yet, different agreements provide different information. Alliance commitments that would require allies to intervene on behalf of potential target states reduce the probability that a militarized dispute will emerge, but alliance commitments promising offensive support to a potential challenger and alliances that promise nonintervention by outside powers increase the likelihood that a challenger will initiate a crisis. As diplomats have long understood, the specific content of international agreements helps to determine their effects.
+
+## Replication Work
+
+Step one: read in replication data from original paper.
+
+```{r replication data}
+rep_data <- read_dta("/Users/jonathanbonaguro/R-GENERAL/Replications/Leeds_2003/Data/LeedsAJPS03.dta")
+```
+
+Step two: fit Generalized Estimating Equation using `gee()` from package `gee`.
+
+```{r rep equation one, message=FALSE}
+rep_formula1 <- (dispute ~ jdem + contig + capprop + atopally + swtglo)
+
+rep_model1 <- gee(rep_formula1, data = rep_data, family = binomial(link = "logit"), id = dyad, corstr = "exchangeable")
+
+summary(rep_model1)
+```
+
