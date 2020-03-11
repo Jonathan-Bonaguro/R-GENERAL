@@ -1,0 +1,142 @@
+---
+title: "Week 8 Lab Assignment 1"
+output: 
+  html_document:
+    df_print: paged
+author: "Jonathan Bonaguro"
+date: "March 11, 2020"
+---
+
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+library(tidyverse)
+```
+
+## Assignments
+
+Refer to the following [`stringr` reference page](https://stringr.tidyverse.org/reference/index.html) for the following questions.
+
+1. What function in stringr convert the upper case characters to lower case characters and lower case to upper case? Execute them with an example.
+
+2. What is the use of `str_pad()` and `str_trim()`?. Execute them with an example.
+
+3. Using the appropriate stringr functions and the dataset “words” answer the following questions:
+    a. How many times the alphabets “w” and “t” occur in the words dataset?
+    b. Subset the words containing the alphabet “t”.
+    b. Can you replace the alphabet “t” with alphabet “b” in the words dataset?
+    c. Construct a continous paragraph with the entire list of words found in the dataset “words”.
+    d. Convert all the words in the words dataset to upper case.
+    e. Calculate the proportion of total number of words of length 5.         
+<br />
+4. What is the use of `str_split()`? Execute this with an example. What does the argument simplify accomplish in this function?
+
+5. Using the appropriate stringr function and the dataset “sentences” answer the following questions:
+    a. Can you replace a word across the list of sentences with a word of choice.
+    b. Return the first five characters across all the sentences.
+    c. Count the maximum number of occurences of the word ‘the’ in the entire sentences dataset.
+
+#### Assignment 1
+
+1. What function in stringr convert the upper case characters to lower case characters and lower case to upper case? Execute them with an example.
+
+```{r assignment 1}
+# convert upper case string to lower case: `str_to_lower()`
+
+upper_case_string <- c("APPLE", "BANANA", "BLUEBERRY")
+str_to_lower(upper_case_string)
+
+# convert lower case string to upper case: `str_to_upper()`
+
+lower_case_string <- c("grapes", "watermelon", "kiwi")
+str_to_upper(lower_case_string)
+```
+
+#### Assignment 2
+
+2. What is the use of `str_pad()` and `str_trim()`?. Execute them with an example.
+
+```{r assignment 2}
+# `str_pad()` adds a character to a string to make all of the strings the same length, specified by `width =`. The default is a space. The argument `side =` can be used to specify whether to add the pad character to the left side of the string, the right side of the string, or on both sides of the string. 
+
+fruits <- c("apple", "banana", "blueberry", "grapes", "watermelon", "kiwi")
+str_pad(fruits, width = 20, side = "both", pad = " ")
+
+# `str_trim()` removes whitespace from either the start of a string, the end of the string, or removes whitespace from both end of the string. `str_trim()` does not affect whitespace in the middle of the string.
+
+vegetables <- c("   broccoli", "green beans    ", "brussel sprouts")
+str_trim(vegetables, side = "both")
+```
+
+#### Assignment 3
+
+3. Using the appropriate stringr functions and the dataset “words” answer the following questions:
+    a. How many times the alphabets “w” and “t” occur in the words dataset?
+    b. Subset the words containing the alphabet “t”.
+    c. Can you replace the alphabet “t” with alphabet “b” in the words dataset?
+    d. Construct a continous paragraph with the entire list of words found in the dataset “words”.
+    e. Convert all the words in the words dataset to upper case.
+    f. Calculate the proportion of total number of words of length 5.   
+
+```{r assignment 3}
+# a. How many times the alphabets “w” and “t” occur in the words dataset?
+
+sum(str_count(words, "w"))
+sum(str_count(words, "t"))
+
+# b. Subset the words containing the alphabet “t”.
+
+str_subset(words, "t")
+
+# c. Can you replace the alphabet “t” with alphabet “b” in the words dataset?
+
+str_replace(words,"t", "b")
+
+# d. Construct a continous paragraph with the entire list of words found in the dataset “words”.
+
+str_c(words, sep = "", collapse = ", ")
+
+# e. Convert all the words in the words dataset to upper case.
+
+str_to_upper(words)
+
+# f. Calculate the proportion of total number of words of length 5.  
+
+sum(str_length(words) == 5) / length(words)
+
+```
+
+#### Assignment 4
+
+4. What is the use of `str_split()`? Execute this with an example. What does the argument simplify accomplish in this function?
+
+```{r assignment 4}
+# `str_spring()` is used to split up a string into a list of character vectors. To return a character matrix, use "simplify = TRUE"
+
+veggies <- c("broccoli, green beans, corn, asparagus", "carrots, onion, brussel sprouts, bok choy")
+str_split(veggies, ", ")
+
+# return output of `str_split()` as a matrix
+
+str_split(veggies, ", ", simplify = TRUE)
+```
+
+#### Assignment 5
+
+5. Using the appropriate stringr function and the dataset “sentences” answer the following questions:
+    a. Can you replace a word across the list of sentences with a word of choice.
+    b. Return the first five characters across all the sentences.
+    c. Count the maximum number of occurences of the word ‘the’ in the entire sentences dataset.
+
+```{r assignment 5}
+# a. Can you replace a word across the list of sentences with a word of choice.
+
+str_replace_all(sentences, pattern = 'cat', replacement = 'dog')
+
+# Return the first five characters across all the sentences.
+
+str_sub(sentences, start = 1L, end = 5L)
+
+# Count the maximum number of occurences of the word ‘the’ in the entire sentences dataset.
+
+max(str_count(sentences, 'the'))
+```
