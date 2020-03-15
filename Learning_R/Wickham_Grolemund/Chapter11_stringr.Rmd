@@ -1,0 +1,81 @@
+---
+title: "Chapter 11: Strings with `stringr`"
+author: "Jonathan Bonaguro"
+output: html_document
+---
+
+```{r setup, include=FALSE, message=FALSE}
+library(tidyverse)
+knitr::opts_chunk$set(collapse = TRUE)
+```
+
+
+## Excercises: String Basics
+
+1. In code that doesn’t use stringr, you’ll often see `paste()` and `paste0()`. What’s the difference between the two functions? What stringr function are they equivalent to? How do the functions differ in their handling of NA?
+
+**Answer:** `paste()` is used to concatenate vectors after converting them to character, seperating them with a value specified by `sep = " "` with the default value being a space. `collapse = NULL` allows for a user to specify what character seperates the results. `paste0()` does not allow for a seperating character, and automatically smashes the strings together. However, `paste0()` does take a `collapse = NULL` argument. `str_c()` is the `stringr` function which accomplishes the same thing. It defaults to having no character to seperate the values similar to `paste0()`. `str_c()` treats missing values as true missing values, and will return `NA` similar to how `sum()` would if given an NA value. `paste()` and `paste0()` automatically convert `NA` to a string.  
+
+2. In your own words, describe the difference between the sep and collapse arguments to str_c().
+
+**Answer:** When combining strings into one string using `str_c()`, `sep = ""` is used to combine and seperate strings that are passed as arguments to `str_c()`. `collapse = NULL` is used when combining a vector of strings into a single string, and tells `str_c()` which values to use to seperate the items in the vector in the single string. 
+
+3. Use `str_length()` and `str_sub()` to extract the middle character from a string. What will you do if the string has an even number of characters?
+
+**Answer:** If the string has an even number of characters, I chose to pick extract the letter from the middle pair that is closest to the end of the word by rounding up the length divided by two using `ceiling()`.
+
+```{r basics question 3}
+x <- fruit[c(1:4, 6:8)]
+x
+
+L <-  str_length(x)
+M <- ceiling(L/2)
+
+str_sub(x, M, M)
+```
+
+4. What does `str_wrap()` do? When might you want to use it?
+
+**Answer:** The function `str_wrap()` wraps text so that it fits within a certain width. This is useful for wrapping long strings of text to be typeset.
+
+5. What does `str_trim()` do? What’s the opposite of `str_trim()`?
+
+**Answer:** `str_trim()` removes whitespace from the start and end of a string. The opposite of `str_trim()` is `str_pad()`, which allows you to add whitespace to the start or end of a string. 
+
+6. Write a function that turns (e.g.) a vector `c("a", "b", "c")` into the string `a, b, and c`. Think carefully about what it should do if given a vector of length 0, 1, or 2.
+
+```{r basics question 6}
+oxford_comma <- function(input, delim = ",") {
+  n <- length(input)
+  if (n == 0) {
+    ""
+  } else if (n == 1) {
+    input
+  } else if (n == 2) {
+    str_c(input, collapse = " and ")
+  } else {
+    # commas after all n - 1 elements
+    not_last <- str_c(input[seq_len(n - 1)], delim)
+    # prepend "and" to the last element
+    last <- str_c("and", input[[n]], sep = " ")
+    # combine parts with spaces
+    str_c(c(not_last, last), collapse = " ")
+  }
+}
+
+oxford_comma(c("a", "b", "c", "d"))
+```
+
+## Excercises : Matching Patterns with Regular Expressions
+
+1. Describe, in words, what these expressions will match:
+    a. (.)\1\1
+    b. "(.)(.)\\2\\1"
+    c. (..)\1
+    d. "(.).\\1.\\1"
+    e. "(.)(.)(.).*\\3\\2\\1"
+
+2. Construct regular expressions to match words that:
+    a. Start and end with the same character.
+    b. Contain a repeated pair of letters (e.g., “church” contains “ch” repeated twice).
+    c. Contain one letter repeated in at least three places (e.g., “eleven” contains three “e”s).
