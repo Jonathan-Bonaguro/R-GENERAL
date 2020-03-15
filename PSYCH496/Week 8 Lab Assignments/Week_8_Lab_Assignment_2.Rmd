@@ -1,0 +1,87 @@
+---
+title: "Week 8 Lab Assignment 2"
+output: 
+  html_document:
+    df_print: paged
+author: "Jonathan Bonaguro"
+date: "March 13, 2020"
+---
+
+```{r setup environment, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+library(nycflights13)
+library(tidyverse)
+library(htmlwidgets)
+```
+
+## Assignments
+
+Use only regular expressions for pattern matching to answer the questions below. You can refer to the reference page on regular expressions [here.](https://stringr.tidyverse.org/articles/regular-expressions.html) 
+
+1. Using the words dataset:
+    a. Return all the words beginning with the letter “s” or “a” and ending with any character.
+    b. Return all the words that does not start with a vowel.
+    c. Find the proportion of words that have repeat of any character (eg.,cc in accept).
+    d. Find all the words containing exactly two vowels and count them.
+    e. Find all the words that starts with the same character and ends with the same character.
+
+Combine your knowledge on factors and datetime functions to answer the following questions:
+
+a. Using the flight data set create a date time variable for departure time from the year, month, day, and dep_time variables.
+
+b. From the date time object create a weekday variable, and calculate the total number of flights departing on each day of the week througout the year.
+
+c. Now create factors by treating each day of the week as a level and calculate the mean departure delay across each day of the week throughout the year.
+
+#### Assignment 1
+
+1. Using the words dataset:
+    a. Return all the words beginning with the letter “s” or “a” and ending with any character.
+    b. Return all the words that does not start with a vowel.
+    c. Find the proportion of words that have repeat of any character (eg.,cc in accept).
+    d. Find all the words containing exactly two vowels and count them.
+    e. Find all the words that starts with the same character and ends with the same character.
+
+```{r assignment 1}
+# a. Return all the words beginning with the letter “s” or “a” and ending with any character.
+str_subset(words, pattern = "^s|^a")
+
+# b. Return all the words that does not start with a vowel.
+str_subset(words, pattern = "^[^aeioy]")
+
+# c. Find the proportion of words that have repeat of any character (eg.,cc in accept).
+length(str_subset(words, pattern = "(.)\\1")) / length(words)
+
+# d. Find all the words containing exactly two vowels and count them.
+sum(str_count(words, pattern = "[aeioy]") == 2)
+
+# e. Find all the words that starts with the same character and ends with the same character.
+str_subset(words, pattern = "^(.).*\\1$")
+
+```
+
+#### Assignment 2
+
+a. Using the flight data set create a date time variable for departure time from the year, month, day, and dep_time variables.
+
+b. From the date time object create a weekday variable, and calculate the total number of flights departing on each day of the week througout the year.
+
+c. Now create factors by treating each day of the week as a level and calculate the mean departure delay across each day of the week throughout the year.
+
+```{r assignment 2}
+flights <- flights %>% 
+  mutate(dep_date_time = make_date(year, month, day))
+
+flights %>% 
+  mutate(weekday = wday(dep_date_time)) %>% 
+  group_by(weekday) %>% 
+  summarise(num_flights = n())
+
+flights %>% 
+  mutate(weekday = factor(wday(dep_date_time))) %>% 
+  group_by(weekday) %>% 
+  summarise(mean_dep_delay = mean(dep_delay, na.rm = TRUE))
+
+```
+
+
