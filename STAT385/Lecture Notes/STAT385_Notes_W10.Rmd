@@ -1,0 +1,192 @@
+---
+title: "STAT385 Notes Week 7"
+author: "Jonathan Bonaguro"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(collapse = TRUE)
+library(tidyverse)
+```
+
+## **Monday, Mar. 23, 2020- The Grammar of Graphics**
+
+## `ggplot2`
+
+* `ggplot2` is a package in the `tidyverse`
+* Visualizing data using `ggplot2` has become the default for many R users
+* It is much more elegant and versatile than base R graphing functions
+* But that comes with the price of more "complex" function calls
+    + `ggplot2` implements the grammer of graphics, a coherent system for describing and building graphs
+    
+## First Steps
+
+* `ggplot2` is already installed as part of `tidyverse`
+* Once you call `library(tidyverse)`, you are ready to graph using `ggplot2`
+* Let's use our first graph to answer this question
+    + *Do cars with big engines use more fuel than cars with small engines?*
+    
+### The `mpg` data frame
+
+* To answer the question above, use the `mpg` dataset that is included in `ggplot2`
+
+```{r}
+mpg
+```
+
+* The variables we care about are
+    + `displ`: a car's engine size in liters
+    + `hwy`: a car's fuel efficiency on the highway in miles per gallon
+    
+## Our first `ggplot2` plot
+
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy))
+```
+
+* The above code graphs a scatterplot with `displ` on the x-axis and `hwy` on the y-axis
+* Now, let's interpret the code:
+    + With `ggplot2`, you begin a plot with the function `ggplot()`.
+    + `ggplot()` creates a coordinate system that you can add layers to.
+    + The first argument of `ggplot()` is the dataset to use in the graph.
+    + So `ggplot(data = mpg)` creates an empty graph (see below)
+    
+```{r}
+ggplot(data = mpg)
+```
+    
+## A graphing template
+
+* The following code segment is a reusable template for making graphs with `ggplot2`
+
+```{r, eval=FALSE}
+ggplot(data = <DATA>)
+  <GEOM_FUNCTION>(mapping = aes (<MAPPINGS>))
+```
+
+## The `geom` function
+
+* There are many `geom()` functions in ggplot2: `geom_boxplot()`, `geom_line()`, etc.
+* Each `geom()` function takes a `mapping` argument. This defines how variables in your dataset are mapped to visual properties
+    + The `mapping` argument is always paired with `aes()`
+    + The `x` and `y` arguments of `aes()` set the axes
+    + `ggplot2` looks for the mapped variables in teh data argument
+    
+### Examples
+
+* **Example 1:** make a scatterplot of `hwy` vs `cyl`.
+* **Example 2:** make a scatterplot of `class` vs `drv`.
+
+```{r}
+# Example 1: scatterplot of `hwy` vs `cyl`.
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = hwy, y = cyl))
+```
+
+```{r}
+# Example 2: scatterplot of `class` vs `drv`.
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = class, y = drv))
+```
+
+## Aesthetic Mappings
+
+* Aesthetic mappings use the `aes()` function
+* Aesthetics are the visual properties of of the objects in your plot
+* This could be the size, shape, and color of your points
+
+### Add color to your plot
+
+* With `aes(..., color = class)`, `ggplot2` will automatically assign a unique level of the aesthetic (here a unique color) to each unique value of the variable (here `class`), a process known as **scaling**.
+* `ggplot2` will also add a legend that explains which levels correspond to which values.
+
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy, color = class))
+```
+
+* Now, what’s if you don’t want to color the points by class, you just want all the points to be blue!
+    + Let’s try changing class to "blue".
+
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy), color = "blue")
+```
+
+* This goes outside of the `aes()` argument.
+    + We are manually setting the color to blue, not mapping it to any data
+
+### Change the shape of your points
+
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy, shape = class))
+```
+
+* `suv` is not shown because the shape palette default can only handle 6 descrete values, and `class` has 7 values. In order to have 7 classes, we would have to manually set shapes.
+* We can manually set shape similar to how we manyally set color:
+
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy), shape = 15)
+```
+
+### Change the transparency of points
+
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy, alpha = class))
+```
+
+* Let's try setting `alpha` to a continuous variable: 
+
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy, alpha = cty))
+```
+
+* We can change the color to make it a little easier to read:
+
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy, alpha = cty), color = "red")
+```
+
+### Examples
+
+* **Example 1:** What happens if you map the same variable to multiple aesthetics?
+* **Example 2:** What does the `stroke` aesthetic do? What shapes does it work with?
+* **Example 3:** What happens if you map an aesthetic to something other than a variable name, like `aes(colour = displ < 5)`? Note, you’ll also need to specify x and y.
+
+```{r}
+# Example 1
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = displ))
+```
+
+* Plotting the same variable on mutliple aesthetics plots a perfectly linear correlation!
+
+```{r}
+# Example 2
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy, stroke = hwy/10), shape = 21, color = "darkorange", fill = "blue")
+```
+
+* `stroke` controls the size of the outer ring the shapes 21-24. In this example, the stroke is the orange part. 
+
+```{r}
+# Example 3
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy, color = displ < 5))
+```
+
+* In this case, the color argument took the boolean argument `displ < 5` and applied a color mapping to the variables depending on whether or not that row met that condition. 
+
+## Common Problems
+
+* One common problem when creating graphics using `ggplot2` is putting the `+` in the wrong places
+    + It comes at the end of the line, not the start of the next line!
