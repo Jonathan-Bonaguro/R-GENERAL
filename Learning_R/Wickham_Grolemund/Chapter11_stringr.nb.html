@@ -303,15 +303,334 @@ oxford_comma(c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;))</cod
 </div>
 <div id="excercises-matching-patterns-with-regular-expressions" class="section level2">
 <h2>Excercises : Matching Patterns with Regular Expressions</h2>
+<div id="basic-matches" class="section level4">
+<h4>Basic Matches</h4>
+<ol style="list-style-type: decimal">
+<li>Explain why each of these strings don’t match a : “&quot;,”\“,”\&quot;.</li>
+</ol>
+<p><strong>Answer:</strong> A single <code>\</code> escapes the next character in an R <em>string</em>. <code>\\</code> resolves to a single <code>\</code> which escapes the next character in the <em>expression</em>. A triple <code>\\\</code>, since the doulbe slash escapes a character, will escape the escaped character.</p>
+<ol start="2" style="list-style-type: decimal">
+<li>How would you match the sequence “’?</li>
+</ol>
+<p><strong>Answer:</strong> The sequence <code>&quot;'\</code> could be matched with <code>&quot;\&quot;'\\\\&quot;</code></p>
+<ol start="3" style="list-style-type: decimal">
+<li>What patterns will the regular expression ...... match? How would you represent it as a string?</li>
+</ol>
+<p><strong>Answer:</strong> This pattern will match a <code>.</code> followed by any character three times in a row, such as <code>.a.b.c</code>.</p>
+</div>
+<div id="anchors" class="section level4">
+<h4>Anchors</h4>
+<ol style="list-style-type: decimal">
+<li>How would you match the literal string “$^$”?</li>
+</ol>
+<p><strong>Answer:</strong> The string <code>$^$</code> could be matched with <code>&quot;\\$\\^\\$&quot;</code></p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RyX3N1YnNldChcIiReJFwiLCBcIlxcXFwkXFxcXF5cXFxcJFwiKVxuYGBgIn0= -->
+<pre class="r"><code>str_subset(&quot;$^$&quot;, &quot;\\$\\^\\$&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiJF4kXCJcbiJ9 -->
+<pre><code>[1] &quot;$^$&quot;</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<ol start="2" style="list-style-type: decimal">
+<li>Given the corpus of common words in stringr::words, create regular expressions that find all words that:
+<ol style="list-style-type: lower-alpha">
+<li>Start with “y”.</li>
+<li>End with “x”.</li>
+<li>Are exactly three letters long. (Don’t cheat by using str_length()!)</li>
+<li>Have seven letters or more.</li>
+</ol></li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBhLiBTdGFydCB3aXRoIOKAnHnigJ0uXG5zdHJfc3Vic2V0KHdvcmRzLCBwYXR0ZXJuID0gXCJeeVwiKVxuYGBgIn0= -->
+<pre class="r"><code># a. Start with “y”.
+str_subset(words, pattern = &quot;^y&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwieWVhclwiICAgICAgXCJ5ZXNcIiAgICAgICBcInllc3RlcmRheVwiIFwieWV0XCIgICAgICAgXCJ5b3VcIiAgICAgICBcInlvdW5nXCIgICAgXG4ifQ== -->
+<pre><code>[1] &quot;year&quot;      &quot;yes&quot;       &quot;yesterday&quot; &quot;yet&quot;       &quot;you&quot;       &quot;young&quot;    </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBiLiBFbmQgd2l0aCDigJx44oCdLlxuc3RyX3N1YnNldCh3b3JkcywgcGF0dGVybiA9IFwieCRcIilcbmBgYCJ9 -->
+<pre class="r"><code># b. End with “x”.
+str_subset(words, pattern = &quot;x$&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiYm94XCIgXCJzZXhcIiBcInNpeFwiIFwidGF4XCJcbiJ9 -->
+<pre><code>[1] &quot;box&quot; &quot;sex&quot; &quot;six&quot; &quot;tax&quot;</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBjLiBBcmUgZXhhY3RseSB0aHJlZSBsZXR0ZXJzIGxvbmcuIChEb27igJl0IGNoZWF0IGJ5IHVzaW5nIHN0cl9sZW5ndGgoKSEpXG5zdHJfc3Vic2V0KHdvcmRzLCBwYXR0ZXJuID0gXCJeLi4uJFwiKVxuYGBgIn0= -->
+<pre class="r"><code># c. Are exactly three letters long. (Don’t cheat by using str_length()!)
+str_subset(words, pattern = &quot;^...$&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICBbMV0gXCJhY3RcIiBcImFkZFwiIFwiYWdlXCIgXCJhZ29cIiBcImFpclwiIFwiYWxsXCIgXCJhbmRcIiBcImFueVwiIFwiYXJtXCIgXCJhcnRcIiBcImFza1wiIFwiYmFkXCIgXCJiYWdcIiBcImJhclwiIFwiYmVkXCIgXCJiZXRcIlxuIFsxN10gXCJiaWdcIiBcImJpdFwiIFwiYm94XCIgXCJib3lcIiBcImJ1c1wiIFwiYnV0XCIgXCJidXlcIiBcImNhblwiIFwiY2FyXCIgXCJjYXRcIiBcImN1cFwiIFwiY3V0XCIgXCJkYWRcIiBcImRheVwiIFwiZGllXCIgXCJkb2dcIlxuIFszM10gXCJkcnlcIiBcImR1ZVwiIFwiZWF0XCIgXCJlZ2dcIiBcImVuZFwiIFwiZXllXCIgXCJmYXJcIiBcImZld1wiIFwiZml0XCIgXCJmbHlcIiBcImZvclwiIFwiZnVuXCIgXCJnYXNcIiBcImdldFwiIFwiZ29kXCIgXCJndXlcIlxuIFs0OV0gXCJoaXRcIiBcImhvdFwiIFwiaG93XCIgXCJqb2JcIiBcImtleVwiIFwia2lkXCIgXCJsYWRcIiBcImxhd1wiIFwibGF5XCIgXCJsZWdcIiBcImxldFwiIFwibGllXCIgXCJsb3RcIiBcImxvd1wiIFwibWFuXCIgXCJtYXlcIlxuIFs2NV0gXCJtcnNcIiBcIm5ld1wiIFwibm9uXCIgXCJub3RcIiBcIm5vd1wiIFwib2RkXCIgXCJvZmZcIiBcIm9sZFwiIFwib25lXCIgXCJvdXRcIiBcIm93blwiIFwicGF5XCIgXCJwZXJcIiBcInB1dFwiIFwicmVkXCIgXCJyaWRcIlxuIFs4MV0gXCJydW5cIiBcInNheVwiIFwic2VlXCIgXCJzZXRcIiBcInNleFwiIFwic2hlXCIgXCJzaXJcIiBcInNpdFwiIFwic2l4XCIgXCJzb25cIiBcInN1blwiIFwidGF4XCIgXCJ0ZWFcIiBcInRlblwiIFwidGhlXCIgXCJ0aWVcIlxuIFs5N10gXCJ0b29cIiBcInRvcFwiIFwidHJ5XCIgXCJ0d29cIiBcInVzZVwiIFwid2FyXCIgXCJ3YXlcIiBcIndlZVwiIFwid2hvXCIgXCJ3aHlcIiBcIndpblwiIFwieWVzXCIgXCJ5ZXRcIiBcInlvdVwiXG4ifQ== -->
+<pre><code>  [1] &quot;act&quot; &quot;add&quot; &quot;age&quot; &quot;ago&quot; &quot;air&quot; &quot;all&quot; &quot;and&quot; &quot;any&quot; &quot;arm&quot; &quot;art&quot; &quot;ask&quot; &quot;bad&quot; &quot;bag&quot; &quot;bar&quot; &quot;bed&quot; &quot;bet&quot;
+ [17] &quot;big&quot; &quot;bit&quot; &quot;box&quot; &quot;boy&quot; &quot;bus&quot; &quot;but&quot; &quot;buy&quot; &quot;can&quot; &quot;car&quot; &quot;cat&quot; &quot;cup&quot; &quot;cut&quot; &quot;dad&quot; &quot;day&quot; &quot;die&quot; &quot;dog&quot;
+ [33] &quot;dry&quot; &quot;due&quot; &quot;eat&quot; &quot;egg&quot; &quot;end&quot; &quot;eye&quot; &quot;far&quot; &quot;few&quot; &quot;fit&quot; &quot;fly&quot; &quot;for&quot; &quot;fun&quot; &quot;gas&quot; &quot;get&quot; &quot;god&quot; &quot;guy&quot;
+ [49] &quot;hit&quot; &quot;hot&quot; &quot;how&quot; &quot;job&quot; &quot;key&quot; &quot;kid&quot; &quot;lad&quot; &quot;law&quot; &quot;lay&quot; &quot;leg&quot; &quot;let&quot; &quot;lie&quot; &quot;lot&quot; &quot;low&quot; &quot;man&quot; &quot;may&quot;
+ [65] &quot;mrs&quot; &quot;new&quot; &quot;non&quot; &quot;not&quot; &quot;now&quot; &quot;odd&quot; &quot;off&quot; &quot;old&quot; &quot;one&quot; &quot;out&quot; &quot;own&quot; &quot;pay&quot; &quot;per&quot; &quot;put&quot; &quot;red&quot; &quot;rid&quot;
+ [81] &quot;run&quot; &quot;say&quot; &quot;see&quot; &quot;set&quot; &quot;sex&quot; &quot;she&quot; &quot;sir&quot; &quot;sit&quot; &quot;six&quot; &quot;son&quot; &quot;sun&quot; &quot;tax&quot; &quot;tea&quot; &quot;ten&quot; &quot;the&quot; &quot;tie&quot;
+ [97] &quot;too&quot; &quot;top&quot; &quot;try&quot; &quot;two&quot; &quot;use&quot; &quot;war&quot; &quot;way&quot; &quot;wee&quot; &quot;who&quot; &quot;why&quot; &quot;win&quot; &quot;yes&quot; &quot;yet&quot; &quot;you&quot;</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBkLiBIYXZlIHNldmVuIGxldHRlcnMgb3IgbW9yZS5cbnN0cl9zdWJzZXQod29yZHMsIHBhdHRlcm4gPSBcIl4uLi4uLi4uXCIpXG5gYGAifQ== -->
+<pre class="r"><code># d. Have seven letters or more.
+str_subset(words, pattern = &quot;^.......&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICBbMV0gXCJhYnNvbHV0ZVwiICAgIFwiYWNjb3VudFwiICAgICBcImFjaGlldmVcIiAgICAgXCJhZGRyZXNzXCIgICAgIFwiYWR2ZXJ0aXNlXCIgICBcImFmdGVybm9vblwiICBcbiAgWzddIFwiYWdhaW5zdFwiICAgICBcImFscmVhZHlcIiAgICAgXCJhbHJpZ2h0XCIgICAgIFwiYWx0aG91Z2hcIiAgICBcImFtZXJpY2FcIiAgICAgXCJhbm90aGVyXCIgICAgXG4gWzEzXSBcImFwcGFyZW50XCIgICAgXCJhcHBvaW50XCIgICAgIFwiYXBwcm9hY2hcIiAgICBcImFwcHJvcHJpYXRlXCIgXCJhcnJhbmdlXCIgICAgIFwiYXNzb2NpYXRlXCIgIFxuIFsxOV0gXCJhdXRob3JpdHlcIiAgIFwiYXZhaWxhYmxlXCIgICBcImJhbGFuY2VcIiAgICAgXCJiZWNhdXNlXCIgICAgIFwiYmVsaWV2ZVwiICAgICBcImJlbmVmaXRcIiAgICBcbiBbMjVdIFwiYmV0d2VlblwiICAgICBcImJyaWxsaWFudFwiICAgXCJicml0YWluXCIgICAgIFwiYnJvdGhlclwiICAgICBcImJ1c2luZXNzXCIgICAgXCJjZXJ0YWluXCIgICAgXG4gWzMxXSBcImNoYWlybWFuXCIgICAgXCJjaGFyYWN0ZXJcIiAgIFwiQ2hyaXN0bWFzXCIgICBcImNvbGxlYWd1ZVwiICAgXCJjb2xsZWN0XCIgICAgIFwiY29sbGVnZVwiICAgIFxuIFszN10gXCJjb21tZW50XCIgICAgIFwiY29tbWl0dGVlXCIgICBcImNvbW11bml0eVwiICAgXCJjb21wYW55XCIgICAgIFwiY29tcGFyZVwiICAgICBcImNvbXBsZXRlXCIgICBcbiBbNDNdIFwiY29tcHV0ZVwiICAgICBcImNvbmNlcm5cIiAgICAgXCJjb25kaXRpb25cIiAgIFwiY29uc2lkZXJcIiAgICBcImNvbnN1bHRcIiAgICAgXCJjb250YWN0XCIgICAgXG4gWzQ5XSBcImNvbnRpbnVlXCIgICAgXCJjb250cmFjdFwiICAgIFwiY29udHJvbFwiICAgICBcImNvbnZlcnNlXCIgICAgXCJjb3JyZWN0XCIgICAgIFwiY291bmNpbFwiICAgIFxuIFs1NV0gXCJjb3VudHJ5XCIgICAgIFwiY3VycmVudFwiICAgICBcImRlY2lzaW9uXCIgICAgXCJkZWZpbml0ZVwiICAgIFwiZGVwYXJ0bWVudFwiICBcImRlc2NyaWJlXCIgICBcbiBbNjFdIFwiZGV2ZWxvcFwiICAgICBcImRpZmZlcmVuY2VcIiAgXCJkaWZmaWN1bHRcIiAgIFwiZGlzY3Vzc1wiICAgICBcImRpc3RyaWN0XCIgICAgXCJkb2N1bWVudFwiICAgXG4gWzY3XSBcImVjb25vbXlcIiAgICAgXCJlZHVjYXRlXCIgICAgIFwiZWxlY3RyaWNcIiAgICBcImVuY291cmFnZVwiICAgXCJlbmdsaXNoXCIgICAgIFwiZW52aXJvbm1lbnRcIlxuIFs3M10gXCJlc3BlY2lhbFwiICAgIFwiZXZlbmluZ1wiICAgICBcImV2aWRlbmNlXCIgICAgXCJleGFtcGxlXCIgICAgIFwiZXhlcmNpc2VcIiAgICBcImV4cGVuc2VcIiAgICBcbiBbNzldIFwiZXhwZXJpZW5jZVwiICBcImV4cGxhaW5cIiAgICAgXCJleHByZXNzXCIgICAgIFwiZmluYW5jZVwiICAgICBcImZvcnR1bmVcIiAgICAgXCJmb3J3YXJkXCIgICAgXG4gWzg1XSBcImZ1bmN0aW9uXCIgICAgXCJmdXJ0aGVyXCIgICAgIFwiZ2VuZXJhbFwiICAgICBcImdlcm1hbnlcIiAgICAgXCJnb29kYnllXCIgICAgIFwiaGlzdG9yeVwiICAgIFxuIFs5MV0gXCJob2xpZGF5XCIgICAgIFwiaG9zcGl0YWxcIiAgICBcImhvd2V2ZXJcIiAgICAgXCJodW5kcmVkXCIgICAgIFwiaHVzYmFuZFwiICAgICBcImlkZW50aWZ5XCIgICBcbiBbOTddIFwiaW1hZ2luZVwiICAgICBcImltcG9ydGFudFwiICAgXCJpbXByb3ZlXCIgICAgIFwiaW5jbHVkZVwiICAgICBcImluY3JlYXNlXCIgICAgXCJpbmRpdmlkdWFsXCIgXG5bMTAzXSBcImluZHVzdHJ5XCIgICAgXCJpbnN0ZWFkXCIgICAgIFwiaW50ZXJlc3RcIiAgICBcImludHJvZHVjZVwiICAgXCJpbnZvbHZlXCIgICAgIFwia2l0Y2hlblwiICAgIFxuWzEwOV0gXCJsYW5ndWFnZVwiICAgIFwibWFjaGluZVwiICAgICBcIm1lYW5pbmdcIiAgICAgXCJtZWFzdXJlXCIgICAgIFwibWVudGlvblwiICAgICBcIm1pbGxpb25cIiAgICBcblsxMTVdIFwibWluaXN0ZXJcIiAgICBcIm1vcm5pbmdcIiAgICAgXCJuZWNlc3NhcnlcIiAgIFwib2J2aW91c1wiICAgICBcIm9jY2FzaW9uXCIgICAgXCJvcGVyYXRlXCIgICAgXG5bMTIxXSBcIm9wcG9ydHVuaXR5XCIgXCJvcmdhbml6ZVwiICAgIFwib3JpZ2luYWxcIiAgICBcIm90aGVyd2lzZVwiICAgXCJwYXJhZ3JhcGhcIiAgIFwicGFydGljdWxhclwiIFxuWzEyN10gXCJwZW5zaW9uXCIgICAgIFwicGVyY2VudFwiICAgICBcInBlcmZlY3RcIiAgICAgXCJwZXJoYXBzXCIgICAgIFwicGhvdG9ncmFwaFwiICBcInBpY3R1cmVcIiAgICBcblsxMzNdIFwicG9saXRpY1wiICAgICBcInBvc2l0aW9uXCIgICAgXCJwb3NpdGl2ZVwiICAgIFwicG9zc2libGVcIiAgICBcInByYWN0aXNlXCIgICAgXCJwcmVwYXJlXCIgICAgXG5bMTM5XSBcInByZXNlbnRcIiAgICAgXCJwcmVzc3VyZVwiICAgIFwicHJlc3VtZVwiICAgICBcInByZXZpb3VzXCIgICAgXCJwcml2YXRlXCIgICAgIFwicHJvYmFibGVcIiAgIFxuWzE0NV0gXCJwcm9ibGVtXCIgICAgIFwicHJvY2VlZFwiICAgICBcInByb2Nlc3NcIiAgICAgXCJwcm9kdWNlXCIgICAgIFwicHJvZHVjdFwiICAgICBcInByb2dyYW1tZVwiICBcblsxNTFdIFwicHJvamVjdFwiICAgICBcInByb3Bvc2VcIiAgICAgXCJwcm90ZWN0XCIgICAgIFwicHJvdmlkZVwiICAgICBcInB1cnBvc2VcIiAgICAgXCJxdWFsaXR5XCIgICAgXG5bMTU3XSBcInF1YXJ0ZXJcIiAgICAgXCJxdWVzdGlvblwiICAgIFwicmVhbGlzZVwiICAgICBcInJlY2VpdmVcIiAgICAgXCJyZWNvZ25pemVcIiAgIFwicmVjb21tZW5kXCIgIFxuWzE2M10gXCJyZWxhdGlvblwiICAgIFwicmVtZW1iZXJcIiAgICBcInJlcHJlc2VudFwiICAgXCJyZXF1aXJlXCIgICAgIFwicmVzZWFyY2hcIiAgICBcInJlc291cmNlXCIgICBcblsxNjldIFwicmVzcGVjdFwiICAgICBcInJlc3BvbnNpYmxlXCIgXCJzYXR1cmRheVwiICAgIFwic2NpZW5jZVwiICAgICBcInNjb3RsYW5kXCIgICAgXCJzZWNyZXRhcnlcIiAgXG5bMTc1XSBcInNlY3Rpb25cIiAgICAgXCJzZXBhcmF0ZVwiICAgIFwic2VyaW91c1wiICAgICBcInNlcnZpY2VcIiAgICAgXCJzaW1pbGFyXCIgICAgIFwic2l0dWF0ZVwiICAgIFxuWzE4MV0gXCJzb2NpZXR5XCIgICAgIFwic3BlY2lhbFwiICAgICBcInNwZWNpZmljXCIgICAgXCJzdGFuZGFyZFwiICAgIFwic3RhdGlvblwiICAgICBcInN0cmFpZ2h0XCIgICBcblsxODddIFwic3RyYXRlZ3lcIiAgICBcInN0cnVjdHVyZVwiICAgXCJzdHVkZW50XCIgICAgIFwic3ViamVjdFwiICAgICBcInN1Y2NlZWRcIiAgICAgXCJzdWdnZXN0XCIgICAgXG5bMTkzXSBcInN1cHBvcnRcIiAgICAgXCJzdXBwb3NlXCIgICAgIFwic3VycHJpc2VcIiAgICBcInRlbGVwaG9uZVwiICAgXCJ0ZWxldmlzaW9uXCIgIFwidGVycmlibGVcIiAgIFxuWzE5OV0gXCJ0aGVyZWZvcmVcIiAgIFwidGhpcnRlZW5cIiAgICBcInRob3VzYW5kXCIgICAgXCJ0aHJvdWdoXCIgICAgIFwidGh1cnNkYXlcIiAgICBcInRvZ2V0aGVyXCIgICBcblsyMDVdIFwidG9tb3Jyb3dcIiAgICBcInRvbmlnaHRcIiAgICAgXCJ0cmFmZmljXCIgICAgIFwidHJhbnNwb3J0XCIgICBcInRyb3VibGVcIiAgICAgXCJ0dWVzZGF5XCIgICAgXG5bMjExXSBcInVuZGVyc3RhbmRcIiAgXCJ1bml2ZXJzaXR5XCIgIFwidmFyaW91c1wiICAgICBcInZpbGxhZ2VcIiAgICAgXCJ3ZWRuZXNkYXlcIiAgIFwid2VsY29tZVwiICAgIFxuWzIxN10gXCJ3aGV0aGVyXCIgICAgIFwid2l0aG91dFwiICAgICBcInllc3RlcmRheVwiICBcbiJ9 -->
+<pre><code>  [1] &quot;absolute&quot;    &quot;account&quot;     &quot;achieve&quot;     &quot;address&quot;     &quot;advertise&quot;   &quot;afternoon&quot;  
+  [7] &quot;against&quot;     &quot;already&quot;     &quot;alright&quot;     &quot;although&quot;    &quot;america&quot;     &quot;another&quot;    
+ [13] &quot;apparent&quot;    &quot;appoint&quot;     &quot;approach&quot;    &quot;appropriate&quot; &quot;arrange&quot;     &quot;associate&quot;  
+ [19] &quot;authority&quot;   &quot;available&quot;   &quot;balance&quot;     &quot;because&quot;     &quot;believe&quot;     &quot;benefit&quot;    
+ [25] &quot;between&quot;     &quot;brilliant&quot;   &quot;britain&quot;     &quot;brother&quot;     &quot;business&quot;    &quot;certain&quot;    
+ [31] &quot;chairman&quot;    &quot;character&quot;   &quot;Christmas&quot;   &quot;colleague&quot;   &quot;collect&quot;     &quot;college&quot;    
+ [37] &quot;comment&quot;     &quot;committee&quot;   &quot;community&quot;   &quot;company&quot;     &quot;compare&quot;     &quot;complete&quot;   
+ [43] &quot;compute&quot;     &quot;concern&quot;     &quot;condition&quot;   &quot;consider&quot;    &quot;consult&quot;     &quot;contact&quot;    
+ [49] &quot;continue&quot;    &quot;contract&quot;    &quot;control&quot;     &quot;converse&quot;    &quot;correct&quot;     &quot;council&quot;    
+ [55] &quot;country&quot;     &quot;current&quot;     &quot;decision&quot;    &quot;definite&quot;    &quot;department&quot;  &quot;describe&quot;   
+ [61] &quot;develop&quot;     &quot;difference&quot;  &quot;difficult&quot;   &quot;discuss&quot;     &quot;district&quot;    &quot;document&quot;   
+ [67] &quot;economy&quot;     &quot;educate&quot;     &quot;electric&quot;    &quot;encourage&quot;   &quot;english&quot;     &quot;environment&quot;
+ [73] &quot;especial&quot;    &quot;evening&quot;     &quot;evidence&quot;    &quot;example&quot;     &quot;exercise&quot;    &quot;expense&quot;    
+ [79] &quot;experience&quot;  &quot;explain&quot;     &quot;express&quot;     &quot;finance&quot;     &quot;fortune&quot;     &quot;forward&quot;    
+ [85] &quot;function&quot;    &quot;further&quot;     &quot;general&quot;     &quot;germany&quot;     &quot;goodbye&quot;     &quot;history&quot;    
+ [91] &quot;holiday&quot;     &quot;hospital&quot;    &quot;however&quot;     &quot;hundred&quot;     &quot;husband&quot;     &quot;identify&quot;   
+ [97] &quot;imagine&quot;     &quot;important&quot;   &quot;improve&quot;     &quot;include&quot;     &quot;increase&quot;    &quot;individual&quot; 
+[103] &quot;industry&quot;    &quot;instead&quot;     &quot;interest&quot;    &quot;introduce&quot;   &quot;involve&quot;     &quot;kitchen&quot;    
+[109] &quot;language&quot;    &quot;machine&quot;     &quot;meaning&quot;     &quot;measure&quot;     &quot;mention&quot;     &quot;million&quot;    
+[115] &quot;minister&quot;    &quot;morning&quot;     &quot;necessary&quot;   &quot;obvious&quot;     &quot;occasion&quot;    &quot;operate&quot;    
+[121] &quot;opportunity&quot; &quot;organize&quot;    &quot;original&quot;    &quot;otherwise&quot;   &quot;paragraph&quot;   &quot;particular&quot; 
+[127] &quot;pension&quot;     &quot;percent&quot;     &quot;perfect&quot;     &quot;perhaps&quot;     &quot;photograph&quot;  &quot;picture&quot;    
+[133] &quot;politic&quot;     &quot;position&quot;    &quot;positive&quot;    &quot;possible&quot;    &quot;practise&quot;    &quot;prepare&quot;    
+[139] &quot;present&quot;     &quot;pressure&quot;    &quot;presume&quot;     &quot;previous&quot;    &quot;private&quot;     &quot;probable&quot;   
+[145] &quot;problem&quot;     &quot;proceed&quot;     &quot;process&quot;     &quot;produce&quot;     &quot;product&quot;     &quot;programme&quot;  
+[151] &quot;project&quot;     &quot;propose&quot;     &quot;protect&quot;     &quot;provide&quot;     &quot;purpose&quot;     &quot;quality&quot;    
+[157] &quot;quarter&quot;     &quot;question&quot;    &quot;realise&quot;     &quot;receive&quot;     &quot;recognize&quot;   &quot;recommend&quot;  
+[163] &quot;relation&quot;    &quot;remember&quot;    &quot;represent&quot;   &quot;require&quot;     &quot;research&quot;    &quot;resource&quot;   
+[169] &quot;respect&quot;     &quot;responsible&quot; &quot;saturday&quot;    &quot;science&quot;     &quot;scotland&quot;    &quot;secretary&quot;  
+[175] &quot;section&quot;     &quot;separate&quot;    &quot;serious&quot;     &quot;service&quot;     &quot;similar&quot;     &quot;situate&quot;    
+[181] &quot;society&quot;     &quot;special&quot;     &quot;specific&quot;    &quot;standard&quot;    &quot;station&quot;     &quot;straight&quot;   
+[187] &quot;strategy&quot;    &quot;structure&quot;   &quot;student&quot;     &quot;subject&quot;     &quot;succeed&quot;     &quot;suggest&quot;    
+[193] &quot;support&quot;     &quot;suppose&quot;     &quot;surprise&quot;    &quot;telephone&quot;   &quot;television&quot;  &quot;terrible&quot;   
+[199] &quot;therefore&quot;   &quot;thirteen&quot;    &quot;thousand&quot;    &quot;through&quot;     &quot;thursday&quot;    &quot;together&quot;   
+[205] &quot;tomorrow&quot;    &quot;tonight&quot;     &quot;traffic&quot;     &quot;transport&quot;   &quot;trouble&quot;     &quot;tuesday&quot;    
+[211] &quot;understand&quot;  &quot;university&quot;  &quot;various&quot;     &quot;village&quot;     &quot;wednesday&quot;   &quot;welcome&quot;    
+[217] &quot;whether&quot;     &quot;without&quot;     &quot;yesterday&quot;  </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="character-classes-and-alternatives" class="section level4">
+<h4>Character Classes and Alternatives</h4>
+<ol style="list-style-type: decimal">
+<li>Create regular expressions to find all words that:
+<ol style="list-style-type: lower-alpha">
+<li>Start with a vowel.</li>
+<li>Only contain consonants. (Hint: think about matching “not”-vowels.)</li>
+<li>End with ed, but not with eed.</li>
+<li>End with ing or ize.</li>
+</ol></li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBhLiBTdGFydCB3aXRoIGEgdm93ZWwuXG5zdHJfc3Vic2V0KHdvcmRzLCBwYXR0ZXJuID0gXCJeW2FlaW91XVwiKVxuYGBgIn0= -->
+<pre class="r"><code># a. Start with a vowel.
+str_subset(words, pattern = &quot;^[aeiou]&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICBbMV0gXCJhXCIgICAgICAgICAgIFwiYWJsZVwiICAgICAgICBcImFib3V0XCIgICAgICAgXCJhYnNvbHV0ZVwiICAgIFwiYWNjZXB0XCIgICAgICBcImFjY291bnRcIiAgICBcbiAgWzddIFwiYWNoaWV2ZVwiICAgICBcImFjcm9zc1wiICAgICAgXCJhY3RcIiAgICAgICAgIFwiYWN0aXZlXCIgICAgICBcImFjdHVhbFwiICAgICAgXCJhZGRcIiAgICAgICAgXG4gWzEzXSBcImFkZHJlc3NcIiAgICAgXCJhZG1pdFwiICAgICAgIFwiYWR2ZXJ0aXNlXCIgICBcImFmZmVjdFwiICAgICAgXCJhZmZvcmRcIiAgICAgIFwiYWZ0ZXJcIiAgICAgIFxuIFsxOV0gXCJhZnRlcm5vb25cIiAgIFwiYWdhaW5cIiAgICAgICBcImFnYWluc3RcIiAgICAgXCJhZ2VcIiAgICAgICAgIFwiYWdlbnRcIiAgICAgICBcImFnb1wiICAgICAgICBcbiBbMjVdIFwiYWdyZWVcIiAgICAgICBcImFpclwiICAgICAgICAgXCJhbGxcIiAgICAgICAgIFwiYWxsb3dcIiAgICAgICBcImFsbW9zdFwiICAgICAgXCJhbG9uZ1wiICAgICAgXG4gWzMxXSBcImFscmVhZHlcIiAgICAgXCJhbHJpZ2h0XCIgICAgIFwiYWxzb1wiICAgICAgICBcImFsdGhvdWdoXCIgICAgXCJhbHdheXNcIiAgICAgIFwiYW1lcmljYVwiICAgIFxuIFszN10gXCJhbW91bnRcIiAgICAgIFwiYW5kXCIgICAgICAgICBcImFub3RoZXJcIiAgICAgXCJhbnN3ZXJcIiAgICAgIFwiYW55XCIgICAgICAgICBcImFwYXJ0XCIgICAgICBcbiBbNDNdIFwiYXBwYXJlbnRcIiAgICBcImFwcGVhclwiICAgICAgXCJhcHBseVwiICAgICAgIFwiYXBwb2ludFwiICAgICBcImFwcHJvYWNoXCIgICAgXCJhcHByb3ByaWF0ZVwiXG4gWzQ5XSBcImFyZWFcIiAgICAgICAgXCJhcmd1ZVwiICAgICAgIFwiYXJtXCIgICAgICAgICBcImFyb3VuZFwiICAgICAgXCJhcnJhbmdlXCIgICAgIFwiYXJ0XCIgICAgICAgIFxuIFs1NV0gXCJhc1wiICAgICAgICAgIFwiYXNrXCIgICAgICAgICBcImFzc29jaWF0ZVwiICAgXCJhc3N1bWVcIiAgICAgIFwiYXRcIiAgICAgICAgICBcImF0dGVuZFwiICAgICBcbiBbNjFdIFwiYXV0aG9yaXR5XCIgICBcImF2YWlsYWJsZVwiICAgXCJhd2FyZVwiICAgICAgIFwiYXdheVwiICAgICAgICBcImF3ZnVsXCIgICAgICAgXCJlYWNoXCIgICAgICAgXG4gWzY3XSBcImVhcmx5XCIgICAgICAgXCJlYXN0XCIgICAgICAgIFwiZWFzeVwiICAgICAgICBcImVhdFwiICAgICAgICAgXCJlY29ub215XCIgICAgIFwiZWR1Y2F0ZVwiICAgIFxuIFs3M10gXCJlZmZlY3RcIiAgICAgIFwiZWdnXCIgICAgICAgICBcImVpZ2h0XCIgICAgICAgXCJlaXRoZXJcIiAgICAgIFwiZWxlY3RcIiAgICAgICBcImVsZWN0cmljXCIgICBcbiBbNzldIFwiZWxldmVuXCIgICAgICBcImVsc2VcIiAgICAgICAgXCJlbXBsb3lcIiAgICAgIFwiZW5jb3VyYWdlXCIgICBcImVuZFwiICAgICAgICAgXCJlbmdpbmVcIiAgICAgXG4gWzg1XSBcImVuZ2xpc2hcIiAgICAgXCJlbmpveVwiICAgICAgIFwiZW5vdWdoXCIgICAgICBcImVudGVyXCIgICAgICAgXCJlbnZpcm9ubWVudFwiIFwiZXF1YWxcIiAgICAgIFxuIFs5MV0gXCJlc3BlY2lhbFwiICAgIFwiZXVyb3BlXCIgICAgICBcImV2ZW5cIiAgICAgICAgXCJldmVuaW5nXCIgICAgIFwiZXZlclwiICAgICAgICBcImV2ZXJ5XCIgICAgICBcbiBbOTddIFwiZXZpZGVuY2VcIiAgICBcImV4YWN0XCIgICAgICAgXCJleGFtcGxlXCIgICAgIFwiZXhjZXB0XCIgICAgICBcImV4Y3VzZVwiICAgICAgXCJleGVyY2lzZVwiICAgXG5bMTAzXSBcImV4aXN0XCIgICAgICAgXCJleHBlY3RcIiAgICAgIFwiZXhwZW5zZVwiICAgICBcImV4cGVyaWVuY2VcIiAgXCJleHBsYWluXCIgICAgIFwiZXhwcmVzc1wiICAgIFxuWzEwOV0gXCJleHRyYVwiICAgICAgIFwiZXllXCIgICAgICAgICBcImlkZWFcIiAgICAgICAgXCJpZGVudGlmeVwiICAgIFwiaWZcIiAgICAgICAgICBcImltYWdpbmVcIiAgICBcblsxMTVdIFwiaW1wb3J0YW50XCIgICBcImltcHJvdmVcIiAgICAgXCJpblwiICAgICAgICAgIFwiaW5jbHVkZVwiICAgICBcImluY29tZVwiICAgICAgXCJpbmNyZWFzZVwiICAgXG5bMTIxXSBcImluZGVlZFwiICAgICAgXCJpbmRpdmlkdWFsXCIgIFwiaW5kdXN0cnlcIiAgICBcImluZm9ybVwiICAgICAgXCJpbnNpZGVcIiAgICAgIFwiaW5zdGVhZFwiICAgIFxuWzEyN10gXCJpbnN1cmVcIiAgICAgIFwiaW50ZXJlc3RcIiAgICBcImludG9cIiAgICAgICAgXCJpbnRyb2R1Y2VcIiAgIFwiaW52ZXN0XCIgICAgICBcImludm9sdmVcIiAgICBcblsxMzNdIFwiaXNzdWVcIiAgICAgICBcIml0XCIgICAgICAgICAgXCJpdGVtXCIgICAgICAgIFwib2J2aW91c1wiICAgICBcIm9jY2FzaW9uXCIgICAgXCJvZGRcIiAgICAgICAgXG5bMTM5XSBcIm9mXCIgICAgICAgICAgXCJvZmZcIiAgICAgICAgIFwib2ZmZXJcIiAgICAgICBcIm9mZmljZVwiICAgICAgXCJvZnRlblwiICAgICAgIFwib2theVwiICAgICAgIFxuWzE0NV0gXCJvbGRcIiAgICAgICAgIFwib25cIiAgICAgICAgICBcIm9uY2VcIiAgICAgICAgXCJvbmVcIiAgICAgICAgIFwib25seVwiICAgICAgICBcIm9wZW5cIiAgICAgICBcblsxNTFdIFwib3BlcmF0ZVwiICAgICBcIm9wcG9ydHVuaXR5XCIgXCJvcHBvc2VcIiAgICAgIFwib3JcIiAgICAgICAgICBcIm9yZGVyXCIgICAgICAgXCJvcmdhbml6ZVwiICAgXG5bMTU3XSBcIm9yaWdpbmFsXCIgICAgXCJvdGhlclwiICAgICAgIFwib3RoZXJ3aXNlXCIgICBcIm91Z2h0XCIgICAgICAgXCJvdXRcIiAgICAgICAgIFwib3ZlclwiICAgICAgIFxuWzE2M10gXCJvd25cIiAgICAgICAgIFwidW5kZXJcIiAgICAgICBcInVuZGVyc3RhbmRcIiAgXCJ1bmlvblwiICAgICAgIFwidW5pdFwiICAgICAgICBcInVuaXRlXCIgICAgICBcblsxNjldIFwidW5pdmVyc2l0eVwiICBcInVubGVzc1wiICAgICAgXCJ1bnRpbFwiICAgICAgIFwidXBcIiAgICAgICAgICBcInVwb25cIiAgICAgICAgXCJ1c2VcIiAgICAgICAgXG5bMTc1XSBcInVzdWFsXCIgICAgICBcbiJ9 -->
+<pre><code>  [1] &quot;a&quot;           &quot;able&quot;        &quot;about&quot;       &quot;absolute&quot;    &quot;accept&quot;      &quot;account&quot;    
+  [7] &quot;achieve&quot;     &quot;across&quot;      &quot;act&quot;         &quot;active&quot;      &quot;actual&quot;      &quot;add&quot;        
+ [13] &quot;address&quot;     &quot;admit&quot;       &quot;advertise&quot;   &quot;affect&quot;      &quot;afford&quot;      &quot;after&quot;      
+ [19] &quot;afternoon&quot;   &quot;again&quot;       &quot;against&quot;     &quot;age&quot;         &quot;agent&quot;       &quot;ago&quot;        
+ [25] &quot;agree&quot;       &quot;air&quot;         &quot;all&quot;         &quot;allow&quot;       &quot;almost&quot;      &quot;along&quot;      
+ [31] &quot;already&quot;     &quot;alright&quot;     &quot;also&quot;        &quot;although&quot;    &quot;always&quot;      &quot;america&quot;    
+ [37] &quot;amount&quot;      &quot;and&quot;         &quot;another&quot;     &quot;answer&quot;      &quot;any&quot;         &quot;apart&quot;      
+ [43] &quot;apparent&quot;    &quot;appear&quot;      &quot;apply&quot;       &quot;appoint&quot;     &quot;approach&quot;    &quot;appropriate&quot;
+ [49] &quot;area&quot;        &quot;argue&quot;       &quot;arm&quot;         &quot;around&quot;      &quot;arrange&quot;     &quot;art&quot;        
+ [55] &quot;as&quot;          &quot;ask&quot;         &quot;associate&quot;   &quot;assume&quot;      &quot;at&quot;          &quot;attend&quot;     
+ [61] &quot;authority&quot;   &quot;available&quot;   &quot;aware&quot;       &quot;away&quot;        &quot;awful&quot;       &quot;each&quot;       
+ [67] &quot;early&quot;       &quot;east&quot;        &quot;easy&quot;        &quot;eat&quot;         &quot;economy&quot;     &quot;educate&quot;    
+ [73] &quot;effect&quot;      &quot;egg&quot;         &quot;eight&quot;       &quot;either&quot;      &quot;elect&quot;       &quot;electric&quot;   
+ [79] &quot;eleven&quot;      &quot;else&quot;        &quot;employ&quot;      &quot;encourage&quot;   &quot;end&quot;         &quot;engine&quot;     
+ [85] &quot;english&quot;     &quot;enjoy&quot;       &quot;enough&quot;      &quot;enter&quot;       &quot;environment&quot; &quot;equal&quot;      
+ [91] &quot;especial&quot;    &quot;europe&quot;      &quot;even&quot;        &quot;evening&quot;     &quot;ever&quot;        &quot;every&quot;      
+ [97] &quot;evidence&quot;    &quot;exact&quot;       &quot;example&quot;     &quot;except&quot;      &quot;excuse&quot;      &quot;exercise&quot;   
+[103] &quot;exist&quot;       &quot;expect&quot;      &quot;expense&quot;     &quot;experience&quot;  &quot;explain&quot;     &quot;express&quot;    
+[109] &quot;extra&quot;       &quot;eye&quot;         &quot;idea&quot;        &quot;identify&quot;    &quot;if&quot;          &quot;imagine&quot;    
+[115] &quot;important&quot;   &quot;improve&quot;     &quot;in&quot;          &quot;include&quot;     &quot;income&quot;      &quot;increase&quot;   
+[121] &quot;indeed&quot;      &quot;individual&quot;  &quot;industry&quot;    &quot;inform&quot;      &quot;inside&quot;      &quot;instead&quot;    
+[127] &quot;insure&quot;      &quot;interest&quot;    &quot;into&quot;        &quot;introduce&quot;   &quot;invest&quot;      &quot;involve&quot;    
+[133] &quot;issue&quot;       &quot;it&quot;          &quot;item&quot;        &quot;obvious&quot;     &quot;occasion&quot;    &quot;odd&quot;        
+[139] &quot;of&quot;          &quot;off&quot;         &quot;offer&quot;       &quot;office&quot;      &quot;often&quot;       &quot;okay&quot;       
+[145] &quot;old&quot;         &quot;on&quot;          &quot;once&quot;        &quot;one&quot;         &quot;only&quot;        &quot;open&quot;       
+[151] &quot;operate&quot;     &quot;opportunity&quot; &quot;oppose&quot;      &quot;or&quot;          &quot;order&quot;       &quot;organize&quot;   
+[157] &quot;original&quot;    &quot;other&quot;       &quot;otherwise&quot;   &quot;ought&quot;       &quot;out&quot;         &quot;over&quot;       
+[163] &quot;own&quot;         &quot;under&quot;       &quot;understand&quot;  &quot;union&quot;       &quot;unit&quot;        &quot;unite&quot;      
+[169] &quot;university&quot;  &quot;unless&quot;      &quot;until&quot;       &quot;up&quot;          &quot;upon&quot;        &quot;use&quot;        
+[175] &quot;usual&quot;      </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBiLiBPbmx5IGNvbnRhaW4gY29uc29uYW50cy4gKEhpbnQ6IHRoaW5rIGFib3V0IG1hdGNoaW5nIOKAnG5vdOKAnS12b3dlbHMuKVxuc3RyX3N1YnNldCh3b3JkcywgcGF0dGVybiA9IFwiXlteYWVpb3VdKyRcIilcbmBgYCJ9 -->
+<pre class="r"><code># b. Only contain consonants. (Hint: think about matching “not”-vowels.)
+str_subset(words, pattern = &quot;^[^aeiou]+$&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiYnlcIiAgXCJkcnlcIiBcImZseVwiIFwibXJzXCIgXCJ0cnlcIiBcIndoeVwiXG4ifQ== -->
+<pre><code>[1] &quot;by&quot;  &quot;dry&quot; &quot;fly&quot; &quot;mrs&quot; &quot;try&quot; &quot;why&quot;</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBjLiBFbmQgd2l0aCBlZCwgYnV0IG5vdCB3aXRoIGVlZC5cbnN0cl9zdWJzZXQod29yZHMsIHBhdHRlcm4gPSBcIlteZV1lZCRcIilcbmBgYCJ9 -->
+<pre class="r"><code># c. End with ed, but not with eed.
+str_subset(words, pattern = &quot;[^e]ed$&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiYmVkXCIgICAgIFwiaHVuZHJlZFwiIFwicmVkXCIgICAgXG4ifQ== -->
+<pre><code>[1] &quot;bed&quot;     &quot;hundred&quot; &quot;red&quot;    </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBkLiBFbmQgd2l0aCBpbmcgb3IgaXplLlxuc3RyX3N1YnNldCh3b3JkcywgcGF0dGVybiA9IFwiaShuZ3x6ZSkkXCIpXG5gYGAifQ== -->
+<pre class="r"><code># d. End with ing or ize.
+str_subset(words, pattern = &quot;i(ng|ze)$&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiIFsxXSBcImJyaW5nXCIgICAgIFwiZHVyaW5nXCIgICAgXCJldmVuaW5nXCIgICBcImtpbmdcIiAgICAgIFwibWVhbmluZ1wiICAgXCJtb3JuaW5nXCIgICBcIm9yZ2FuaXplXCIgIFwicmVjb2duaXplXCJcbiBbOV0gXCJyaW5nXCIgICAgICBcInNpbmdcIiAgICAgIFwic2l6ZVwiICAgICAgXCJ0aGluZ1wiICAgIFxuIn0= -->
+<pre><code> [1] &quot;bring&quot;     &quot;during&quot;    &quot;evening&quot;   &quot;king&quot;      &quot;meaning&quot;   &quot;morning&quot;   &quot;organize&quot;  &quot;recognize&quot;
+ [9] &quot;ring&quot;      &quot;sing&quot;      &quot;size&quot;      &quot;thing&quot;    </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<ol start="2" style="list-style-type: decimal">
+<li>Empirically verify the rule “i before e except after c.”</li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RyX3N1YnNldCh3b3JkcywgcGF0dGVybiA9IFwiY2VpfFteY11pZVwiKVxuYGBgIn0= -->
+<pre class="r"><code>str_subset(words, pattern = &quot;cei|[^c]ie&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiIFsxXSBcImFjaGlldmVcIiAgICBcImJlbGlldmVcIiAgICBcImJyaWVmXCIgICAgICBcImNsaWVudFwiICAgICBcImRpZVwiICAgICAgICBcImV4cGVyaWVuY2VcIiBcImZpZWxkXCIgICAgIFxuIFs4XSBcImZyaWVuZFwiICAgICBcImxpZVwiICAgICAgICBcInBpZWNlXCIgICAgICBcInF1aWV0XCIgICAgICBcInJlY2VpdmVcIiAgICBcInRpZVwiICAgICAgICBcInZpZXdcIiAgICAgIFxuIn0= -->
+<pre><code> [1] &quot;achieve&quot;    &quot;believe&quot;    &quot;brief&quot;      &quot;client&quot;     &quot;die&quot;        &quot;experience&quot; &quot;field&quot;     
+ [8] &quot;friend&quot;     &quot;lie&quot;        &quot;piece&quot;      &quot;quiet&quot;      &quot;receive&quot;    &quot;tie&quot;        &quot;view&quot;      </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RyX3N1YnNldCh3b3JkcywgcGF0dGVybiA9IFwiY2llfFteY11laVwiKVxuYGBgIn0= -->
+<pre class="r"><code>str_subset(words, pattern = &quot;cie|[^c]ei&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwic2NpZW5jZVwiIFwic29jaWV0eVwiIFwid2VpZ2hcIiAgXG4ifQ== -->
+<pre><code>[1] &quot;science&quot; &quot;society&quot; &quot;weigh&quot;  </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<ol start="3" style="list-style-type: decimal">
+<li>Is “q” always followed by a “u”?</li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RyX3N1YnNldCh3b3JkcywgcGF0dGVybiA9IFwicVtedV1cIilcbmBgYCJ9 -->
+<pre class="r"><code>str_subset(words, pattern = &quot;q[^u]&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiY2hhcmFjdGVyKDApXG4ifQ== -->
+<pre><code>character(0)</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p><strong>Answer:</strong> Yes!</p>
+<ol start="4" style="list-style-type: decimal">
+<li>Write a regular expression that matches a word if it’s probably written in British English, not American English.</li>
+</ol>
+<p><strong>Answer:</strong> Common differences in British and American English include things like the following: <code>ou|ise$|ae|oe|yse$</code>.</p>
+<ol start="5" style="list-style-type: decimal">
+<li>Create a regular expression that will match telephone numbers as commonly written in your country.</li>
+</ol>
+<p><strong>Answer:</strong> For a format like 123-456-7891, <code>\\d\\d\\d-\\d\\d\\d-\\d\\d\\d\\d</code> would match phone numbers.</p>
+</div>
+<div id="repetition" class="section level4">
+<h4>Repetition</h4>
+<ol style="list-style-type: decimal">
+<li>Describe the equivalents of ?, +, and * in {m,n} form.</li>
+</ol>
+<p><strong>Answer:</strong> The equivalent of <code>?</code> (0 or 1 matches) would be <code>{0, 1}</code>, the equivalent for <code>+</code> (1 or more matches) would be <code>{1, }</code>, and the equivalent for <code>*</code> (0 or more matches) would be <code>{0, }</code>.</p>
+<ol start="2" style="list-style-type: decimal">
+<li>Describe in words what these regular expressions match (read carefully to see if I’m using a regular expression or a string that defines a regular expression):
+<ol style="list-style-type: lower-alpha">
+<li><code>^.*$</code></li>
+<li><code>&quot;\\{.+\\}&quot;</code></li>
+<li><code>\d{4}-\d{2}-\d{2}</code></li>
+<li><code>&quot;\\\\{4}&quot;</code></li>
+</ol></li>
+</ol>
+<p><strong>Answer:</strong> The first expression <code>^.*$</code> matches any string that starts with and has 0 or more of any character (so basically any string). The second expression <code>&quot;\\{.+\\}&quot;</code> matches strings that have curly braces around at least one character, e.g. <code>{ab}</code>. The third expression <code>\d{4}-\d{2}-\d{2}</code> matches 4 digits, hyphen, 2 digits, hyphen, 2 digits, similar to a date in YYYY-MM-DD form. The pattern <code>&quot;\\\\{4}&quot;</code> will match <code>\\\\</code> in a string.</p>
+<ol start="3" style="list-style-type: decimal">
+<li>Create regular expressions to find all words that:
+<ol style="list-style-type: lower-alpha">
+<li>Start with three consonants.</li>
+<li>Have three or more vowels in a row.</li>
+<li>Have two or more vowel-consonant pairs in a row.</li>
+</ol></li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBhLiBTdGFydCB3aXRoIHRocmVlIGNvbnNvbmFudHMuXG5zdHJfc3Vic2V0KHdvcmRzLCBwYXR0ZXJuID0gXCJeW15hZWlvdV17M31cIilcbmBgYCJ9 -->
+<pre class="r"><code># a. Start with three consonants.
+str_subset(words, pattern = &quot;^[^aeiou]{3}&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiIFsxXSBcIkNocmlzdFwiICAgIFwiQ2hyaXN0bWFzXCIgXCJkcnlcIiAgICAgICBcImZseVwiICAgICAgIFwibXJzXCIgICAgICAgXCJzY2hlbWVcIiAgICBcInNjaG9vbFwiICAgIFwic3RyYWlnaHRcIiBcbiBbOV0gXCJzdHJhdGVneVwiICBcInN0cmVldFwiICAgIFwic3RyaWtlXCIgICAgXCJzdHJvbmdcIiAgICBcInN0cnVjdHVyZVwiIFwic3lzdGVtXCIgICAgXCJ0aHJlZVwiICAgICBcInRocm91Z2hcIiAgXG5bMTddIFwidGhyb3dcIiAgICAgXCJ0cnlcIiAgICAgICBcInR5cGVcIiAgICAgIFwid2h5XCIgICAgICBcbiJ9 -->
+<pre><code> [1] &quot;Christ&quot;    &quot;Christmas&quot; &quot;dry&quot;       &quot;fly&quot;       &quot;mrs&quot;       &quot;scheme&quot;    &quot;school&quot;    &quot;straight&quot; 
+ [9] &quot;strategy&quot;  &quot;street&quot;    &quot;strike&quot;    &quot;strong&quot;    &quot;structure&quot; &quot;system&quot;    &quot;three&quot;     &quot;through&quot;  
+[17] &quot;throw&quot;     &quot;try&quot;       &quot;type&quot;      &quot;why&quot;      </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBiLiBIYXZlIHRocmVlIG9yIG1vcmUgdm93ZWxzIGluIGEgcm93Llxuc3RyX3N1YnNldCh3b3JkcywgcGF0dGVybiA9IFwiW2FlaW91XXszLH1cIilcbmBgYCJ9 -->
+<pre class="r"><code># b. Have three or more vowels in a row.
+str_subset(words, pattern = &quot;[aeiou]{3,}&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwiYmVhdXR5XCIgICBcIm9idmlvdXNcIiAgXCJwcmV2aW91c1wiIFwicXVpZXRcIiAgICBcInNlcmlvdXNcIiAgXCJ2YXJpb3VzXCIgXG4ifQ== -->
+<pre><code>[1] &quot;beauty&quot;   &quot;obvious&quot;  &quot;previous&quot; &quot;quiet&quot;    &quot;serious&quot;  &quot;various&quot; </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBjLiBIYXZlIHR3byBvciBtb3JlIHZvd2VsLWNvbnNvbmFudCBwYWlycyBpbiBhIHJvdy5cbnN0cl9zdWJzZXQod29yZHMsIHBhdHRlcm4gPSBcIihbYWVpb3VdW15hZWlvdV0pezIsfVwiKVxuYGBgIn0= -->
+<pre class="r"><code># c. Have two or more vowel-consonant pairs in a row.
+str_subset(words, pattern = &quot;([aeiou][^aeiou]){2,}&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICBbMV0gXCJhYnNvbHV0ZVwiICAgIFwiYWdlbnRcIiAgICAgICBcImFsb25nXCIgICAgICAgXCJhbWVyaWNhXCIgICAgIFwiYW5vdGhlclwiICAgICBcImFwYXJ0XCIgICAgICBcbiAgWzddIFwiYXBwYXJlbnRcIiAgICBcImF1dGhvcml0eVwiICAgXCJhdmFpbGFibGVcIiAgIFwiYXdhcmVcIiAgICAgICBcImF3YXlcIiAgICAgICAgXCJiYWxhbmNlXCIgICAgXG4gWzEzXSBcImJhc2lzXCIgICAgICAgXCJiZWNvbWVcIiAgICAgIFwiYmVmb3JlXCIgICAgICBcImJlZ2luXCIgICAgICAgXCJiZWhpbmRcIiAgICAgIFwiYmVuZWZpdFwiICAgIFxuIFsxOV0gXCJidXNpbmVzc1wiICAgIFwiY2hhcmFjdGVyXCIgICBcImNsb3Nlc1wiICAgICAgXCJjb21tdW5pdHlcIiAgIFwiY29uc2lkZXJcIiAgICBcImNvdmVyXCIgICAgICBcbiBbMjVdIFwiZGViYXRlXCIgICAgICBcImRlY2lkZVwiICAgICAgXCJkZWNpc2lvblwiICAgIFwiZGVmaW5pdGVcIiAgICBcImRlcGFydG1lbnRcIiAgXCJkZXBlbmRcIiAgICAgXG4gWzMxXSBcImRlc2lnblwiICAgICAgXCJkZXZlbG9wXCIgICAgIFwiZGlmZmVyZW5jZVwiICBcImRpZmZpY3VsdFwiICAgXCJkaXJlY3RcIiAgICAgIFwiZGl2aWRlXCIgICAgIFxuIFszN10gXCJkb2N1bWVudFwiICAgIFwiZHVyaW5nXCIgICAgICBcImVjb25vbXlcIiAgICAgXCJlZHVjYXRlXCIgICAgIFwiZWxlY3RcIiAgICAgICBcImVsZWN0cmljXCIgICBcbiBbNDNdIFwiZWxldmVuXCIgICAgICBcImVuY291cmFnZVwiICAgXCJlbnZpcm9ubWVudFwiIFwiZXVyb3BlXCIgICAgICBcImV2ZW5cIiAgICAgICAgXCJldmVuaW5nXCIgICAgXG4gWzQ5XSBcImV2ZXJcIiAgICAgICAgXCJldmVyeVwiICAgICAgIFwiZXZpZGVuY2VcIiAgICBcImV4YWN0XCIgICAgICAgXCJleGFtcGxlXCIgICAgIFwiZXhlcmNpc2VcIiAgIFxuIFs1NV0gXCJleGlzdFwiICAgICAgIFwiZmFtaWx5XCIgICAgICBcImZpZ3VyZVwiICAgICAgXCJmaW5hbFwiICAgICAgIFwiZmluYW5jZVwiICAgICBcImZpbmlzaFwiICAgICBcbiBbNjFdIFwiZnJpZGF5XCIgICAgICBcImZ1dHVyZVwiICAgICAgXCJnZW5lcmFsXCIgICAgIFwiZ292ZXJuXCIgICAgICBcImhvbGlkYXlcIiAgICAgXCJob25lc3RcIiAgICAgXG4gWzY3XSBcImhvc3BpdGFsXCIgICAgXCJob3dldmVyXCIgICAgIFwiaWRlbnRpZnlcIiAgICBcImltYWdpbmVcIiAgICAgXCJpbmRpdmlkdWFsXCIgIFwiaW50ZXJlc3RcIiAgIFxuIFs3M10gXCJpbnRyb2R1Y2VcIiAgIFwiaXRlbVwiICAgICAgICBcImplc3VzXCIgICAgICAgXCJsZXZlbFwiICAgICAgIFwibGlrZWx5XCIgICAgICBcImxpbWl0XCIgICAgICBcbiBbNzldIFwibG9jYWxcIiAgICAgICBcIm1ham9yXCIgICAgICAgXCJtYW5hZ2VcIiAgICAgIFwibWVhbmluZ1wiICAgICBcIm1lYXN1cmVcIiAgICAgXCJtaW5pc3RlclwiICAgXG4gWzg1XSBcIm1pbnVzXCIgICAgICAgXCJtaW51dGVcIiAgICAgIFwibW9tZW50XCIgICAgICBcIm1vbmV5XCIgICAgICAgXCJtdXNpY1wiICAgICAgIFwibmF0dXJlXCIgICAgIFxuIFs5MV0gXCJuZWNlc3NhcnlcIiAgIFwibmV2ZXJcIiAgICAgICBcIm5vdGljZVwiICAgICAgXCJva2F5XCIgICAgICAgIFwib3BlblwiICAgICAgICBcIm9wZXJhdGVcIiAgICBcbiBbOTddIFwib3Bwb3J0dW5pdHlcIiBcIm9yZ2FuaXplXCIgICAgXCJvcmlnaW5hbFwiICAgIFwib3ZlclwiICAgICAgICBcInBhcGVyXCIgICAgICAgXCJwYXJhZ3JhcGhcIiAgXG5bMTAzXSBcInBhcmVudFwiICAgICAgXCJwYXJ0aWN1bGFyXCIgIFwicGhvdG9ncmFwaFwiICBcInBvbGljZVwiICAgICAgXCJwb2xpY3lcIiAgICAgIFwicG9saXRpY1wiICAgIFxuWzEwOV0gXCJwb3NpdGlvblwiICAgIFwicG9zaXRpdmVcIiAgICBcInBvd2VyXCIgICAgICAgXCJwcmVwYXJlXCIgICAgIFwicHJlc2VudFwiICAgICBcInByZXN1bWVcIiAgICBcblsxMTVdIFwicHJpdmF0ZVwiICAgICBcInByb2JhYmxlXCIgICAgXCJwcm9jZXNzXCIgICAgIFwicHJvZHVjZVwiICAgICBcInByb2R1Y3RcIiAgICAgXCJwcm9qZWN0XCIgICAgXG5bMTIxXSBcInByb3BlclwiICAgICAgXCJwcm9wb3NlXCIgICAgIFwicHJvdGVjdFwiICAgICBcInByb3ZpZGVcIiAgICAgXCJxdWFsaXR5XCIgICAgIFwicmVhbGlzZVwiICAgIFxuWzEyN10gXCJyZWFzb25cIiAgICAgIFwicmVjZW50XCIgICAgICBcInJlY29nbml6ZVwiICAgXCJyZWNvbW1lbmRcIiAgIFwicmVjb3JkXCIgICAgICBcInJlZHVjZVwiICAgICBcblsxMzNdIFwicmVmZXJcIiAgICAgICBcInJlZ2FyZFwiICAgICAgXCJyZWxhdGlvblwiICAgIFwicmVtZW1iZXJcIiAgICBcInJlcG9ydFwiICAgICAgXCJyZXByZXNlbnRcIiAgXG5bMTM5XSBcInJlc3VsdFwiICAgICAgXCJyZXR1cm5cIiAgICAgIFwic2F0dXJkYXlcIiAgICBcInNlY29uZFwiICAgICAgXCJzZWNyZXRhcnlcIiAgIFwic2VjdXJlXCIgICAgIFxuWzE0NV0gXCJzZXBhcmF0ZVwiICAgIFwic2V2ZW5cIiAgICAgICBcInNpbWlsYXJcIiAgICAgXCJzcGVjaWZpY1wiICAgIFwic3RyYXRlZ3lcIiAgICBcInN0dWRlbnRcIiAgICBcblsxNTFdIFwic3R1cGlkXCIgICAgICBcInRlbGVwaG9uZVwiICAgXCJ0ZWxldmlzaW9uXCIgIFwidGhlcmVmb3JlXCIgICBcInRob3VzYW5kXCIgICAgXCJ0b2RheVwiICAgICAgXG5bMTU3XSBcInRvZ2V0aGVyXCIgICAgXCJ0b21vcnJvd1wiICAgIFwidG9uaWdodFwiICAgICBcInRvdGFsXCIgICAgICAgXCJ0b3dhcmRcIiAgICAgIFwidHJhdmVsXCIgICAgIFxuWzE2M10gXCJ1bml0XCIgICAgICAgIFwidW5pdGVcIiAgICAgICBcInVuaXZlcnNpdHlcIiAgXCJ1cG9uXCIgICAgICAgIFwidmlzaXRcIiAgICAgICBcIndhdGVyXCIgICAgICBcblsxNjldIFwid29tYW5cIiAgICAgIFxuIn0= -->
+<pre><code>  [1] &quot;absolute&quot;    &quot;agent&quot;       &quot;along&quot;       &quot;america&quot;     &quot;another&quot;     &quot;apart&quot;      
+  [7] &quot;apparent&quot;    &quot;authority&quot;   &quot;available&quot;   &quot;aware&quot;       &quot;away&quot;        &quot;balance&quot;    
+ [13] &quot;basis&quot;       &quot;become&quot;      &quot;before&quot;      &quot;begin&quot;       &quot;behind&quot;      &quot;benefit&quot;    
+ [19] &quot;business&quot;    &quot;character&quot;   &quot;closes&quot;      &quot;community&quot;   &quot;consider&quot;    &quot;cover&quot;      
+ [25] &quot;debate&quot;      &quot;decide&quot;      &quot;decision&quot;    &quot;definite&quot;    &quot;department&quot;  &quot;depend&quot;     
+ [31] &quot;design&quot;      &quot;develop&quot;     &quot;difference&quot;  &quot;difficult&quot;   &quot;direct&quot;      &quot;divide&quot;     
+ [37] &quot;document&quot;    &quot;during&quot;      &quot;economy&quot;     &quot;educate&quot;     &quot;elect&quot;       &quot;electric&quot;   
+ [43] &quot;eleven&quot;      &quot;encourage&quot;   &quot;environment&quot; &quot;europe&quot;      &quot;even&quot;        &quot;evening&quot;    
+ [49] &quot;ever&quot;        &quot;every&quot;       &quot;evidence&quot;    &quot;exact&quot;       &quot;example&quot;     &quot;exercise&quot;   
+ [55] &quot;exist&quot;       &quot;family&quot;      &quot;figure&quot;      &quot;final&quot;       &quot;finance&quot;     &quot;finish&quot;     
+ [61] &quot;friday&quot;      &quot;future&quot;      &quot;general&quot;     &quot;govern&quot;      &quot;holiday&quot;     &quot;honest&quot;     
+ [67] &quot;hospital&quot;    &quot;however&quot;     &quot;identify&quot;    &quot;imagine&quot;     &quot;individual&quot;  &quot;interest&quot;   
+ [73] &quot;introduce&quot;   &quot;item&quot;        &quot;jesus&quot;       &quot;level&quot;       &quot;likely&quot;      &quot;limit&quot;      
+ [79] &quot;local&quot;       &quot;major&quot;       &quot;manage&quot;      &quot;meaning&quot;     &quot;measure&quot;     &quot;minister&quot;   
+ [85] &quot;minus&quot;       &quot;minute&quot;      &quot;moment&quot;      &quot;money&quot;       &quot;music&quot;       &quot;nature&quot;     
+ [91] &quot;necessary&quot;   &quot;never&quot;       &quot;notice&quot;      &quot;okay&quot;        &quot;open&quot;        &quot;operate&quot;    
+ [97] &quot;opportunity&quot; &quot;organize&quot;    &quot;original&quot;    &quot;over&quot;        &quot;paper&quot;       &quot;paragraph&quot;  
+[103] &quot;parent&quot;      &quot;particular&quot;  &quot;photograph&quot;  &quot;police&quot;      &quot;policy&quot;      &quot;politic&quot;    
+[109] &quot;position&quot;    &quot;positive&quot;    &quot;power&quot;       &quot;prepare&quot;     &quot;present&quot;     &quot;presume&quot;    
+[115] &quot;private&quot;     &quot;probable&quot;    &quot;process&quot;     &quot;produce&quot;     &quot;product&quot;     &quot;project&quot;    
+[121] &quot;proper&quot;      &quot;propose&quot;     &quot;protect&quot;     &quot;provide&quot;     &quot;quality&quot;     &quot;realise&quot;    
+[127] &quot;reason&quot;      &quot;recent&quot;      &quot;recognize&quot;   &quot;recommend&quot;   &quot;record&quot;      &quot;reduce&quot;     
+[133] &quot;refer&quot;       &quot;regard&quot;      &quot;relation&quot;    &quot;remember&quot;    &quot;report&quot;      &quot;represent&quot;  
+[139] &quot;result&quot;      &quot;return&quot;      &quot;saturday&quot;    &quot;second&quot;      &quot;secretary&quot;   &quot;secure&quot;     
+[145] &quot;separate&quot;    &quot;seven&quot;       &quot;similar&quot;     &quot;specific&quot;    &quot;strategy&quot;    &quot;student&quot;    
+[151] &quot;stupid&quot;      &quot;telephone&quot;   &quot;television&quot;  &quot;therefore&quot;   &quot;thousand&quot;    &quot;today&quot;      
+[157] &quot;together&quot;    &quot;tomorrow&quot;    &quot;tonight&quot;     &quot;total&quot;       &quot;toward&quot;      &quot;travel&quot;     
+[163] &quot;unit&quot;        &quot;unite&quot;       &quot;university&quot;  &quot;upon&quot;        &quot;visit&quot;       &quot;water&quot;      
+[169] &quot;woman&quot;      </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<ol start="4" style="list-style-type: decimal">
+<li>Solve the beginner regexp crosswords at <a href="https://regexcrossword.com/challenges/beginner" class="uri">https://regexcrossword.com/challenges/beginner</a>.</li>
+</ol>
+</div>
+<div id="grouping-and-backreferences" class="section level4">
+<h4>Grouping and Backreferences</h4>
 <ol style="list-style-type: decimal">
 <li>Describe, in words, what these expressions will match:
 <ol style="list-style-type: lower-alpha">
-<li>(.)</li>
-<li>“(.)(.)\2\1”</li>
-<li>(..)</li>
-<li>“(.).\1.\1”</li>
-<li>“(.)(.)(.).*\3\2\1&quot;</li>
+<li><code>(.)\1\1</code></li>
+<li><code>&quot;(.)(.)\\2\\1&quot;</code></li>
+<li><code>(..)\1</code></li>
+<li><code>&quot;(.).\\1.\\1&quot;</code></li>
+<li><code>&quot;(.)(.)(.).*\\3\\2\\1&quot;</code></li>
 </ol></li>
+</ol>
+<p><strong>Answer:</strong> <code>(.)\1\1</code> will match any letter repeated three times, such as <code>&quot;aaa&quot;</code>. <code>&quot;(.)(.)\\2\\1&quot;</code> will match a pattern like <code>&quot;abba&quot;</code>. <code>(..)\1</code> will match any two characters repeated, such as <code>&quot;a1a1&quot;</code>. <code>&quot;(.).\\1.\\1&quot;</code> will match a pattern such as <code>&quot;abaca&quot;</code>, where the 1st, 3rd, and 5th digits are the same. <code>&quot;(.)(.)(.).*\\3\\2\\1&quot;</code> will match any string that has a pattern of three characters, anything in the middle, and then the three starting characters in reverse such as <code>&quot;abc132cba&quot;</code>.</p>
+<ol start="2" style="list-style-type: decimal">
 <li>Construct regular expressions to match words that:
 <ol style="list-style-type: lower-alpha">
 <li>Start and end with the same character.</li>
@@ -320,9 +639,92 @@ oxford_comma(c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;))</cod
 </ol></li>
 </ol>
 <!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBhLiBTdGFydCBhbmQgZW5kIHdpdGggdGhlIHNhbWUgY2hhcmFjdGVyLlxuc3RyX3N1YnNldCh3b3JkcywgcGF0dGVybiA9IFwiXiguKS4qXFxcXDEkXCIpXG5gYGAifQ== -->
+<pre class="r"><code># a. Start and end with the same character.
+str_subset(words, pattern = &quot;^(.).*\\1$&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiIFsxXSBcImFtZXJpY2FcIiAgICBcImFyZWFcIiAgICAgICBcImRhZFwiICAgICAgICBcImRlYWRcIiAgICAgICBcImRlcGVuZFwiICAgICBcImVkdWNhdGVcIiAgICBcImVsc2VcIiAgICAgIFxuIFs4XSBcImVuY291cmFnZVwiICBcImVuZ2luZVwiICAgICBcImV1cm9wZVwiICAgICBcImV2aWRlbmNlXCIgICBcImV4YW1wbGVcIiAgICBcImV4Y3VzZVwiICAgICBcImV4ZXJjaXNlXCIgIFxuWzE1XSBcImV4cGVuc2VcIiAgICBcImV4cGVyaWVuY2VcIiBcImV5ZVwiICAgICAgICBcImhlYWx0aFwiICAgICBcImhpZ2hcIiAgICAgICBcImtub2NrXCIgICAgICBcImxldmVsXCIgICAgIFxuWzIyXSBcImxvY2FsXCIgICAgICBcIm5hdGlvblwiICAgICBcIm5vblwiICAgICAgICBcInJhdGhlclwiICAgICBcInJlZmVyXCIgICAgICBcInJlbWVtYmVyXCIgICBcInNlcmlvdXNcIiAgIFxuWzI5XSBcInN0YWlyc1wiICAgICBcInRlc3RcIiAgICAgICBcInRvbmlnaHRcIiAgICBcInRyYW5zcG9ydFwiICBcInRyZWF0XCIgICAgICBcInRydXN0XCIgICAgICBcIndpbmRvd1wiICAgIFxuWzM2XSBcInllc3RlcmRheVwiIFxuIn0= -->
+<pre><code> [1] &quot;america&quot;    &quot;area&quot;       &quot;dad&quot;        &quot;dead&quot;       &quot;depend&quot;     &quot;educate&quot;    &quot;else&quot;      
+ [8] &quot;encourage&quot;  &quot;engine&quot;     &quot;europe&quot;     &quot;evidence&quot;   &quot;example&quot;    &quot;excuse&quot;     &quot;exercise&quot;  
+[15] &quot;expense&quot;    &quot;experience&quot; &quot;eye&quot;        &quot;health&quot;     &quot;high&quot;       &quot;knock&quot;      &quot;level&quot;     
+[22] &quot;local&quot;      &quot;nation&quot;     &quot;non&quot;        &quot;rather&quot;     &quot;refer&quot;      &quot;remember&quot;   &quot;serious&quot;   
+[29] &quot;stairs&quot;     &quot;test&quot;       &quot;tonight&quot;    &quot;transport&quot;  &quot;treat&quot;      &quot;trust&quot;      &quot;window&quot;    
+[36] &quot;yesterday&quot; </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBiLiBDb250YWluIGEgcmVwZWF0ZWQgcGFpciBvZiBsZXR0ZXJzIChlLmcuLCDigJxjaHVyY2jigJ0gY29udGFpbnMg4oCcY2jigJ0gcmVwZWF0ZWQgdHdpY2UpLlxuc3RyX3N1YnNldCh3b3JkcywgcGF0dGVybiA9IFwiKC4uKS4qXFxcXDFcIilcbmBgYCJ9 -->
+<pre class="r"><code># b. Contain a repeated pair of letters (e.g., “church” contains “ch” repeated twice).
+str_subset(words, pattern = &quot;(..).*\\1&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiIFsxXSBcImFwcHJvcHJpYXRlXCIgXCJjaHVyY2hcIiAgICAgIFwiY29uZGl0aW9uXCIgICBcImRlY2lkZVwiICAgICAgXCJlbnZpcm9ubWVudFwiIFwibG9uZG9uXCIgICAgICBcInBhcmFncmFwaFwiICBcbiBbOF0gXCJwYXJ0aWN1bGFyXCIgIFwicGhvdG9ncmFwaFwiICBcInByZXBhcmVcIiAgICAgXCJwcmVzc3VyZVwiICAgIFwicmVtZW1iZXJcIiAgICBcInJlcHJlc2VudFwiICAgXCJyZXF1aXJlXCIgICAgXG5bMTVdIFwic2Vuc2VcIiAgICAgICBcInRoZXJlZm9yZVwiICAgXCJ1bmRlcnN0YW5kXCIgIFwid2hldGhlclwiICAgIFxuIn0= -->
+<pre><code> [1] &quot;appropriate&quot; &quot;church&quot;      &quot;condition&quot;   &quot;decide&quot;      &quot;environment&quot; &quot;london&quot;      &quot;paragraph&quot;  
+ [8] &quot;particular&quot;  &quot;photograph&quot;  &quot;prepare&quot;     &quot;pressure&quot;    &quot;remember&quot;    &quot;represent&quot;   &quot;require&quot;    
+[15] &quot;sense&quot;       &quot;therefore&quot;   &quot;understand&quot;  &quot;whether&quot;    </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBjLiBDb250YWluIG9uZSBsZXR0ZXIgcmVwZWF0ZWQgaW4gYXQgbGVhc3QgdGhyZWUgcGxhY2VzIChlLmcuLCDigJxlbGV2ZW7igJ0gY29udGFpbnMgdGhyZWUg4oCcZeKAnXMpLlxuc3RyX3N1YnNldCh3b3JkcywgcGF0dGVybiA9IFwiKC4pLipcXFxcMS4qXFxcXDFcIilcbmBgYCJ9 -->
+<pre class="r"><code># c. Contain one letter repeated in at least three places (e.g., “eleven” contains three “e”s).
+str_subset(words, pattern = &quot;(.).*\\1.*\\1&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiIFsxXSBcImFwcHJvcHJpYXRlXCIgXCJhdmFpbGFibGVcIiAgIFwiYmVsaWV2ZVwiICAgICBcImJldHdlZW5cIiAgICAgXCJidXNpbmVzc1wiICAgIFwiZGVncmVlXCIgICAgICBcImRpZmZlcmVuY2VcIiBcbiBbOF0gXCJkaXNjdXNzXCIgICAgIFwiZWxldmVuXCIgICAgICBcImVudmlyb25tZW50XCIgXCJldmlkZW5jZVwiICAgIFwiZXhlcmNpc2VcIiAgICBcImV4cGVuc2VcIiAgICAgXCJleHBlcmllbmNlXCIgXG5bMTVdIFwiaW5kaXZpZHVhbFwiICBcInBhcmFncmFwaFwiICAgXCJyZWNlaXZlXCIgICAgIFwicmVtZW1iZXJcIiAgICBcInJlcHJlc2VudFwiICAgXCJ0ZWxlcGhvbmVcIiAgIFwidGhlcmVmb3JlXCIgIFxuWzIyXSBcInRvbW9ycm93XCIgICBcbiJ9 -->
+<pre><code> [1] &quot;appropriate&quot; &quot;available&quot;   &quot;believe&quot;     &quot;between&quot;     &quot;business&quot;    &quot;degree&quot;      &quot;difference&quot; 
+ [8] &quot;discuss&quot;     &quot;eleven&quot;      &quot;environment&quot; &quot;evidence&quot;    &quot;exercise&quot;    &quot;expense&quot;     &quot;experience&quot; 
+[15] &quot;individual&quot;  &quot;paragraph&quot;   &quot;receive&quot;     &quot;remember&quot;    &quot;represent&quot;   &quot;telephone&quot;   &quot;therefore&quot;  
+[22] &quot;tomorrow&quot;   </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+</div>
+<div id="excercises-tools" class="section level2">
+<h2>Excercises: Tools</h2>
+<div id="detect-matches" class="section level4">
+<h4>Detect Matches</h4>
+<ol style="list-style-type: decimal">
+<li>For each of the following challenges, try solving it by using both a single regular expression, and a combination of multiple str_detect() calls:
+<ol style="list-style-type: lower-alpha">
+<li>Find all words that start or end with x.</li>
+<li>Find all words that start with a vowel and end with a consonant.</li>
+<li>Are there any words that contain at least one of each different vowel?</li>
+<li>What word has the highest number of vowels? What word has the highest proportion of vowels? (Hint: what is the denominator?)</li>
+</ol></li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBiLiBGaW5kIGFsbCB3b3JkcyB0aGF0IHN0YXJ0IHdpdGggYSB2b3dlbCBhbmQgZW5kIHdpdGggYSBjb25zb25hbnQuXG5zdHJfc3Vic2V0KHdvcmRzLCBwYXR0ZXJuID0gXCJeW2FlaW91XS4qW15hZWlvdV0kXCIpXG5cbmBgYCJ9 -->
+<pre class="r"><code># b. Find all words that start with a vowel and end with a consonant.
+str_subset(words, pattern = &quot;^[aeiou].*[^aeiou]$&quot;)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICBbMV0gXCJhYm91dFwiICAgICAgIFwiYWNjZXB0XCIgICAgICBcImFjY291bnRcIiAgICAgXCJhY3Jvc3NcIiAgICAgIFwiYWN0XCIgICAgICAgICBcImFjdHVhbFwiICAgICBcbiAgWzddIFwiYWRkXCIgICAgICAgICBcImFkZHJlc3NcIiAgICAgXCJhZG1pdFwiICAgICAgIFwiYWZmZWN0XCIgICAgICBcImFmZm9yZFwiICAgICAgXCJhZnRlclwiICAgICAgXG4gWzEzXSBcImFmdGVybm9vblwiICAgXCJhZ2FpblwiICAgICAgIFwiYWdhaW5zdFwiICAgICBcImFnZW50XCIgICAgICAgXCJhaXJcIiAgICAgICAgIFwiYWxsXCIgICAgICAgIFxuIFsxOV0gXCJhbGxvd1wiICAgICAgIFwiYWxtb3N0XCIgICAgICBcImFsb25nXCIgICAgICAgXCJhbHJlYWR5XCIgICAgIFwiYWxyaWdodFwiICAgICBcImFsdGhvdWdoXCIgICBcbiBbMjVdIFwiYWx3YXlzXCIgICAgICBcImFtb3VudFwiICAgICAgXCJhbmRcIiAgICAgICAgIFwiYW5vdGhlclwiICAgICBcImFuc3dlclwiICAgICAgXCJhbnlcIiAgICAgICAgXG4gWzMxXSBcImFwYXJ0XCIgICAgICAgXCJhcHBhcmVudFwiICAgIFwiYXBwZWFyXCIgICAgICBcImFwcGx5XCIgICAgICAgXCJhcHBvaW50XCIgICAgIFwiYXBwcm9hY2hcIiAgIFxuIFszN10gXCJhcm1cIiAgICAgICAgIFwiYXJvdW5kXCIgICAgICBcImFydFwiICAgICAgICAgXCJhc1wiICAgICAgICAgIFwiYXNrXCIgICAgICAgICBcImF0XCIgICAgICAgICBcbiBbNDNdIFwiYXR0ZW5kXCIgICAgICBcImF1dGhvcml0eVwiICAgXCJhd2F5XCIgICAgICAgIFwiYXdmdWxcIiAgICAgICBcImVhY2hcIiAgICAgICAgXCJlYXJseVwiICAgICAgXG4gWzQ5XSBcImVhc3RcIiAgICAgICAgXCJlYXN5XCIgICAgICAgIFwiZWF0XCIgICAgICAgICBcImVjb25vbXlcIiAgICAgXCJlZmZlY3RcIiAgICAgIFwiZWdnXCIgICAgICAgIFxuIFs1NV0gXCJlaWdodFwiICAgICAgIFwiZWl0aGVyXCIgICAgICBcImVsZWN0XCIgICAgICAgXCJlbGVjdHJpY1wiICAgIFwiZWxldmVuXCIgICAgICBcImVtcGxveVwiICAgICBcbiBbNjFdIFwiZW5kXCIgICAgICAgICBcImVuZ2xpc2hcIiAgICAgXCJlbmpveVwiICAgICAgIFwiZW5vdWdoXCIgICAgICBcImVudGVyXCIgICAgICAgXCJlbnZpcm9ubWVudFwiXG4gWzY3XSBcImVxdWFsXCIgICAgICAgXCJlc3BlY2lhbFwiICAgIFwiZXZlblwiICAgICAgICBcImV2ZW5pbmdcIiAgICAgXCJldmVyXCIgICAgICAgIFwiZXZlcnlcIiAgICAgIFxuIFs3M10gXCJleGFjdFwiICAgICAgIFwiZXhjZXB0XCIgICAgICBcImV4aXN0XCIgICAgICAgXCJleHBlY3RcIiAgICAgIFwiZXhwbGFpblwiICAgICBcImV4cHJlc3NcIiAgICBcbiBbNzldIFwiaWRlbnRpZnlcIiAgICBcImlmXCIgICAgICAgICAgXCJpbXBvcnRhbnRcIiAgIFwiaW5cIiAgICAgICAgICBcImluZGVlZFwiICAgICAgXCJpbmRpdmlkdWFsXCIgXG4gWzg1XSBcImluZHVzdHJ5XCIgICAgXCJpbmZvcm1cIiAgICAgIFwiaW5zdGVhZFwiICAgICBcImludGVyZXN0XCIgICAgXCJpbnZlc3RcIiAgICAgIFwiaXRcIiAgICAgICAgIFxuIFs5MV0gXCJpdGVtXCIgICAgICAgIFwib2J2aW91c1wiICAgICBcIm9jY2FzaW9uXCIgICAgXCJvZGRcIiAgICAgICAgIFwib2ZcIiAgICAgICAgICBcIm9mZlwiICAgICAgICBcbiBbOTddIFwib2ZmZXJcIiAgICAgICBcIm9mdGVuXCIgICAgICAgXCJva2F5XCIgICAgICAgIFwib2xkXCIgICAgICAgICBcIm9uXCIgICAgICAgICAgXCJvbmx5XCIgICAgICAgXG5bMTAzXSBcIm9wZW5cIiAgICAgICAgXCJvcHBvcnR1bml0eVwiIFwib3JcIiAgICAgICAgICBcIm9yZGVyXCIgICAgICAgXCJvcmlnaW5hbFwiICAgIFwib3RoZXJcIiAgICAgIFxuWzEwOV0gXCJvdWdodFwiICAgICAgIFwib3V0XCIgICAgICAgICBcIm92ZXJcIiAgICAgICAgXCJvd25cIiAgICAgICAgIFwidW5kZXJcIiAgICAgICBcInVuZGVyc3RhbmRcIiBcblsxMTVdIFwidW5pb25cIiAgICAgICBcInVuaXRcIiAgICAgICAgXCJ1bml2ZXJzaXR5XCIgIFwidW5sZXNzXCIgICAgICBcInVudGlsXCIgICAgICAgXCJ1cFwiICAgICAgICAgXG5bMTIxXSBcInVwb25cIiAgICAgICAgXCJ1c3VhbFwiICAgICAgXG4ifQ== -->
+<pre><code>  [1] &quot;about&quot;       &quot;accept&quot;      &quot;account&quot;     &quot;across&quot;      &quot;act&quot;         &quot;actual&quot;     
+  [7] &quot;add&quot;         &quot;address&quot;     &quot;admit&quot;       &quot;affect&quot;      &quot;afford&quot;      &quot;after&quot;      
+ [13] &quot;afternoon&quot;   &quot;again&quot;       &quot;against&quot;     &quot;agent&quot;       &quot;air&quot;         &quot;all&quot;        
+ [19] &quot;allow&quot;       &quot;almost&quot;      &quot;along&quot;       &quot;already&quot;     &quot;alright&quot;     &quot;although&quot;   
+ [25] &quot;always&quot;      &quot;amount&quot;      &quot;and&quot;         &quot;another&quot;     &quot;answer&quot;      &quot;any&quot;        
+ [31] &quot;apart&quot;       &quot;apparent&quot;    &quot;appear&quot;      &quot;apply&quot;       &quot;appoint&quot;     &quot;approach&quot;   
+ [37] &quot;arm&quot;         &quot;around&quot;      &quot;art&quot;         &quot;as&quot;          &quot;ask&quot;         &quot;at&quot;         
+ [43] &quot;attend&quot;      &quot;authority&quot;   &quot;away&quot;        &quot;awful&quot;       &quot;each&quot;        &quot;early&quot;      
+ [49] &quot;east&quot;        &quot;easy&quot;        &quot;eat&quot;         &quot;economy&quot;     &quot;effect&quot;      &quot;egg&quot;        
+ [55] &quot;eight&quot;       &quot;either&quot;      &quot;elect&quot;       &quot;electric&quot;    &quot;eleven&quot;      &quot;employ&quot;     
+ [61] &quot;end&quot;         &quot;english&quot;     &quot;enjoy&quot;       &quot;enough&quot;      &quot;enter&quot;       &quot;environment&quot;
+ [67] &quot;equal&quot;       &quot;especial&quot;    &quot;even&quot;        &quot;evening&quot;     &quot;ever&quot;        &quot;every&quot;      
+ [73] &quot;exact&quot;       &quot;except&quot;      &quot;exist&quot;       &quot;expect&quot;      &quot;explain&quot;     &quot;express&quot;    
+ [79] &quot;identify&quot;    &quot;if&quot;          &quot;important&quot;   &quot;in&quot;          &quot;indeed&quot;      &quot;individual&quot; 
+ [85] &quot;industry&quot;    &quot;inform&quot;      &quot;instead&quot;     &quot;interest&quot;    &quot;invest&quot;      &quot;it&quot;         
+ [91] &quot;item&quot;        &quot;obvious&quot;     &quot;occasion&quot;    &quot;odd&quot;         &quot;of&quot;          &quot;off&quot;        
+ [97] &quot;offer&quot;       &quot;often&quot;       &quot;okay&quot;        &quot;old&quot;         &quot;on&quot;          &quot;only&quot;       
+[103] &quot;open&quot;        &quot;opportunity&quot; &quot;or&quot;          &quot;order&quot;       &quot;original&quot;    &quot;other&quot;      
+[109] &quot;ought&quot;       &quot;out&quot;         &quot;over&quot;        &quot;own&quot;         &quot;under&quot;       &quot;understand&quot; 
+[115] &quot;union&quot;       &quot;unit&quot;        &quot;university&quot;  &quot;unless&quot;      &quot;until&quot;       &quot;up&quot;         
+[121] &quot;upon&quot;        &quot;usual&quot;      </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+</div>
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiQ2hhcHRlciAxMTogU3RyaW5ncyB3aXRoIGBzdHJpbmdyYCIKYXV0aG9yOiAiSm9uYXRoYW4gQm9uYWd1cm8iCm91dHB1dDogaHRtbF9kb2N1bWVudAotLS0KCmBgYHtyIHNldHVwLCBpbmNsdWRlPUZBTFNFLCBtZXNzYWdlPUZBTFNFfQpsaWJyYXJ5KHRpZHl2ZXJzZSkKa25pdHI6Om9wdHNfY2h1bmskc2V0KGNvbGxhcHNlID0gVFJVRSkKYGBgCgoKIyMgRXhjZXJjaXNlczogU3RyaW5nIEJhc2ljcwoKMS4gSW4gY29kZSB0aGF0IGRvZXNu4oCZdCB1c2Ugc3RyaW5nciwgeW914oCZbGwgb2Z0ZW4gc2VlIGBwYXN0ZSgpYCBhbmQgYHBhc3RlMCgpYC4gV2hhdOKAmXMgdGhlIGRpZmZlcmVuY2UgYmV0d2VlbiB0aGUgdHdvIGZ1bmN0aW9ucz8gV2hhdCBzdHJpbmdyIGZ1bmN0aW9uIGFyZSB0aGV5IGVxdWl2YWxlbnQgdG8/IEhvdyBkbyB0aGUgZnVuY3Rpb25zIGRpZmZlciBpbiB0aGVpciBoYW5kbGluZyBvZiBOQT8KCioqQW5zd2VyOioqIGBwYXN0ZSgpYCBpcyB1c2VkIHRvIGNvbmNhdGVuYXRlIHZlY3RvcnMgYWZ0ZXIgY29udmVydGluZyB0aGVtIHRvIGNoYXJhY3Rlciwgc2VwZXJhdGluZyB0aGVtIHdpdGggYSB2YWx1ZSBzcGVjaWZpZWQgYnkgYHNlcCA9ICIgImAgd2l0aCB0aGUgZGVmYXVsdCB2YWx1ZSBiZWluZyBhIHNwYWNlLiBgY29sbGFwc2UgPSBOVUxMYCBhbGxvd3MgZm9yIGEgdXNlciB0byBzcGVjaWZ5IHdoYXQgY2hhcmFjdGVyIHNlcGVyYXRlcyB0aGUgcmVzdWx0cy4gYHBhc3RlMCgpYCBkb2VzIG5vdCBhbGxvdyBmb3IgYSBzZXBlcmF0aW5nIGNoYXJhY3RlciwgYW5kIGF1dG9tYXRpY2FsbHkgc21hc2hlcyB0aGUgc3RyaW5ncyB0b2dldGhlci4gSG93ZXZlciwgYHBhc3RlMCgpYCBkb2VzIHRha2UgYSBgY29sbGFwc2UgPSBOVUxMYCBhcmd1bWVudC4gYHN0cl9jKClgIGlzIHRoZSBgc3RyaW5ncmAgZnVuY3Rpb24gd2hpY2ggYWNjb21wbGlzaGVzIHRoZSBzYW1lIHRoaW5nLiBJdCBkZWZhdWx0cyB0byBoYXZpbmcgbm8gY2hhcmFjdGVyIHRvIHNlcGVyYXRlIHRoZSB2YWx1ZXMgc2ltaWxhciB0byBgcGFzdGUwKClgLiBgc3RyX2MoKWAgdHJlYXRzIG1pc3NpbmcgdmFsdWVzIGFzIHRydWUgbWlzc2luZyB2YWx1ZXMsIGFuZCB3aWxsIHJldHVybiBgTkFgIHNpbWlsYXIgdG8gaG93IGBzdW0oKWAgd291bGQgaWYgZ2l2ZW4gYW4gTkEgdmFsdWUuIGBwYXN0ZSgpYCBhbmQgYHBhc3RlMCgpYCBhdXRvbWF0aWNhbGx5IGNvbnZlcnQgYE5BYCB0byBhIHN0cmluZy4gIAoKMi4gSW4geW91ciBvd24gd29yZHMsIGRlc2NyaWJlIHRoZSBkaWZmZXJlbmNlIGJldHdlZW4gdGhlIHNlcCBhbmQgY29sbGFwc2UgYXJndW1lbnRzIHRvIHN0cl9jKCkuCgoqKkFuc3dlcjoqKiBXaGVuIGNvbWJpbmluZyBzdHJpbmdzIGludG8gb25lIHN0cmluZyB1c2luZyBgc3RyX2MoKWAsIGBzZXAgPSAiImAgaXMgdXNlZCB0byBjb21iaW5lIGFuZCBzZXBlcmF0ZSBzdHJpbmdzIHRoYXQgYXJlIHBhc3NlZCBhcyBhcmd1bWVudHMgdG8gYHN0cl9jKClgLiBgY29sbGFwc2UgPSBOVUxMYCBpcyB1c2VkIHdoZW4gY29tYmluaW5nIGEgdmVjdG9yIG9mIHN0cmluZ3MgaW50byBhIHNpbmdsZSBzdHJpbmcsIGFuZCB0ZWxscyBgc3RyX2MoKWAgd2hpY2ggdmFsdWVzIHRvIHVzZSB0byBzZXBlcmF0ZSB0aGUgaXRlbXMgaW4gdGhlIHZlY3RvciBpbiB0aGUgc2luZ2xlIHN0cmluZy4gCgozLiBVc2UgYHN0cl9sZW5ndGgoKWAgYW5kIGBzdHJfc3ViKClgIHRvIGV4dHJhY3QgdGhlIG1pZGRsZSBjaGFyYWN0ZXIgZnJvbSBhIHN0cmluZy4gV2hhdCB3aWxsIHlvdSBkbyBpZiB0aGUgc3RyaW5nIGhhcyBhbiBldmVuIG51bWJlciBvZiBjaGFyYWN0ZXJzPwoKKipBbnN3ZXI6KiogSWYgdGhlIHN0cmluZyBoYXMgYW4gZXZlbiBudW1iZXIgb2YgY2hhcmFjdGVycywgSSBjaG9zZSB0byBwaWNrIGV4dHJhY3QgdGhlIGxldHRlciBmcm9tIHRoZSBtaWRkbGUgcGFpciB0aGF0IGlzIGNsb3Nlc3QgdG8gdGhlIGVuZCBvZiB0aGUgd29yZCBieSByb3VuZGluZyB1cCB0aGUgbGVuZ3RoIGRpdmlkZWQgYnkgdHdvIHVzaW5nIGBjZWlsaW5nKClgLgoKYGBge3IgYmFzaWNzIHF1ZXN0aW9uIDN9CnggPC0gZnJ1aXRbYygxOjQsIDY6OCldCngKCkwgPC0gIHN0cl9sZW5ndGgoeCkKTSA8LSBjZWlsaW5nKEwvMikKCnN0cl9zdWIoeCwgTSwgTSkKYGBgCgo0LiBXaGF0IGRvZXMgYHN0cl93cmFwKClgIGRvPyBXaGVuIG1pZ2h0IHlvdSB3YW50IHRvIHVzZSBpdD8KCioqQW5zd2VyOioqIFRoZSBmdW5jdGlvbiBgc3RyX3dyYXAoKWAgd3JhcHMgdGV4dCBzbyB0aGF0IGl0IGZpdHMgd2l0aGluIGEgY2VydGFpbiB3aWR0aC4gVGhpcyBpcyB1c2VmdWwgZm9yIHdyYXBwaW5nIGxvbmcgc3RyaW5ncyBvZiB0ZXh0IHRvIGJlIHR5cGVzZXQuCgo1LiBXaGF0IGRvZXMgYHN0cl90cmltKClgIGRvPyBXaGF04oCZcyB0aGUgb3Bwb3NpdGUgb2YgYHN0cl90cmltKClgPwoKKipBbnN3ZXI6KiogYHN0cl90cmltKClgIHJlbW92ZXMgd2hpdGVzcGFjZSBmcm9tIHRoZSBzdGFydCBhbmQgZW5kIG9mIGEgc3RyaW5nLiBUaGUgb3Bwb3NpdGUgb2YgYHN0cl90cmltKClgIGlzIGBzdHJfcGFkKClgLCB3aGljaCBhbGxvd3MgeW91IHRvIGFkZCB3aGl0ZXNwYWNlIHRvIHRoZSBzdGFydCBvciBlbmQgb2YgYSBzdHJpbmcuIAoKNi4gV3JpdGUgYSBmdW5jdGlvbiB0aGF0IHR1cm5zIChlLmcuKSBhIHZlY3RvciBgYygiYSIsICJiIiwgImMiKWAgaW50byB0aGUgc3RyaW5nIGBhLCBiLCBhbmQgY2AuIFRoaW5rIGNhcmVmdWxseSBhYm91dCB3aGF0IGl0IHNob3VsZCBkbyBpZiBnaXZlbiBhIHZlY3RvciBvZiBsZW5ndGggMCwgMSwgb3IgMi4KCmBgYHtyIGJhc2ljcyBxdWVzdGlvbiA2fQpveGZvcmRfY29tbWEgPC0gZnVuY3Rpb24oaW5wdXQsIGRlbGltID0gIiwiKSB7CiAgbiA8LSBsZW5ndGgoaW5wdXQpCiAgaWYgKG4gPT0gMCkgewogICAgIiIKICB9IGVsc2UgaWYgKG4gPT0gMSkgewogICAgaW5wdXQKICB9IGVsc2UgaWYgKG4gPT0gMikgewogICAgc3RyX2MoaW5wdXQsIGNvbGxhcHNlID0gIiBhbmQgIikKICB9IGVsc2UgewogICAgIyBjb21tYXMgYWZ0ZXIgYWxsIG4gLSAxIGVsZW1lbnRzCiAgICBub3RfbGFzdCA8LSBzdHJfYyhpbnB1dFtzZXFfbGVuKG4gLSAxKV0sIGRlbGltKQogICAgIyBwcmVwZW5kICJhbmQiIHRvIHRoZSBsYXN0IGVsZW1lbnQKICAgIGxhc3QgPC0gc3RyX2MoImFuZCIsIGlucHV0W1tuXV0sIHNlcCA9ICIgIikKICAgICMgY29tYmluZSBwYXJ0cyB3aXRoIHNwYWNlcwogICAgc3RyX2MoYyhub3RfbGFzdCwgbGFzdCksIGNvbGxhcHNlID0gIiAiKQogIH0KfQoKb3hmb3JkX2NvbW1hKGMoImEiLCAiYiIsICJjIiwgImQiKSkKYGBgCgojIyBFeGNlcmNpc2VzIDogTWF0Y2hpbmcgUGF0dGVybnMgd2l0aCBSZWd1bGFyIEV4cHJlc3Npb25zCgoxLiBEZXNjcmliZSwgaW4gd29yZHMsIHdoYXQgdGhlc2UgZXhwcmVzc2lvbnMgd2lsbCBtYXRjaDoKICAgIGEuICguKVwxXDEKICAgIGIuICIoLikoLilcXDJcXDEiCiAgICBjLiAoLi4pXDEKICAgIGQuICIoLikuXFwxLlxcMSIKICAgIGUuICIoLikoLikoLikuKlxcM1xcMlxcMSIKCjIuIENvbnN0cnVjdCByZWd1bGFyIGV4cHJlc3Npb25zIHRvIG1hdGNoIHdvcmRzIHRoYXQ6CiAgICBhLiBTdGFydCBhbmQgZW5kIHdpdGggdGhlIHNhbWUgY2hhcmFjdGVyLgogICAgYi4gQ29udGFpbiBhIHJlcGVhdGVkIHBhaXIgb2YgbGV0dGVycyAoZS5nLiwg4oCcY2h1cmNo4oCdIGNvbnRhaW5zIOKAnGNo4oCdIHJlcGVhdGVkIHR3aWNlKS4KICAgIGMuIENvbnRhaW4gb25lIGxldHRlciByZXBlYXRlZCBpbiBhdCBsZWFzdCB0aHJlZSBwbGFjZXMgKGUuZy4sIOKAnGVsZXZlbuKAnSBjb250YWlucyB0aHJlZSDigJxl4oCdcyku</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiQ2hhcHRlciAxMTogU3RyaW5ncyB3aXRoIGBzdHJpbmdyYCIKYXV0aG9yOiAiSm9uYXRoYW4gQm9uYWd1cm8iCm91dHB1dDogaHRtbF9kb2N1bWVudAotLS0KCmBgYHtyIHNldHVwLCBpbmNsdWRlPUZBTFNFLCBtZXNzYWdlPUZBTFNFfQpsaWJyYXJ5KHRpZHl2ZXJzZSkKa25pdHI6Om9wdHNfY2h1bmskc2V0KGNvbGxhcHNlID0gVFJVRSkKYGBgCgoKIyMgRXhjZXJjaXNlczogU3RyaW5nIEJhc2ljcwoKMS4gSW4gY29kZSB0aGF0IGRvZXNu4oCZdCB1c2Ugc3RyaW5nciwgeW914oCZbGwgb2Z0ZW4gc2VlIGBwYXN0ZSgpYCBhbmQgYHBhc3RlMCgpYC4gV2hhdOKAmXMgdGhlIGRpZmZlcmVuY2UgYmV0d2VlbiB0aGUgdHdvIGZ1bmN0aW9ucz8gV2hhdCBzdHJpbmdyIGZ1bmN0aW9uIGFyZSB0aGV5IGVxdWl2YWxlbnQgdG8/IEhvdyBkbyB0aGUgZnVuY3Rpb25zIGRpZmZlciBpbiB0aGVpciBoYW5kbGluZyBvZiBOQT8KCioqQW5zd2VyOioqIGBwYXN0ZSgpYCBpcyB1c2VkIHRvIGNvbmNhdGVuYXRlIHZlY3RvcnMgYWZ0ZXIgY29udmVydGluZyB0aGVtIHRvIGNoYXJhY3Rlciwgc2VwZXJhdGluZyB0aGVtIHdpdGggYSB2YWx1ZSBzcGVjaWZpZWQgYnkgYHNlcCA9ICIgImAgd2l0aCB0aGUgZGVmYXVsdCB2YWx1ZSBiZWluZyBhIHNwYWNlLiBgY29sbGFwc2UgPSBOVUxMYCBhbGxvd3MgZm9yIGEgdXNlciB0byBzcGVjaWZ5IHdoYXQgY2hhcmFjdGVyIHNlcGVyYXRlcyB0aGUgcmVzdWx0cy4gYHBhc3RlMCgpYCBkb2VzIG5vdCBhbGxvdyBmb3IgYSBzZXBlcmF0aW5nIGNoYXJhY3RlciwgYW5kIGF1dG9tYXRpY2FsbHkgc21hc2hlcyB0aGUgc3RyaW5ncyB0b2dldGhlci4gSG93ZXZlciwgYHBhc3RlMCgpYCBkb2VzIHRha2UgYSBgY29sbGFwc2UgPSBOVUxMYCBhcmd1bWVudC4gYHN0cl9jKClgIGlzIHRoZSBgc3RyaW5ncmAgZnVuY3Rpb24gd2hpY2ggYWNjb21wbGlzaGVzIHRoZSBzYW1lIHRoaW5nLiBJdCBkZWZhdWx0cyB0byBoYXZpbmcgbm8gY2hhcmFjdGVyIHRvIHNlcGVyYXRlIHRoZSB2YWx1ZXMgc2ltaWxhciB0byBgcGFzdGUwKClgLiBgc3RyX2MoKWAgdHJlYXRzIG1pc3NpbmcgdmFsdWVzIGFzIHRydWUgbWlzc2luZyB2YWx1ZXMsIGFuZCB3aWxsIHJldHVybiBgTkFgIHNpbWlsYXIgdG8gaG93IGBzdW0oKWAgd291bGQgaWYgZ2l2ZW4gYW4gTkEgdmFsdWUuIGBwYXN0ZSgpYCBhbmQgYHBhc3RlMCgpYCBhdXRvbWF0aWNhbGx5IGNvbnZlcnQgYE5BYCB0byBhIHN0cmluZy4gIAoKMi4gSW4geW91ciBvd24gd29yZHMsIGRlc2NyaWJlIHRoZSBkaWZmZXJlbmNlIGJldHdlZW4gdGhlIHNlcCBhbmQgY29sbGFwc2UgYXJndW1lbnRzIHRvIHN0cl9jKCkuCgoqKkFuc3dlcjoqKiBXaGVuIGNvbWJpbmluZyBzdHJpbmdzIGludG8gb25lIHN0cmluZyB1c2luZyBgc3RyX2MoKWAsIGBzZXAgPSAiImAgaXMgdXNlZCB0byBjb21iaW5lIGFuZCBzZXBlcmF0ZSBzdHJpbmdzIHRoYXQgYXJlIHBhc3NlZCBhcyBhcmd1bWVudHMgdG8gYHN0cl9jKClgLiBgY29sbGFwc2UgPSBOVUxMYCBpcyB1c2VkIHdoZW4gY29tYmluaW5nIGEgdmVjdG9yIG9mIHN0cmluZ3MgaW50byBhIHNpbmdsZSBzdHJpbmcsIGFuZCB0ZWxscyBgc3RyX2MoKWAgd2hpY2ggdmFsdWVzIHRvIHVzZSB0byBzZXBlcmF0ZSB0aGUgaXRlbXMgaW4gdGhlIHZlY3RvciBpbiB0aGUgc2luZ2xlIHN0cmluZy4gCgozLiBVc2UgYHN0cl9sZW5ndGgoKWAgYW5kIGBzdHJfc3ViKClgIHRvIGV4dHJhY3QgdGhlIG1pZGRsZSBjaGFyYWN0ZXIgZnJvbSBhIHN0cmluZy4gV2hhdCB3aWxsIHlvdSBkbyBpZiB0aGUgc3RyaW5nIGhhcyBhbiBldmVuIG51bWJlciBvZiBjaGFyYWN0ZXJzPwoKKipBbnN3ZXI6KiogSWYgdGhlIHN0cmluZyBoYXMgYW4gZXZlbiBudW1iZXIgb2YgY2hhcmFjdGVycywgSSBjaG9zZSB0byBwaWNrIGV4dHJhY3QgdGhlIGxldHRlciBmcm9tIHRoZSBtaWRkbGUgcGFpciB0aGF0IGlzIGNsb3Nlc3QgdG8gdGhlIGVuZCBvZiB0aGUgd29yZCBieSByb3VuZGluZyB1cCB0aGUgbGVuZ3RoIGRpdmlkZWQgYnkgdHdvIHVzaW5nIGBjZWlsaW5nKClgLgoKYGBge3IgYmFzaWNzIHF1ZXN0aW9uIDN9CnggPC0gZnJ1aXRbYygxOjQsIDY6OCldCngKCkwgPC0gIHN0cl9sZW5ndGgoeCkKTSA8LSBjZWlsaW5nKEwvMikKCnN0cl9zdWIoeCwgTSwgTSkKYGBgCgo0LiBXaGF0IGRvZXMgYHN0cl93cmFwKClgIGRvPyBXaGVuIG1pZ2h0IHlvdSB3YW50IHRvIHVzZSBpdD8KCioqQW5zd2VyOioqIFRoZSBmdW5jdGlvbiBgc3RyX3dyYXAoKWAgd3JhcHMgdGV4dCBzbyB0aGF0IGl0IGZpdHMgd2l0aGluIGEgY2VydGFpbiB3aWR0aC4gVGhpcyBpcyB1c2VmdWwgZm9yIHdyYXBwaW5nIGxvbmcgc3RyaW5ncyBvZiB0ZXh0IHRvIGJlIHR5cGVzZXQuCgo1LiBXaGF0IGRvZXMgYHN0cl90cmltKClgIGRvPyBXaGF04oCZcyB0aGUgb3Bwb3NpdGUgb2YgYHN0cl90cmltKClgPwoKKipBbnN3ZXI6KiogYHN0cl90cmltKClgIHJlbW92ZXMgd2hpdGVzcGFjZSBmcm9tIHRoZSBzdGFydCBhbmQgZW5kIG9mIGEgc3RyaW5nLiBUaGUgb3Bwb3NpdGUgb2YgYHN0cl90cmltKClgIGlzIGBzdHJfcGFkKClgLCB3aGljaCBhbGxvd3MgeW91IHRvIGFkZCB3aGl0ZXNwYWNlIHRvIHRoZSBzdGFydCBvciBlbmQgb2YgYSBzdHJpbmcuIAoKNi4gV3JpdGUgYSBmdW5jdGlvbiB0aGF0IHR1cm5zIChlLmcuKSBhIHZlY3RvciBgYygiYSIsICJiIiwgImMiKWAgaW50byB0aGUgc3RyaW5nIGBhLCBiLCBhbmQgY2AuIFRoaW5rIGNhcmVmdWxseSBhYm91dCB3aGF0IGl0IHNob3VsZCBkbyBpZiBnaXZlbiBhIHZlY3RvciBvZiBsZW5ndGggMCwgMSwgb3IgMi4KCmBgYHtyIGJhc2ljcyBxdWVzdGlvbiA2fQpveGZvcmRfY29tbWEgPC0gZnVuY3Rpb24oaW5wdXQsIGRlbGltID0gIiwiKSB7CiAgbiA8LSBsZW5ndGgoaW5wdXQpCiAgaWYgKG4gPT0gMCkgewogICAgIiIKICB9IGVsc2UgaWYgKG4gPT0gMSkgewogICAgaW5wdXQKICB9IGVsc2UgaWYgKG4gPT0gMikgewogICAgc3RyX2MoaW5wdXQsIGNvbGxhcHNlID0gIiBhbmQgIikKICB9IGVsc2UgewogICAgIyBjb21tYXMgYWZ0ZXIgYWxsIG4gLSAxIGVsZW1lbnRzCiAgICBub3RfbGFzdCA8LSBzdHJfYyhpbnB1dFtzZXFfbGVuKG4gLSAxKV0sIGRlbGltKQogICAgIyBwcmVwZW5kICJhbmQiIHRvIHRoZSBsYXN0IGVsZW1lbnQKICAgIGxhc3QgPC0gc3RyX2MoImFuZCIsIGlucHV0W1tuXV0sIHNlcCA9ICIgIikKICAgICMgY29tYmluZSBwYXJ0cyB3aXRoIHNwYWNlcwogICAgc3RyX2MoYyhub3RfbGFzdCwgbGFzdCksIGNvbGxhcHNlID0gIiAiKQogIH0KfQoKb3hmb3JkX2NvbW1hKGMoImEiLCAiYiIsICJjIiwgImQiKSkKYGBgCgojIyBFeGNlcmNpc2VzIDogTWF0Y2hpbmcgUGF0dGVybnMgd2l0aCBSZWd1bGFyIEV4cHJlc3Npb25zCgojIyMjIEJhc2ljIE1hdGNoZXMKCjEuIEV4cGxhaW4gd2h5IGVhY2ggb2YgdGhlc2Ugc3RyaW5ncyBkb27igJl0IG1hdGNoIGEgXDogIlwiLCAiXFwiLCAiXFxcIi4KCioqQW5zd2VyOioqIEEgc2luZ2xlIGBcYCBlc2NhcGVzIHRoZSBuZXh0IGNoYXJhY3RlciBpbiBhbiBSICpzdHJpbmcqLiBgXFxgIHJlc29sdmVzIHRvIGEgc2luZ2xlIGBcYCB3aGljaCBlc2NhcGVzIHRoZSBuZXh0IGNoYXJhY3RlciBpbiB0aGUgKmV4cHJlc3Npb24qLiBBIHRyaXBsZSBgXFxcYCwgc2luY2UgdGhlIGRvdWxiZSBzbGFzaCBlc2NhcGVzIGEgY2hhcmFjdGVyLCB3aWxsIGVzY2FwZSB0aGUgZXNjYXBlZCBjaGFyYWN0ZXIuIAoKMi4gSG93IHdvdWxkIHlvdSBtYXRjaCB0aGUgc2VxdWVuY2UgIidcPwoKKipBbnN3ZXI6KiogVGhlIHNlcXVlbmNlIGAiJ1xgIGNvdWxkIGJlIG1hdGNoZWQgd2l0aCBgIlwiJ1xcXFwiYAoKMy4gV2hhdCBwYXR0ZXJucyB3aWxsIHRoZSByZWd1bGFyIGV4cHJlc3Npb24gXC4uXC4uXC4uIG1hdGNoPyBIb3cgd291bGQgeW91IHJlcHJlc2VudCBpdCBhcyBhIHN0cmluZz8KCioqQW5zd2VyOioqIFRoaXMgcGF0dGVybiB3aWxsIG1hdGNoIGEgYC5gIGZvbGxvd2VkIGJ5IGFueSBjaGFyYWN0ZXIgdGhyZWUgdGltZXMgaW4gYSByb3csIHN1Y2ggYXMgYC5hLmIuY2AuCgojIyMjIEFuY2hvcnMKCjEuIEhvdyB3b3VsZCB5b3UgbWF0Y2ggdGhlIGxpdGVyYWwgc3RyaW5nICJcJF5cJCI/CgoqKkFuc3dlcjoqKiBUaGUgc3RyaW5nIGAkXiRgIGNvdWxkIGJlIG1hdGNoZWQgd2l0aCBgIlxcJFxcXlxcJCJgCgpgYGB7ciBhbmNob3JzIDF9CnN0cl9zdWJzZXQoIiReJCIsICJcXCRcXF5cXCQiKQpgYGAKCjIuIEdpdmVuIHRoZSBjb3JwdXMgb2YgY29tbW9uIHdvcmRzIGluIHN0cmluZ3I6OndvcmRzLCBjcmVhdGUgcmVndWxhciBleHByZXNzaW9ucyB0aGF0IGZpbmQgYWxsIHdvcmRzIHRoYXQ6CiAgICBhLiBTdGFydCB3aXRoIOKAnHnigJ0uCiAgICBiLiBFbmQgd2l0aCDigJx44oCdLgogICAgYy4gQXJlIGV4YWN0bHkgdGhyZWUgbGV0dGVycyBsb25nLiAoRG9u4oCZdCBjaGVhdCBieSB1c2luZyBzdHJfbGVuZ3RoKCkhKQogICAgZC4gSGF2ZSBzZXZlbiBsZXR0ZXJzIG9yIG1vcmUuCgpgYGB7ciBhbmNob3JzIDJ9CiMgYS4gU3RhcnQgd2l0aCDigJx54oCdLgpzdHJfc3Vic2V0KHdvcmRzLCBwYXR0ZXJuID0gIl55IikKCiMgYi4gRW5kIHdpdGgg4oCceOKAnS4Kc3RyX3N1YnNldCh3b3JkcywgcGF0dGVybiA9ICJ4JCIpCgojIGMuIEFyZSBleGFjdGx5IHRocmVlIGxldHRlcnMgbG9uZy4gKERvbuKAmXQgY2hlYXQgYnkgdXNpbmcgc3RyX2xlbmd0aCgpISkKc3RyX3N1YnNldCh3b3JkcywgcGF0dGVybiA9ICJeLi4uJCIpCgojIGQuIEhhdmUgc2V2ZW4gbGV0dGVycyBvciBtb3JlLgpzdHJfc3Vic2V0KHdvcmRzLCBwYXR0ZXJuID0gIl4uLi4uLi4uIikKYGBgCiAgICAKIyMjIyBDaGFyYWN0ZXIgQ2xhc3NlcyBhbmQgQWx0ZXJuYXRpdmVzCgoxLiBDcmVhdGUgcmVndWxhciBleHByZXNzaW9ucyB0byBmaW5kIGFsbCB3b3JkcyB0aGF0OgogICAgYS4gU3RhcnQgd2l0aCBhIHZvd2VsLgogICAgYi4gT25seSBjb250YWluIGNvbnNvbmFudHMuIChIaW50OiB0aGluayBhYm91dCBtYXRjaGluZyDigJxub3TigJ0tdm93ZWxzLikKICAgIGMuIEVuZCB3aXRoIGVkLCBidXQgbm90IHdpdGggZWVkLgogICAgZC4gRW5kIHdpdGggaW5nIG9yIGl6ZS4KICAgIApgYGB7ciBjbGFzc2VzIDF9CiMgYS4gU3RhcnQgd2l0aCBhIHZvd2VsLgpzdHJfc3Vic2V0KHdvcmRzLCBwYXR0ZXJuID0gIl5bYWVpb3VdIikKCiMgYi4gT25seSBjb250YWluIGNvbnNvbmFudHMuIChIaW50OiB0aGluayBhYm91dCBtYXRjaGluZyDigJxub3TigJ0tdm93ZWxzLikKc3RyX3N1YnNldCh3b3JkcywgcGF0dGVybiA9ICJeW15hZWlvdV0rJCIpCgojIGMuIEVuZCB3aXRoIGVkLCBidXQgbm90IHdpdGggZWVkLgpzdHJfc3Vic2V0KHdvcmRzLCBwYXR0ZXJuID0gIlteZV1lZCQiKQoKIyBkLiBFbmQgd2l0aCBpbmcgb3IgaXplLgpzdHJfc3Vic2V0KHdvcmRzLCBwYXR0ZXJuID0gImkobmd8emUpJCIpCmBgYAoKMi4gRW1waXJpY2FsbHkgdmVyaWZ5IHRoZSBydWxlIOKAnGkgYmVmb3JlIGUgZXhjZXB0IGFmdGVyIGMu4oCdCgpgYGB7ciBjbGFzc2VzIDJ9CnN0cl9zdWJzZXQod29yZHMsIHBhdHRlcm4gPSAiY2VpfFteY11pZSIpCgpzdHJfc3Vic2V0KHdvcmRzLCBwYXR0ZXJuID0gImNpZXxbXmNdZWkiKQpgYGAKCjMuIElzIOKAnHHigJ0gYWx3YXlzIGZvbGxvd2VkIGJ5IGEg4oCcdeKAnT8KCmBgYHtyIGNsYXNzZXMgM30Kc3RyX3N1YnNldCh3b3JkcywgcGF0dGVybiA9ICJxW151XSIpCmBgYAoKKipBbnN3ZXI6KiogWWVzIQoKNC4gV3JpdGUgYSByZWd1bGFyIGV4cHJlc3Npb24gdGhhdCBtYXRjaGVzIGEgd29yZCBpZiBpdOKAmXMgcHJvYmFibHkgd3JpdHRlbiBpbiBCcml0aXNoIEVuZ2xpc2gsIG5vdCBBbWVyaWNhbiBFbmdsaXNoLgoKKipBbnN3ZXI6KiogQ29tbW9uIGRpZmZlcmVuY2VzIGluIEJyaXRpc2ggYW5kIEFtZXJpY2FuIEVuZ2xpc2ggaW5jbHVkZSB0aGluZ3MgbGlrZSB0aGUgZm9sbG93aW5nOiBgb3V8aXNlJHxhZXxvZXx5c2UkYC4KCjUuIENyZWF0ZSBhIHJlZ3VsYXIgZXhwcmVzc2lvbiB0aGF0IHdpbGwgbWF0Y2ggdGVsZXBob25lIG51bWJlcnMgYXMgY29tbW9ubHkgd3JpdHRlbiBpbiB5b3VyIGNvdW50cnkuCgoqKkFuc3dlcjoqKiBGb3IgYSBmb3JtYXQgbGlrZSAxMjMtNDU2LTc4OTEsIGBcXGRcXGRcXGQtXFxkXFxkXFxkLVxcZFxcZFxcZFxcZGAgd291bGQgbWF0Y2ggcGhvbmUgbnVtYmVycy4gCgojIyMjIFJlcGV0aXRpb24KCjEuIERlc2NyaWJlIHRoZSBlcXVpdmFsZW50cyBvZiA/LCArLCBhbmQgKiBpbiB7bSxufSBmb3JtLgoKKipBbnN3ZXI6KiogVGhlIGVxdWl2YWxlbnQgb2YgYD9gICgwIG9yIDEgbWF0Y2hlcykgd291bGQgYmUgYHswLCAxfWAsIHRoZSBlcXVpdmFsZW50IGZvciBgK2AgKDEgb3IgbW9yZSBtYXRjaGVzKSB3b3VsZCBiZSBgezEsIH1gLCBhbmQgdGhlIGVxdWl2YWxlbnQgZm9yIGAqYCAoMCBvciBtb3JlIG1hdGNoZXMpIHdvdWxkIGJlIGB7MCwgfWAuCgoyLiBEZXNjcmliZSBpbiB3b3JkcyB3aGF0IHRoZXNlIHJlZ3VsYXIgZXhwcmVzc2lvbnMgbWF0Y2ggKHJlYWQgY2FyZWZ1bGx5IHRvIHNlZSBpZiBJ4oCZbSB1c2luZyBhIHJlZ3VsYXIgZXhwcmVzc2lvbiBvciBhIHN0cmluZyB0aGF0IGRlZmluZXMgYSByZWd1bGFyIGV4cHJlc3Npb24pOgogICAgYS4gYF4uKiRgCiAgICBiLiBgIlxcey4rXFx9ImAKICAgIGMuIGBcZHs0fS1cZHsyfS1cZHsyfWAKICAgIGQuIGAiXFxcXHs0fSJgCgoqKkFuc3dlcjoqKiBUaGUgZmlyc3QgZXhwcmVzc2lvbiBgXi4qJGAgbWF0Y2hlcyBhbnkgc3RyaW5nIHRoYXQgc3RhcnRzIHdpdGggYW5kIGhhcyAwIG9yIG1vcmUgb2YgYW55IGNoYXJhY3RlciAoc28gYmFzaWNhbGx5IGFueSBzdHJpbmcpLiBUaGUgc2Vjb25kIGV4cHJlc3Npb24gYCJcXHsuK1xcfSJgIG1hdGNoZXMgc3RyaW5ncyB0aGF0IGhhdmUgY3VybHkgYnJhY2VzIGFyb3VuZCBhdCBsZWFzdCBvbmUgY2hhcmFjdGVyLCBlLmcuIGB7YWJ9YC4gVGhlIHRoaXJkIGV4cHJlc3Npb24gYFxkezR9LVxkezJ9LVxkezJ9YCBtYXRjaGVzIDQgZGlnaXRzLCBoeXBoZW4sIDIgZGlnaXRzLCBoeXBoZW4sIDIgZGlnaXRzLCBzaW1pbGFyIHRvIGEgZGF0ZSBpbiBZWVlZLU1NLUREIGZvcm0uIFRoZSBwYXR0ZXJuIGAiXFxcXHs0fSJgIHdpbGwgbWF0Y2ggYFxcXFxgIGluIGEgc3RyaW5nLiAKCjMuIENyZWF0ZSByZWd1bGFyIGV4cHJlc3Npb25zIHRvIGZpbmQgYWxsIHdvcmRzIHRoYXQ6CiAgICBhLiBTdGFydCB3aXRoIHRocmVlIGNvbnNvbmFudHMuCiAgICBiLiBIYXZlIHRocmVlIG9yIG1vcmUgdm93ZWxzIGluIGEgcm93LgogICAgYy4gSGF2ZSB0d28gb3IgbW9yZSB2b3dlbC1jb25zb25hbnQgcGFpcnMgaW4gYSByb3cuCiAgICAKYGBge3IgcmVwZXRpdGlvbiAzfQojIGEuIFN0YXJ0IHdpdGggdGhyZWUgY29uc29uYW50cy4Kc3RyX3N1YnNldCh3b3JkcywgcGF0dGVybiA9ICJeW15hZWlvdV17M30iKQoKIyBiLiBIYXZlIHRocmVlIG9yIG1vcmUgdm93ZWxzIGluIGEgcm93LgpzdHJfc3Vic2V0KHdvcmRzLCBwYXR0ZXJuID0gIlthZWlvdV17Myx9IikKCiMgYy4gSGF2ZSB0d28gb3IgbW9yZSB2b3dlbC1jb25zb25hbnQgcGFpcnMgaW4gYSByb3cuCnN0cl9zdWJzZXQod29yZHMsIHBhdHRlcm4gPSAiKFthZWlvdV1bXmFlaW91XSl7Mix9IikKYGBgCgo0LiBTb2x2ZSB0aGUgYmVnaW5uZXIgcmVnZXhwIGNyb3Nzd29yZHMgYXQgaHR0cHM6Ly9yZWdleGNyb3Nzd29yZC5jb20vY2hhbGxlbmdlcy9iZWdpbm5lci4KCiMjIyMgR3JvdXBpbmcgYW5kIEJhY2tyZWZlcmVuY2VzCgoxLiBEZXNjcmliZSwgaW4gd29yZHMsIHdoYXQgdGhlc2UgZXhwcmVzc2lvbnMgd2lsbCBtYXRjaDoKICAgIGEuIGAoLilcMVwxYAogICAgYi4gYCIoLikoLilcXDJcXDEiYAogICAgYy4gYCguLilcMWAKICAgIGQuIGAiKC4pLlxcMS5cXDEiYAogICAgZS4gYCIoLikoLikoLikuKlxcM1xcMlxcMSJgCgoqKkFuc3dlcjoqKiBgKC4pXDFcMWAgd2lsbCBtYXRjaCBhbnkgbGV0dGVyIHJlcGVhdGVkIHRocmVlIHRpbWVzLCBzdWNoIGFzIGAiYWFhImAuIGAiKC4pKC4pXFwyXFwxImAgd2lsbCBtYXRjaCBhIHBhdHRlcm4gbGlrZSBgImFiYmEiYC4gYCguLilcMWAgd2lsbCBtYXRjaCBhbnkgdHdvIGNoYXJhY3RlcnMgcmVwZWF0ZWQsIHN1Y2ggYXMgYCJhMWExImAuIGAiKC4pLlxcMS5cXDEiYCB3aWxsIG1hdGNoIGEgcGF0dGVybiBzdWNoIGFzIGAiYWJhY2EiYCwgd2hlcmUgdGhlIDFzdCwgM3JkLCBhbmQgNXRoIGRpZ2l0cyBhcmUgdGhlIHNhbWUuIGAiKC4pKC4pKC4pLipcXDNcXDJcXDEiYCB3aWxsIG1hdGNoIGFueSBzdHJpbmcgdGhhdCBoYXMgYSBwYXR0ZXJuIG9mIHRocmVlIGNoYXJhY3RlcnMsIGFueXRoaW5nIGluIHRoZSBtaWRkbGUsIGFuZCB0aGVuIHRoZSB0aHJlZSBzdGFydGluZyBjaGFyYWN0ZXJzIGluIHJldmVyc2Ugc3VjaCBhcyBgImFiYzEzMmNiYSJgLgoKMi4gQ29uc3RydWN0IHJlZ3VsYXIgZXhwcmVzc2lvbnMgdG8gbWF0Y2ggd29yZHMgdGhhdDoKICAgIGEuIFN0YXJ0IGFuZCBlbmQgd2l0aCB0aGUgc2FtZSBjaGFyYWN0ZXIuCiAgICBiLiBDb250YWluIGEgcmVwZWF0ZWQgcGFpciBvZiBsZXR0ZXJzIChlLmcuLCDigJxjaHVyY2jigJ0gY29udGFpbnMg4oCcY2jigJ0gcmVwZWF0ZWQgdHdpY2UpLgogICAgYy4gQ29udGFpbiBvbmUgbGV0dGVyIHJlcGVhdGVkIGluIGF0IGxlYXN0IHRocmVlIHBsYWNlcyAoZS5nLiwg4oCcZWxldmVu4oCdIGNvbnRhaW5zIHRocmVlIOKAnGXigJ1zKS4KICAgIApgYGB7ciBncm91cGluZyAyfQojIGEuIFN0YXJ0IGFuZCBlbmQgd2l0aCB0aGUgc2FtZSBjaGFyYWN0ZXIuCnN0cl9zdWJzZXQod29yZHMsIHBhdHRlcm4gPSAiXiguKS4qXFwxJCIpCgojIGIuIENvbnRhaW4gYSByZXBlYXRlZCBwYWlyIG9mIGxldHRlcnMgKGUuZy4sIOKAnGNodXJjaOKAnSBjb250YWlucyDigJxjaOKAnSByZXBlYXRlZCB0d2ljZSkuCnN0cl9zdWJzZXQod29yZHMsIHBhdHRlcm4gPSAiKC4uKS4qXFwxIikKCiMgYy4gQ29udGFpbiBvbmUgbGV0dGVyIHJlcGVhdGVkIGluIGF0IGxlYXN0IHRocmVlIHBsYWNlcyAoZS5nLiwg4oCcZWxldmVu4oCdIGNvbnRhaW5zIHRocmVlIOKAnGXigJ1zKS4Kc3RyX3N1YnNldCh3b3JkcywgcGF0dGVybiA9ICIoLikuKlxcMS4qXFwxIikKYGBgCgojIyBFeGNlcmNpc2VzOiBUb29scwoKIyMjIyBEZXRlY3QgTWF0Y2hlcwoKMS4gRm9yIGVhY2ggb2YgdGhlIGZvbGxvd2luZyBjaGFsbGVuZ2VzLCB0cnkgc29sdmluZyBpdCBieSB1c2luZyBib3RoIGEgc2luZ2xlIHJlZ3VsYXIgZXhwcmVzc2lvbiwgYW5kIGEgY29tYmluYXRpb24gb2YgbXVsdGlwbGUgc3RyX2RldGVjdCgpIGNhbGxzOgogICAgYS4gRmluZCBhbGwgd29yZHMgdGhhdCBzdGFydCBvciBlbmQgd2l0aCB4LgogICAgYi4gRmluZCBhbGwgd29yZHMgdGhhdCBzdGFydCB3aXRoIGEgdm93ZWwgYW5kIGVuZCB3aXRoIGEgY29uc29uYW50LgogICAgYy4gQXJlIHRoZXJlIGFueSB3b3JkcyB0aGF0IGNvbnRhaW4gYXQgbGVhc3Qgb25lIG9mIGVhY2ggZGlmZmVyZW50IHZvd2VsPwogICAgZC4gV2hhdCB3b3JkIGhhcyB0aGUgaGlnaGVzdCBudW1iZXIgb2Ygdm93ZWxzPyBXaGF0IHdvcmQgaGFzIHRoZSBoaWdoZXN0IHByb3BvcnRpb24gb2Ygdm93ZWxzPyAoSGludDogd2hhdCBpcyB0aGUgZGVub21pbmF0b3I/KQogICAgCmBgYHtyIGRldGVjdCAxfQojIGEuIEZpbmQgYWxsIHdvcmRzIHRoYXQgc3RhcnQgb3IgZW5kIHdpdGggeC4Kc3RyX3N1YnNldCh3b3JkcywgcGF0dGVybiA9ICJeeHx4JCIpCndvcmRzW3N0cl9kZXRlY3Qod29yZHMsIHBhdHRlcm4gPSAiXngiKSB8IHN0cl9kZXRlY3Qod29yZHMsIHBhdHRlcm4gPSAieCQiKV0KCiMgYi4gRmluZCBhbGwgd29yZHMgdGhhdCBzdGFydCB3aXRoIGEgdm93ZWwgYW5kIGVuZCB3aXRoIGEgY29uc29uYW50LgpzdHJfc3Vic2V0KHdvcmRzLCBwYXR0ZXJuID0gIl5bYWVpb3VdLipbXmFlaW91XSQiKQoKIyBjLiBBcmUgdGhlcmUgYW55IHdvcmRzIHRoYXQgY29udGFpbiBhdCBsZWFzdCBvbmUgb2YgZWFjaCBkaWZmZXJlbnQgdm93ZWw/CiMgZC4gV2hhdCB3b3JkIGhhcyB0aGUgaGlnaGVzdCBudW1iZXIgb2Ygdm93ZWxzPyBXaGF0IHdvcmQgaGFzIHRoZSBoaWdoZXN0IHByb3BvcnRpb24gb2Ygdm93ZWxzPyAoSGludDogd2hhdCBpcyB0aGUgZGVub21pbmF0b3I/KQpgYGAKCg==</div>
 
 
 

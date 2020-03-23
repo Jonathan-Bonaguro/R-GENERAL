@@ -1,0 +1,78 @@
+---
+title: "Chapter 7: Tibbles with `tibble`"
+author: "Jonathan Bonaguro"
+output: html_document
+---
+
+```{r setup, include=FALSE, message=FALSE}
+library(tidyverse)
+knitr::opts_chunk$set(collapse = TRUE)
+```
+
+## Excercises
+
+1. How can you tell if an object is a tibble? (Hint: try printing mtcars, which is a regular data frame.)
+
+**Answer:** You can tell if an object is a tibble in a few ways. One simple way is to use the command `is_tibble(x)`. If you have the output of a dataframe, it will tell you the dimesnion of the tibble, and print 10 rows of the data along with as many columns as it can fit *and* the column type. 
+
+2. Compare and contrast the following operations on a data.frame and equivalent tibble. What is different? Why might the default data frame behaviors cause you frustration?
+
+```{r}
+df <- data.frame(abc = 1, xyz = "a")
+df
+df$x
+df[, "xyz"]
+df[, c("abc", "xyz")]
+
+tb <- as_tibble(df)
+tb
+tb$x
+tb[, "xyz"]
+tb[, c("abc", "xyz")]
+```
+
+**Answer:** The default behavoir of the `$` character in a dataframe will autocomplete the variable name so that `df$x` returns the column `df$xyz`. This can lead to selecting the wrong column, so tibble does use this functionality to prevent selecting wrong columns. `$` returns a vector from a tibble.
+
+The brackets `[ , ]` returns either a vector or a dataframe from a dataframe depending on the number of columns selecting. When using bracks on a tibble, the brackets will always return a tibble. 
+
+3.  If you have the name of a variable stored in an object, e.g., `var <- "mpg"`, how can you extract the reference variable from a tibble?
+
+**Answer:** You can use the double bracket, `df[[var]]`.
+
+4. Practice referring to nonsyntactic names in the following data frame by:
+    a. Extracting the variable called 1.
+    b. Plotting a scatterplot of 1 versus 2.
+    c. Creating a new column called 3, which is 2 divided by 1.
+    d. Renaming the columns to one, two, and three:
+
+```{r question 4}
+annoying <- tibble(
+  `1` = 1:10,
+  `2` = `1` * 2 + rnorm(length(`1`))
+)
+
+# a. Extracting the variable called 1.
+annoying[['1']]
+annoying$`1`
+
+# b. Plotting a scatterplot of 1 versus 2.
+ggplot(annoying, aes(x = `1`, y = `2`)) +
+  geom_point()
+
+# c. Creating a new column called 3, which is 2 divided by 1.
+annoying[["3"]] = annoying[["2"]] / annoying[["1"]]
+annoying$`3` = annoying$`2` / annoying$`1`
+
+# d. Renaming the columns to one, two, and three:
+rename(annoying, one = `1`, two = `2`, three = `3`)
+
+```
+
+5. What does tibble::enframe() do? When might you use it?
+
+**Answer:** `enframe()` converts named vectors to one or two column data frames. You might use it if you want to reshape data to do grouped analysis.
+
+6. What option controls how many additional column names are printed at the footer of a tibble?
+
+**Answer:** `n_extra` controls the number of extra column information printed. 
+

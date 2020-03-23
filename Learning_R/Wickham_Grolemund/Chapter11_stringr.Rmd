@@ -68,14 +68,176 @@ oxford_comma(c("a", "b", "c", "d"))
 
 ## Excercises : Matching Patterns with Regular Expressions
 
+#### Basic Matches
+
+1. Explain why each of these strings don’t match a \: "\", "\\", "\\\".
+
+**Answer:** A single `\` escapes the next character in an R *string*. `\\` resolves to a single `\` which escapes the next character in the *expression*. A triple `\\\`, since the doulbe slash escapes a character, will escape the escaped character. 
+
+2. How would you match the sequence "'\?
+
+**Answer:** The sequence `"'\` could be matched with `"\"'\\\\"`
+
+3. What patterns will the regular expression \..\..\.. match? How would you represent it as a string?
+
+**Answer:** This pattern will match a `.` followed by any character three times in a row, such as `.a.b.c`.
+
+#### Anchors
+
+1. How would you match the literal string "\$^\$"?
+
+**Answer:** The string `$^$` could be matched with `"\\$\\^\\$"`
+
+```{r anchors 1}
+str_subset("$^$", "\\$\\^\\$")
+```
+
+2. Given the corpus of common words in stringr::words, create regular expressions that find all words that:
+    a. Start with “y”.
+    b. End with “x”.
+    c. Are exactly three letters long. (Don’t cheat by using str_length()!)
+    d. Have seven letters or more.
+
+```{r anchors 2}
+# a. Start with “y”.
+str_subset(words, pattern = "^y")
+
+# b. End with “x”.
+str_subset(words, pattern = "x$")
+
+# c. Are exactly three letters long. (Don’t cheat by using str_length()!)
+str_subset(words, pattern = "^...$")
+
+# d. Have seven letters or more.
+str_subset(words, pattern = "^.......")
+```
+    
+#### Character Classes and Alternatives
+
+1. Create regular expressions to find all words that:
+    a. Start with a vowel.
+    b. Only contain consonants. (Hint: think about matching “not”-vowels.)
+    c. End with ed, but not with eed.
+    d. End with ing or ize.
+    
+```{r classes 1}
+# a. Start with a vowel.
+str_subset(words, pattern = "^[aeiou]")
+
+# b. Only contain consonants. (Hint: think about matching “not”-vowels.)
+str_subset(words, pattern = "^[^aeiou]+$")
+
+# c. End with ed, but not with eed.
+str_subset(words, pattern = "[^e]ed$")
+
+# d. End with ing or ize.
+str_subset(words, pattern = "i(ng|ze)$")
+```
+
+2. Empirically verify the rule “i before e except after c.”
+
+```{r classes 2}
+str_subset(words, pattern = "cei|[^c]ie")
+
+str_subset(words, pattern = "cie|[^c]ei")
+```
+
+3. Is “q” always followed by a “u”?
+
+```{r classes 3}
+str_subset(words, pattern = "q[^u]")
+```
+
+**Answer:** Yes!
+
+4. Write a regular expression that matches a word if it’s probably written in British English, not American English.
+
+**Answer:** Common differences in British and American English include things like the following: `ou|ise$|ae|oe|yse$`.
+
+5. Create a regular expression that will match telephone numbers as commonly written in your country.
+
+**Answer:** For a format like 123-456-7891, `\\d\\d\\d-\\d\\d\\d-\\d\\d\\d\\d` would match phone numbers. 
+
+#### Repetition
+
+1. Describe the equivalents of ?, +, and * in {m,n} form.
+
+**Answer:** The equivalent of `?` (0 or 1 matches) would be `{0, 1}`, the equivalent for `+` (1 or more matches) would be `{1, }`, and the equivalent for `*` (0 or more matches) would be `{0, }`.
+
+2. Describe in words what these regular expressions match (read carefully to see if I’m using a regular expression or a string that defines a regular expression):
+    a. `^.*$`
+    b. `"\\{.+\\}"`
+    c. `\d{4}-\d{2}-\d{2}`
+    d. `"\\\\{4}"`
+
+**Answer:** The first expression `^.*$` matches any string that starts with and has 0 or more of any character (so basically any string). The second expression `"\\{.+\\}"` matches strings that have curly braces around at least one character, e.g. `{ab}`. The third expression `\d{4}-\d{2}-\d{2}` matches 4 digits, hyphen, 2 digits, hyphen, 2 digits, similar to a date in YYYY-MM-DD form. The pattern `"\\\\{4}"` will match `\\\\` in a string. 
+
+3. Create regular expressions to find all words that:
+    a. Start with three consonants.
+    b. Have three or more vowels in a row.
+    c. Have two or more vowel-consonant pairs in a row.
+    
+```{r repetition 3}
+# a. Start with three consonants.
+str_subset(words, pattern = "^[^aeiou]{3}")
+
+# b. Have three or more vowels in a row.
+str_subset(words, pattern = "[aeiou]{3,}")
+
+# c. Have two or more vowel-consonant pairs in a row.
+str_subset(words, pattern = "([aeiou][^aeiou]){2,}")
+```
+
+4. Solve the beginner regexp crosswords at https://regexcrossword.com/challenges/beginner.
+
+#### Grouping and Backreferences
+
 1. Describe, in words, what these expressions will match:
-    a. (.)\1\1
-    b. "(.)(.)\\2\\1"
-    c. (..)\1
-    d. "(.).\\1.\\1"
-    e. "(.)(.)(.).*\\3\\2\\1"
+    a. `(.)\1\1`
+    b. `"(.)(.)\\2\\1"`
+    c. `(..)\1`
+    d. `"(.).\\1.\\1"`
+    e. `"(.)(.)(.).*\\3\\2\\1"`
+
+**Answer:** `(.)\1\1` will match any letter repeated three times, such as `"aaa"`. `"(.)(.)\\2\\1"` will match a pattern like `"abba"`. `(..)\1` will match any two characters repeated, such as `"a1a1"`. `"(.).\\1.\\1"` will match a pattern such as `"abaca"`, where the 1st, 3rd, and 5th digits are the same. `"(.)(.)(.).*\\3\\2\\1"` will match any string that has a pattern of three characters, anything in the middle, and then the three starting characters in reverse such as `"abc132cba"`.
 
 2. Construct regular expressions to match words that:
     a. Start and end with the same character.
     b. Contain a repeated pair of letters (e.g., “church” contains “ch” repeated twice).
     c. Contain one letter repeated in at least three places (e.g., “eleven” contains three “e”s).
+    
+```{r grouping 2}
+# a. Start and end with the same character.
+str_subset(words, pattern = "^(.).*\\1$")
+
+# b. Contain a repeated pair of letters (e.g., “church” contains “ch” repeated twice).
+str_subset(words, pattern = "(..).*\\1")
+
+# c. Contain one letter repeated in at least three places (e.g., “eleven” contains three “e”s).
+str_subset(words, pattern = "(.).*\\1.*\\1")
+```
+
+## Excercises: Tools
+
+#### Detect Matches
+
+1. For each of the following challenges, try solving it by using both a single regular expression, and a combination of multiple str_detect() calls:
+    a. Find all words that start or end with x.
+    b. Find all words that start with a vowel and end with a consonant.
+    c. Are there any words that contain at least one of each different vowel?
+    d. What word has the highest number of vowels? What word has the highest proportion of vowels? (Hint: what is the denominator?)
+    
+```{r detect 1}
+# a. Find all words that start or end with x.
+str_subset(words, pattern = "^x|x$")
+words[str_detect(words, pattern = "^x") | str_detect(words, pattern = "x$")]
+
+# b. Find all words that start with a vowel and end with a consonant.
+str_subset(words, pattern = "^[aeiou].*[^aeiou]$")
+
+# c. Are there any words that contain at least one of each different vowel?
+str_subset(words, pattern = "^[aeiou].*[^aeiou]$")
+
+# d. What word has the highest number of vowels? What word has the highest proportion of vowels? (Hint: what is the denominator?)
+```
+
