@@ -3,4 +3,4 @@
 .RData
 .Ruserdata
 .httr-oauth
-/STAT385/**/*.html
+/**/*.html
