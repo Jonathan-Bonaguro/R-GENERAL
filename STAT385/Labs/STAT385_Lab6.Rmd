@@ -2,11 +2,16 @@
 title: "STAT385 Lab 6"
 author: "Jonathan Bonaguro"
 date: "3/27/2020"
-output: html_document
+output:
+  pdf_document:
+    latex_engine: pdflatex
+  html_document:
+    df_print: paged
 ---
 
 ```{r setup, include = FALSE, message = FALSE}
 knitr::opts_chunk$set(collapse = TRUE)
+knitr::opts_chunk$set(message = FALSE)
 library(tidyverse)
 ```
 
@@ -32,7 +37,7 @@ ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = drv)) +
 
 **Answer:** This plot will have two geoms, a scatterplot with engine displacement on the x-axis and highway fuel efficiency on the y-axis, and the color of the point will be based on the drive-train. On top of this will be a smoothed general trend line of the relationship between engine displacement and highway fuel efficiency broken down by drive-train with no standard error bars. 
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE}
 ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = drv)) + 
   geom_point() + 
   geom_smooth(se = FALSE)
