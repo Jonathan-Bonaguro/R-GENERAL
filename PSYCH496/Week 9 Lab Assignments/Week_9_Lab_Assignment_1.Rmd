@@ -1,0 +1,114 @@
+---
+title: "Week 9 Lab Assignment 1"
+output: 
+  html_document:
+    df_print: paged
+author: "Jonathan Bonaguro"
+date: "March 27, 2020"
+---
+
+```{r setup environment, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+library(tidyverse)
+
+mtcars <- mtcars %>% 
+  mutate(cyl = factor(cyl, labels = c("4 Cylinders", "6 Cylinders", "8 Cylinders")))
+mtcars <- mtcars %>% 
+  mutate(am = factor(am, labels = c('Automatic', 'Manual')))
+mtcars <- mtcars %>% 
+  mutate(gear = factor(gear, labels = c("3 Gears", "4 Gears", "5 Gears")))
+```
+
+## Assignments
+
+Use the `mtcars` dataset (as a tibble) and to create the following plots.
+
+1. Create a scatterplot using weight(wt) of the cars and miles per galon.
+    a. Now change the color of the data points in the above scatterplot to any color of your choice.
+    b. Now map the cylinder variable to the color aesthetic in the above scatterplot, by creating levels according to the number of cylinders.
+    c. Now add a new layer to the above scatterplot that will fit a smoothed regression line to the above datapoints by using the geom_smooth() function.
+    d. Now modify the above plot to show the smoothed regression line fit according to distinct levels of cylinders.
+
+2. Create barplots to show the counts and proportion of cars according to
+    a. distinct categories of transmission.
+    b. distinct categories of transmission and the number of cylinders.
+
+3. Using your knowledge on facets, create a scatter plot showing the relationship between weight of cars and miles per gallon and subset it according to the levels of cylinders.
+    a. Now modify the above plot and subset the plot with your knowledge on facets, across levels of cylinders and gears.
+    
+#### Assignment 1
+
+1. Create a scatterplot using weight(wt) of the cars and miles per galon.
+    a. Now change the color of the data points in the above scatterplot to any color of your choice.
+    b. Now map the cylinder variable to the color aesthetic in the above scatterplot, by creating levels according to the number of cylinders.
+    c. Now add a new layer to the above scatterplot that will fit a smoothed regression line to the above datapoints by using the geom_smooth() function.
+    d. Now modify the above plot to show the smoothed regression line fit according to distinct levels of cylinders.
+
+```{r assignment 1}
+ggplot(data = mtcars, mapping = aes(x = wt, y = mpg)) +
+  geom_point() +
+  labs(title = "Scatterplot of Weight vs. Miles Per Gallon", x = "Weight (1000 lbs)", y = "Miles per Gallon", caption = "Data from R 'mtcars' Dataset")
+
+ggplot(data = mtcars, mapping = aes(x = wt, y = mpg)) +
+  geom_point(color = "darkorange") +
+  labs(title = "Scatterplot of Weight vs. Miles Per Gallon", x = "Weight (1000 lbs)", y = "Miles per Gallon", caption = "Data from R 'mtcars' Dataset")
+
+ggplot(data = mtcars, mapping = aes(x = wt, y = mpg)) +
+  geom_point(mapping = aes(color = cyl)) +
+  labs(title = "Scatterplot of Weight vs. Miles Per Gallon", x = "Weight (1000 lbs)", y = "Miles per Gallon", caption = "Data from R 'mtcars' Dataset", color = "Number of Cylinders")
+
+ggplot(data = mtcars, mapping = aes(x = wt, y = mpg)) +
+  geom_point(mapping = aes(color = cyl)) + 
+  geom_smooth(color = "red") +
+  labs(title = "Scatterplot of Weight vs. Miles Per Gallon", subtitle = "Includes Smoothed Average Value of Scatterplot", x = "Weight (1000 lbs)", y = "Miles per Gallon", caption = "Data from R 'mtcars' Dataset", color = "Number of Cylinders")
+
+ggplot(data = mtcars, mapping = aes(x = wt, y = mpg)) +
+  geom_point(mapping = aes(color = cyl)) + 
+  geom_smooth(mapping = aes(color = cyl)) +
+  labs(title = "Scatterplot of Weight vs. Miles Per Gallon", subtitle = "Includes Cylinder Grouped Smoothed Average Value", x = "Weight (1000 lbs)", y = "Miles per Gallon", caption = "Data from R 'mtcars' Dataset", color = "Number of Cylinders")
+```
+
+#### Assignment 2
+
+2. Create barplots to show the counts and proportion of cars according to
+    a. distinct categories of transmission.
+    b. distinct categories of transmission and the number of cylinders.
+
+```{r assignment 2}
+ggplot(data = mtcars) +
+  geom_bar(mapping = aes(x = am)) +
+  labs(title = "Barplot Showing Count of Cars by Transmission Type", x = "Transmission", y = "Count", caption = "Data from R 'mtcars' Dataset")
+
+ggplot(data = mtcars) +
+  geom_bar(mapping = aes(x = am, y = stat(prop), group = 1)) +
+  scale_y_continuous(labels=scales::percent) +
+  labs(title = "Barplot Showing Proportion of Cars by Transmission Type", x = "Transmission", y = "Proportion", caption = "Data from R 'mtcars' Dataset")
+
+ggplot(data = mtcars) +
+  geom_bar(mapping = aes(x = am, fill = cyl), position = "dodge") +
+  labs(title = "Barplot Showing Count of Cars by Transmission Type", subtitle = "Broken Down by Number of Cylinders", x = "Transmission", y = "Count", caption = "Data from R 'mtcars' Dataset", fill = "Number of Cylinders") +
+  scale_y_continuous(breaks = c(1, 3, 5, 7, 9, 11, 13))
+
+ggplot(data = mtcars) +
+  geom_bar(mapping = aes(x = am, y = (..count..)/sum(..count..), fill = cyl), position = "dodge") +
+  scale_y_continuous(labels=scales::percent) +
+  labs(title = "Barplot Showing Proportion of Cars by Trasmission", subtitle = "Broken Down by Number of Cylinders", x = "Transmission", y = "Proportion", caption = "Data from R 'mtcars' Dataset", fill = "Number of Cylinders")
+```
+
+#### Assignment 3
+
+3. Using your knowledge on facets, create a scatter plot showing the relationship between weight of cars and miles per gallon and subset it according to the levels of cylinders.
+    a. Now modify the above plot and subset the plot with your knowledge on facets, across levels of cylinders and gears.
+
+```{r assignment 3}
+ggplot(data = mtcars, mapping = aes(x = wt, y = mpg)) +
+  geom_point() +
+  facet_wrap(~cyl, nrow = 3) +
+  labs(title = "Scatterplots of Weight vs. Miles Per Gallon Broken Down by Number of Cylinders", x = "Weight (1000 lbs)", y = "Miles Per Gallon", caption = "Data from R 'mtcars' Dataset")
+
+ggplot(data = mtcars, mapping = aes(x = wt, y = mpg)) +
+  geom_point() + 
+  facet_grid(gear~cyl) +
+  labs(title = "Scatterplots of Weight vs. Miles Per Gallon Broken Down by Number of Cylinders and Number of Gears", x = "Weight (1000 lbs)", y = "Miles Per Gallon", caption = "Data from R 'mtcars' Dataset")
+```
+
