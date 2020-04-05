@@ -1,0 +1,209 @@
+---
+title: "Week 10 Lab Assignment 1"
+output: 
+  html_document:
+    df_print: paged
+author: "Jonathan Bonaguro"
+date: "April 3, 2020"
+---
+
+```{r setup environment, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+library(tidyverse)
+mtcars <- mtcars %>% 
+  mutate(am = factor(am, labels = c('Automatic', 'Manual')))
+mtcars <- mtcars %>% 
+  mutate(cyl = factor(cyl, labels = c("4 Cylinders", "6 Cylinders", "8 Cylinders")))
+```
+
+## Assignments
+
+You can refer to the [`ggplot2` reference page](https://ggplot2.tidyverse.org/reference/index.html) to answer the following questions:
+
+1. Create an appropriate title, subtitle, caption and modified legend for x and y axes for the following plots:
+    a. A scatterplot of engine displacement(x) and miles per galon(y) with the mtcars dataset.
+    b. A scatterplot of engine displacement(x) and miles per galon(y) with the color aesthetic mapped to the mode of transmission.
+    
+2.Use the mtcars dataset to find the car with highest mileage per gallon according to the number of cylinders. Now use your knowledge on `geom_text()`/`geom_label()` to show these cars on a scatterplot of engine displacement (x) and miles per galon (y) with color aesthetic mapped to the number of cylinders.
+
+3. In the mtcars dataset, use the scatterplot of engine displacement (x) and miles per galon (y) and answer the following questions pertaining to scale adjustment:
+    a. Modify the default x axis ticks and the ticks legends.
+    b. Modify the default y axis ticks and the ticks legends.
+    c. Change the color of the scatterplot using the scale_color_gradient() function.
+    d. Change the color of the scatterplot using the scale_color_viridis_c() function.
+    
+4. In the mtcars dataset, use the scatterplot of engine displacement (x) and miles per galon (y) with the color aesthetic mapped to cylinders to answer the following questions pertaining to scale adjustment:
+    a. Change the color of the scatterplot by using the `scale_color_manual()` function.
+    b. Change the color of the scatterplot with the color brewer scale by using `scale_color_brewer()` function.
+    c. Using the `guides()` and `guide_legend()` change the legend for this plot and customize it to your choice.
+    
+5. Pick any plot above (1-4) and change the complete default theme to your theme of choice. Plot atleast three different theme variants for this question.
+
+#### Assignment 1
+
+1. Create an appropriate title, subtitle, caption and modified legend for x and y axes for the following plots:
+    a. A scatterplot of engine displacement(x) and miles per galon(y) with the mtcars dataset.
+    b. A scatterplot of engine displacement(x) and miles per galon(y) with the color aesthetic mapped to the mode of transmission.
+    
+```{r}
+ggplot(data = mtcars, mapping = aes(x = disp, y = mpg)) +
+  geom_point() +
+  labs(title = "Scatterplot of Engine Size vs. Fuel Efficiency",
+       subtitle = "Engine Displacement vs. Miles Per Gallon",
+       x = "Engine Size (cubic in.)",
+       y = "Fuel Efficiency (mpg)",
+       caption = "Motor Trend (mtcars) data provided by R ")
+
+ggplot(data = mtcars, mapping = aes(x = disp, y = mpg, color = am)) +
+  geom_point() +
+  labs(title = "Scatterplot of Engine Size (Displacement) vs. Fuel Efficiency",
+       subtitle = "Data Plotted Across Transmission Type",
+       x = "Engine Size (cubic in.)",
+       y = "Fuel Efficiency (mpg)",
+       color = "Transmission Type",
+       caption = "Motor Trend (mtcars) data provided by R")
+```
+
+#### Assignment 2
+
+2.Use the mtcars dataset to find the car with highest mileage per gallon according to the number of cylinders. Now use your knowledge on `geom_text()`/`geom_label()` to show these cars on a scatterplot of engine displacement (x) and miles per galon (y) with color aesthetic mapped to the number of cylinders.
+
+```{r}
+mileage_by_cylinders <- mtcars %>% 
+  group_by(cyl) %>% 
+  filter(row_number(desc(mpg))==1)
+
+ggplot(data = mtcars, mapping = aes(x = disp, y = mpg, color = cyl)) +
+  geom_point() +
+  geom_label(data = mileage_by_cylinders, mapping = aes(label = cyl, color = cyl), nudge_y = 1.5, show.legend = FALSE) +
+  scale_x_continuous(limits = c(50, 500)) +
+  labs(title = "Scatterplot of Engine Size (Displacement) vs. Fuel Efficiency",
+       subtitle = "Most Fuel Efficient Engine by Number of Cylinders Labelled",
+       x = "Engine Size (cubic in.)",
+       y = "Fuel Efficiency (mpg)",
+       color = "Number of Cylinders",
+       caption = "Motor Trend (mtcars) data provided by R")
+```
+
+#### Assignment 3
+
+3. In the mtcars dataset, use the scatterplot of engine displacement (x) and miles per galon (y) and answer the following questions pertaining to scale adjustment:
+    a. Modify the default x axis ticks and the ticks legends.
+    b. Modify the default y axis ticks and the ticks legends.
+    c. Change the color of the scatterplot using the scale_color_gradient() function.
+    d. Change the color of the scatterplot using the scale_color_viridis_c() function.
+
+```{r}
+ggplot(data = mtcars, mapping = aes(x = disp, y = mpg, color = wt)) +
+  geom_point() +
+  scale_x_continuous(limits = c(50, 500), breaks = c(100, 300, 500), labels = c("One Hundred", "Three Hundred", "Five Hundred")) +
+  scale_y_continuous(breaks = c(10, 20, 30), labels = c("Ten", "Twenty", "Thirty")) +
+  scale_color_gradient(low = "#00FFFF", high = "#0000FF") + 
+  labs(title = "Scatterplot of Engine Size (Displacment) vs. Fuel Efficiency",
+       subtitle = "Data Plotted Across Weight",
+       x = "Engine Size (cubic in.)",
+       y = "Fuel Efficiency (mpg)",
+       color = "Weight (1000 lbs.)",
+       caption = "Motor Trend (mtcars) data provided by R") 
+
+ggplot(data = mtcars, mapping = aes(x = disp, y = mpg, color = wt)) +
+  geom_point() +
+  scale_x_continuous(limits = c(50, 500), breaks = c(100, 300, 500), labels = c("One Hundred", "Three Hundred", "Five Hundred")) +
+  scale_y_continuous(breaks = c(10, 20, 30), labels = c("Ten", "Twenty", "Thirty")) +
+  scale_color_viridis_c(option = "B", direction = -1) + 
+  labs(title = "Scatterplot of Engine Size (Displacment) vs. Fuel Efficiency",
+       subtitle = "Data Plotted Across Weight",
+       x = "Engine Size (cubic in.)",
+       y = "Fuel Efficiency (mpg)",
+       color = "Weight (1000 lbs.)",
+       caption = "Motor Trend (mtcars) data provided by R") 
+```
+
+#### Assignment 4
+
+4. In the mtcars dataset, use the scatterplot of engine displacement (x) and miles per galon (y) with the color aesthetic mapped to cylinders to answer the following questions pertaining to scale adjustment:
+    a. Change the color of the scatterplot by using the `scale_color_manual()` function.
+    b. Change the color of the scatterplot with the color brewer scale by using `scale_color_brewer()` function.
+    c. Using the `guides()` and `guide_legend()` change the legend for this plot and customize it to your choice.
+
+```{r}
+ggplot(data = mtcars, mapping = aes(x = disp, y = mpg, color = cyl)) +
+  geom_point() +
+  scale_x_continuous(limits = c(50, 500)) +
+  scale_color_manual(values = c("darkorange", "dodgerblue", "navyblue")) + 
+  labs(title = "Scatterplot of Engine Size (Displacement) vs. Fuel Efficiency",
+       subtitle = "Data Plotted Across Number of Cylinders",
+       x = "Engine Size (cubic in.)",
+       y = "Fuel Efficiency (mpg)",
+       color = "Number of Cylinders",
+       caption = "Motor Trend (mtcars) data provided by R")
+
+ggplot(data = mtcars, mapping = aes(x = disp, y = mpg, color = cyl)) +
+  geom_point() +
+  scale_x_continuous(limits = c(50, 500)) +
+  scale_color_brewer(palette = "Greens") +
+  theme_dark() + 
+  labs(title = "Scatterplot of Engine Size (Displacement) vs. Fuel Efficiency",
+       subtitle = "Data Plotted Across Number of Cylinders",
+       x = "Engine Size (cubic in.)",
+       y = "Fuel Efficiency (mpg)",
+       color = "Number of Cylinders",
+       caption = "Motor Trend (mtcars) data provided by R")
+
+ggplot(data = mtcars, mapping = aes(x = disp, y = mpg, color = cyl)) +
+  geom_point() +
+  scale_x_continuous(limits = c(50, 500)) +
+  scale_color_brewer(palette = "Greens") +
+  theme_dark() + 
+  labs(title = "Scatterplot of Engine Size (Displacement) vs. Fuel Efficiency",
+       subtitle = "Data Plotted Across Number of Cylinders",
+       x = "Engine Size (cubic in.)",
+       y = "Fuel Efficiency (mpg)",
+       color = "Number of Cylinders",
+       caption = "Motor Trend (mtcars) data provided by R") +
+  theme(legend.position = "bottom") +
+  guides(color = guide_legend(title.position = "top",
+                              title.theme = element_text(face = "italic")))
+```
+
+#### Assignment 5
+
+5. Pick any plot above (1-4) and change the complete default theme to your theme of choice. Plot atleast three different theme variants for this question.
+
+```{r}
+ggplot(data = mtcars, mapping = aes(x = disp, y = mpg, color = cyl)) +
+  geom_point() +
+  scale_x_continuous(limits = c(50, 500)) +
+  theme_bw() +
+  scale_color_manual(values = c("darkorange", "dodgerblue", "navyblue")) + 
+  labs(title = "Scatterplot of Engine Size (Displacement) vs. Fuel Efficiency",
+       subtitle = "Data Plotted Across Number of Cylinders",
+       x = "Engine Size (cubic in.)",
+       y = "Fuel Efficiency (mpg)",
+       color = "Number of Cylinders",
+       caption = "Motor Trend (mtcars) data provided by R")
+
+ggplot(data = mtcars, mapping = aes(x = disp, y = mpg, color = cyl)) +
+  geom_point() +
+  scale_x_continuous(limits = c(50, 500)) +
+  theme_classic() +
+  scale_color_manual(values = c("darkorange", "dodgerblue", "navyblue")) + 
+  labs(title = "Scatterplot of Engine Size (Displacement) vs. Fuel Efficiency",
+       subtitle = "Data Plotted Across Number of Cylinders",
+       x = "Engine Size (cubic in.)",
+       y = "Fuel Efficiency (mpg)",
+       color = "Number of Cylinders",
+       caption = "Motor Trend (mtcars) data provided by R")
+
+ggplot(data = mtcars, mapping = aes(x = disp, y = mpg, color = cyl)) +
+  geom_point() +
+  scale_x_continuous(limits = c(50, 500)) +
+  theme_minimal() +
+  scale_color_manual(values = c("darkorange", "dodgerblue", "navyblue")) + 
+  labs(title = "Scatterplot of Engine Size (Displacement) vs. Fuel Efficiency",
+       subtitle = "Data Plotted Across Number of Cylinders",
+       x = "Engine Size (cubic in.)",
+       y = "Fuel Efficiency (mpg)",
+       color = "Number of Cylinders",
+       caption = "Motor Trend (mtcars) data provided by R")
+```

@@ -1,0 +1,103 @@
+---
+title: "Week 10 Lab Assignment 1"
+output: 
+  html_document:
+    df_print: paged
+author: "Jonathan Bonaguro"
+date: "April 1, 2020"
+---
+
+```{r setup environment, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+library(tidyverse)
+library(hexbin)
+```
+
+## Assignments
+
+Use the diamonds dataset to answer the following questions. You can also refer to [`ggplot2` cheatsheet and reference page](https://ggplot2.tidyverse.org/reference/index.html).
+
+1. Visualize the distribution of the price of the diamonds with the histogram (`geom_histogram`) and frequency polygon (`geom_freqpoly`). Make sure you try and explore variable binwidths for these visualizations.
+
+2. Visualize the covariation of price of the diamonds in relation to the cut variable with a boxplot (`geom_boxplot`).
+    a. Now reorder the above boxplot by using the median value of the price and visualize the boxplot.
+    b. Now flip the coordinates of x and y and create a new boxplot.
+    c. Visualize the covariation of the price of the diamonds in relation to both cut and clarity using boxplot.
+    d. Overlay the boxplot with the original datapoints. Use the 2a question above for this plot.
+
+3. Visualize the covariation of the price of the diamonds in relation to the cut variable by using the violin plot(`geom_violin`).
+    a. Mark the following quartiles in the above violin plot (0.25,0.5,0.75).
+
+4. Explore the covariation of the price and carat of diamonds using rectangular (`geom_bin2d`) and hexagonal bins (`geom_hex`).Make sure you explore this relationship with variable binwidths.
+
+#### Assignment 1
+
+1. Visualize the distribution of the price of the diamonds with the histogram (`geom_histogram`) and frequency polygon (`geom_freqpoly`). Make sure you try and explore variable binwidths for these visualizations.
+
+```{r}
+ggplot(data = diamonds, mapping = aes(x = price)) +
+  geom_histogram(bins = 50) + 
+  labs(title = "Histogram of Diamond Price", x = "Price (USD)", y = "Count", caption = "Diamonds data provided by ggplot2")
+
+ggplot(data = diamonds, mapping = aes(x = price)) +
+  geom_freqpoly(bins = 50) + 
+  labs(title = "Frequency Diagram of Diamond Price", x = "Price (USD)", y = "Count", caption = "Diamonds data provided by ggplot2")
+
+```
+
+#### Assignment 2
+
+2. Visualize the covariation of price of the diamonds in relation to the cut variable with a boxplot (`geom_boxplot`).
+    a. Now reorder the above boxplot by using the median value of the price and visualize the boxplot.
+    b. Now flip the coordinates of x and y and create a new boxplot.
+    c. Visualize the covariation of the price of the diamonds in relation to both cut and clarity using boxplot.
+    d. Overlay the boxplot with the original datapoints. Use the 2a question above for this plot.
+
+```{r}
+ggplot(data = diamonds, mapping = aes(x = cut, y = price)) +
+  geom_boxplot(outlier.alpha = 0.1) + 
+  labs(title = "Box Plot of Diamond Price Seperated by Cut Quality", x = "Cut Quality", y = "Price (USD)", caption = "Diamonds data provided by ggplot2")
+
+ggplot(data = diamonds, mapping = aes(x = reorder(cut, price, FUN = median), y = price)) +
+  geom_boxplot(outlier.alpha = 0.1) + 
+  labs(title = "Box Plot of Diamond Price Seperated by Cut Quality", x = "Cut Quality", y = "Price (USD)", caption = "Diamonds data provided by ggplot2")
+
+ggplot(data = diamonds, mapping = aes(x = reorder(cut, price, FUN = median), y = price)) +
+  geom_boxplot(outlier.alpha = 0.1) +
+  coord_flip() + 
+  labs(title = "Box Plot of Diamond Price Seperated by Cut Quality", x = "Cut Quality", y = "Price (USD)", caption = "Diamonds data provided by ggplot2")
+
+ggplot(data = diamonds, mapping = aes(x = cut, y = price, fill = clarity)) +
+  geom_boxplot(outlier.alpha = 0.1) +
+  labs(title = "Box Plot of Diamond Price Seperated by Cut Quality", subtitle = "Broken into Diamond Clarity for Each Cut", x = "Cut Quality", y = "Price (USD)", legend = "Diamond Clarity", caption = "Diamonds data provided by ggplot2")
+
+ggplot(data = diamonds, mapping = aes(x = cut, y = price)) +
+  geom_point(position = "jitter", alpha = 0.1, color = "darkorange") +
+  geom_boxplot(color = "blue", outlier.alpha = 0.1) + 
+  labs(title = "Box Plot of Diamond Price Seperated by Cut Quality", subtitle = "Overlaid over original data to show density", x = "Cut Quality", y = "Price (USD)", caption = "Diamonds data provided by ggplot2")
+```
+
+#### Assignment 3
+
+3. Visualize the covariation of the price of the diamonds in relation to the cut variable by using the violin plot(`geom_violin`).
+    a. Mark the following quartiles in the above violin plot (0.25,0.5,0.75).
+
+```{r}
+ggplot(data = diamonds, mapping = aes(x = cut, y = price)) +
+  geom_violin(draw_quantiles = c(0.25,0.5,0.75)) + 
+  labs(title = "Violin Plot of Diamond Price Seperated by Cut Quality", subtitle = "Horizontal Lines Mark 25th, 50th, and 75th Percentiles", x = "Cut Quality", y = "Price (USD)", caption = "Diamonds data provided by ggplot2")
+```
+
+#### Assignment 4
+
+4. Explore the covariation of the price and carat of diamonds using rectangular (`geom_bin2d`) and hexagonal bins (`geom_hex`).Make sure you explore this relationship with variable binwidths.
+
+```{r}
+ggplot(data = diamonds, mapping = aes(x = carat, y = price)) +
+  geom_bin2d(bins = 75) +
+  labs(title = "Plot of Diamond Weight vs. Price", subtitle = "Grouped into bins to show frequency", x = "Diamond Weight (carats)", y = "Price (USD)", caption = "Diamonds data provided by ggplot2")
+
+ggplot(data = diamonds, mapping = aes(x = carat, y = price)) +
+  geom_hex(bins = 75) +
+  labs(title = "Plot of Diamond Weight vs. Price", subtitle = "Grouped into hexagonal bins to show frequency", x = "Diamond Weight (carats)", y = "Price (USD)", caption = "Diamonds data provided by ggplot2")
+```
