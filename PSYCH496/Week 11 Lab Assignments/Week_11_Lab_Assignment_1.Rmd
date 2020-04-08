@@ -1,0 +1,90 @@
+---
+title: "Week 11 Lab Assignment 1"
+output: 
+  html_document:
+    df_print: paged
+author: "Jonathan Bonaguro"
+date: "April 8, 2020"
+---
+
+```{r setup environment, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+library(tidyverse)
+library(modelr)
+library(magrittr)
+```
+
+## Modeling with `modelr`
+
+For answering the following questions, create two continous variables `x` and `y` as per your choice using `runif()` or `rnorm()` functions. You can choose any length for these variables as per your choice. You can refer to the following [`modelr` page](https://modelr.tidyverse.org/reference/index.html) for reference. 
+
+1. Fit a linear model `(y ~ x)` using the `lm()` function to predict `y` using `x`.
+
+2. Using the `modelr` function `add_predictions()`, generate prediction values for your model.
+
+3. Using the `modelr` function `add_residuals()`, generate residual values for your model.
+
+4. Using the appropriate `ggplot` functions plot your predictions.
+
+5. Using the appropriate `ggplot` functions plot the residuals for your model.
+
+### Generate Data
+
+```{r}
+set.seed(496)
+df <- tibble(`x` = sort(runif(15)), `y` = runif(15))
+
+df
+```
+
+#### Assignment 1
+
+1. Fit a linear model (y~x) using the `lm()` function to predict `y` using `x`.
+
+```{r}
+fit <- lm(y ~ x, data = df)
+```
+
+#### Assignment 2
+
+2. Using the `modelr` function `add_predictions()`, generate prediction values for your model.
+
+```{r}
+df <- df %>% 
+  add_predictions(model = fit, var = "pred")
+
+df
+```
+
+#### Assignment 3
+
+3. Using the `modelr` function `add_residuals()`, generate residual values for your model.
+
+```{r}
+df <- df %>% 
+  add_residuals(model = fit, var = "resid")
+
+df
+```
+
+#### Assignment 4
+
+4. Using the appropriate `ggplot` functions plot your predictions.
+
+```{r}
+ggplot(data = df, aes(x = x, y = pred)) +
+  geom_point() +
+  geom_point(aes(y = y), alpha = 0.2, color = "red") +
+  labs(title = "Plot of Independent Variable and Predicted Values", subtitle = "Actual Y Values Plotted in Red", x = "Independent Variable (sort(runif(15))", y = "Predicted Values by add_predictions()", caption = "Data Generated with set.seed(496)")
+```
+
+#### Assignment 5
+
+5. Using the appropriate `ggplot` functions plot the residuals for your model.
+
+```{r}
+ggplot(data = df, mapping = aes(x = x, y = resid)) +
+  geom_hline(yintercept = mean(df$resid), color = "red", alpha = 0.5) +
+  geom_point() +
+  labs(title = "Plot of Independent Variable and Residuals", subtitle = "Mean Residual Value Plotted in Red", x = "Independent Variable (sort(runif(15))", y = "Residual Values by add_residuals()", caption = "Data Generated with set.seed(496)")
+```
