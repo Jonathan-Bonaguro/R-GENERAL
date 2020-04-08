@@ -4,3 +4,6 @@
 [submodule "STAT385/Homework/hw-06-Jonathan-Bonaguro"]
 	path = STAT385/Homework/hw-06-Jonathan-Bonaguro
 	url = https://github.com/stat385-sp2020/hw06-Jonathan-Bonaguro.git
+[submodule "STAT385/Homework/--force"]
+	path = STAT385/Homework/--force
+	url = https://github.com/stat385-sp2020/hw04-Jonathan-Bonaguro.git
