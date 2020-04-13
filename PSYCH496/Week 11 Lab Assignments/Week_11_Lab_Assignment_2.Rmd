@@ -1,0 +1,120 @@
+---
+title: "Week 11 Lab Assignment 2"
+output: 
+  html_document:
+    df_print: paged
+author: "Jonathan Bonaguro"
+date: "April 10, 2020"
+---
+
+```{r setup environment, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+library(tidyverse)
+library(modelr)
+library(broom)
+
+mtcars <- as_tibble(mtcars)
+mtcars <- mtcars %>% 
+  mutate(cyl = factor(cyl, labels = c("4 Cylinders", "6 Cylinders", "8 Cylinders")))
+```
+
+## Modeling with `modelr`, `purrr`, and `broom`
+
+You can refer to the following reference pages for questions below:  
+[`tidyr`](https://tidyr.tidyverse.org/reference/nest.html)
+[`purrr`](https://broom.tidyverse.org/index.html)
+[`broom`](https://broom.tidyverse.org/reference/tidy.lm.html)
+
+Use the `mtcars` dataset and answer the following questions,
+
+1. Group this dataset by the cylinder variable.
+
+2. Nest this grouped dataset.
+
+3. Using the nested data, with appropriate `dplyr` and `map` functions, fit a model to predict miles per galon using weight of the cars.
+
+4. Using `modelr` and appropriate `map` functions now add the predictions and the residuals for this nested data grouped by cylinders.
+
+5. Use the `tidy()` and `glance()` function in the `broom` package in combination with the `map` functions to create summary statistical measures associated with your fitted model.
+
+6. Unnest the above data and visualize the residuals.
+
+7. Unnest the above data and present your statistical summaries across each rows of observation.
+
+#### Assignment 1
+
+1. Group this dataset by the cylinder variable.
+
+```{r}
+mtcars_group <- mtcars %>% 
+  group_by(cyl)
+
+mtcars_group
+```
+
+#### Assignment 2
+
+2. Nest this grouped dataset.
+
+```{r}
+mtcars_nest <- mtcars_group %>% 
+  nest()
+
+mtcars_nest
+```
+
+#### Assignment 3
+
+3. Using the nested data, with appropriate dplyr and map functions, fit a model to predict miles per galon using weight of the cars.
+
+```{r}
+mtcars_fit_model <- function(df) {
+  lm(mpg ~ wt, data=df)
+}
+
+mtcars_model <- mtcars_nest %>% 
+  mutate(model = map(data, mtcars_fit_model))
+```
+
+#### Assignment 4
+
+4. Using modelr and appropriate map functions now add the predictions and the residuals for this nested data grouped by cylinders.
+
+```{r}
+mtcars_model_info <- mtcars_model %>% 
+  mutate(residuals = map2(data, model, add_residuals)) %>% 
+  mutate(predictions = map2(data, model, add_predictions))
+```
+
+#### Assignment 5
+
+5. Use the tidy() and glance() function in the broom package in combination with the map functions to create summary statistical measures associated with your fitted model.
+
+```{r}
+mtcars_model_full_info <- mtcars_model_info %>% 
+  mutate(tidy = map(model, tidy)) %>% 
+  mutate(glance = map(model, glance))
+```
+
+#### Assignment 6
+
+6. Unnest the above data and visualize the residuals.
+
+```{r}
+mtcars_model_full_info %>% 
+  unnest(residuals) %>% 
+  ggplot(aes(x = wt, y = resid)) +
+  geom_line(aes(color = cyl)) +
+  labs(title = "Residual Plot group by Number of Cylinders", subtitle = "Model: Predict Miles per Gallon by Car Weight", x = "Weight (1000 lbs.)", y= "Residuals", color = "Number of Cylinders", caption = "Motor Trends Data Provided by R")
+```
+
+#### Assignment 7
+
+7. Unnest the above data and present your statistical summaries across each rows of observation.
+
+```{r}
+mtcars_model_full_info %>% 
+  unnest(tidy) %>% 
+  unnest(glance, names_repair = "unique") %>% 
+  select(-(data:predictions))
+```
